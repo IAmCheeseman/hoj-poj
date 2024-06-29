@@ -21,7 +21,7 @@ function DebugScreen:m_onActionDown(action, _, isrepeat)
   end
 end
 
-function DebugScreen:m_drawText(text, font, x, y)
+function DebugScreen:m_drawText(text, x, y)
   local width = font:getWidth(text)
   local height = font:getHeight()
 
@@ -45,14 +45,15 @@ function DebugScreen:gui()
 
   local stats = love.graphics.getStats()
   local rname, rversion, _, rdevice = love.graphics.getRendererInfo()
-  y = self:m_drawText(love.system.getOS(), font, x, y)
-  y = self:m_drawText(rname .. " " .. rversion, font, x, y)
-  y = self:m_drawText(rdevice, font, x, y)
-  y = self:m_drawText("Draw calls: " .. stats.drawcalls, font, x, y)
+  y = self:m_drawText(love.system.getOS(), x, y)
+  y = self:m_drawText(rname .. " " .. rversion, x, y)
+  y = self:m_drawText(rdevice, x, y)
+  y = self:m_drawText("FPS: " .. love.timer.getFPS(), x, y)
+  y = self:m_drawText("Draw calls: " .. stats.drawcalls, x, y)
   y = self:m_drawText(
     "I: " .. stats.images .. ", C: " .. stats.canvases
     .. ", F: " .. stats.fonts,
-    font, x, y)
+    x, y)
 end
 
 return DebugScreen
