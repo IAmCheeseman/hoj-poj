@@ -3,8 +3,48 @@ local Event = require("event")
 local input = {}
 
 local actions = {}
+local keybinds = {}
 local keytoname = {}
 local mousetoname = {}
+
+function input.addKeybind(name, ...)
+  local args = {...}
+  if #args % 2 ~= 0 then
+    error("Wrong number of args.", 1)
+  end
+
+  local bind = {}
+  local i = 1
+  while i <= #args do
+    local t = args[i]
+    local id = args[i + 1]
+    table.insert(bind, {
+      type = t,
+      id = id,
+    })
+    i = i + 2
+  end
+
+  keybinds[name] = bind
+end
+
+function input.isKeybindPressed(name)
+  local keybind = keybinds[name]
+  if not keybind then
+    error("keybind '" .. keybind .. "' does not exist.", 1)
+  end
+
+  local allpressed = true
+  for _, action in ipairs(keybind) do
+    if action.type == "kb" then
+      allpressed = allpressed and love.keyboard.isDown(action.id)
+    elseif action.type == "mouse" then
+      allpressed = allpressed and love.mouse.isDown(action.id)
+    end
+  end
+
+  return allpressed
+end
 
 function input.addAction(name, type, id)
   actions[name] = {type=type, id=id}
@@ -38,10 +78,49 @@ function input.inputToAction(type, id)
 end
 
 input.actionTriggered = Event()
+input.actionReleased = Event()
+input.keyPressed = Event()
+input.keyReleased = Event()
+input.mousePressed = Event()
+input.mouseReleased = Event()
+input.mouseMoved = Event()
+input.mouseWheelMoved = Event()
+input.textInput = Event()
 
-function love.keypressed(key, _, isrepeat)
+function love.mousepressed(_, _, button, istouch, presses)
+  local action = input.inputToAction("mouse", button)
+  input.actionTriggered:call(action, button)
+  input.mousePressed:call(button, istouch, presses)
+end
+
+function love.mousereleased(_, _, button, istouch)
+  local action = input.inputToAction("mouse", button)
+  input.actionReleased:call(action, button)
+  input.mouseReleased:call(button, istouch)
+end
+
+function love.mousemoved(_, _, rx, ry, istouch)
+  input.mouseMoved:call(rx, ry, istouch)
+end
+
+function love.keypressed(key, scancode, isrepeat)
   local action = input.inputToAction("kb", key)
   input.actionTriggered:call(action, key, isrepeat)
+  input.keyPressed:call(key, scancode, isrepeat)
+end
+
+function love.keyreleased(key, scancode)
+  local action = input.inputToAction("kb", key)
+  input.actionReleased:call(action, key)
+  input.keyReleased:call(key, scancode)
+end
+
+function love.textinput(text)
+  input.textInput:call(text)
+end
+
+function love.wheelmoved(x, y)
+  input.mouseWheelMoved:call(x, y)
 end
 
 return input

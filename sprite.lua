@@ -14,10 +14,6 @@ local blendmodes = {
 local Sprite = class()
 
 function Sprite:init(path)
-  local file = loadAse("assets/player/player.ase")
-
-  self.width = file.header.width
-  self.height = file.header.height
   self.offsetx = 0
   self.offsety = 0
 
@@ -28,56 +24,78 @@ function Sprite:init(path)
   self.frames = {}
   self.tags = {}
 
-  for _, frame in ipairs(file.header.frames) do
-    for _, chunk in ipairs(frame.chunks) do
-      if chunk.type == 0x2004 then
-        local layerdat = chunk.data
-        if layerdat.type == 0 then
-          local layer = {}
-          local flags = layerdat.flags
+  if path:match("%.ase$") then -- This is an aseprite file
+    local file = loadAse(path)
 
-          layer.visible = bit.band(flags, 1) ~= 0
-          layer.blend = blendmodes[layerdat.blend]
-          if not layer.blend then
-            error("Unsupported blend mode.", 1)
+    self.width = file.header.width
+    self.height = file.header.height
+
+    for _, frame in ipairs(file.header.frames) do
+      for _, chunk in ipairs(frame.chunks) do
+        if chunk.type == 0x2004 then
+          local layerdat = chunk.data
+          if layerdat.type == 0 then
+            local layer = {}
+            local flags = layerdat.flags
+
+            layer.visible = bit.band(flags, 1) ~= 0
+            layer.blend = blendmodes[layerdat.blend]
+            if not layer.blend then
+              error("Unsupported blend mode.", 1)
+            end
+            layer.alpha = 1 - layerdat.opacity / 255
+
+            table.insert(self.layers, layer)
           end
-          layer.alpha = 1 - layerdat.opacity / 255
+        elseif chunk.type == 0x2005 then -- Image
+          local cel = chunk.data
+          local buf = love.data.decompress("data", "zlib", cel.data)
+          local imagedat = love.image.newImageData(
+            cel.width, cel.height, "rgba8", buf)
+          local image = love.graphics.newImage(imagedat)
+          local canvas = love.graphics.newCanvas(self.width, self.height)
 
-          table.insert(self.layers, layer)
-        end
-      elseif chunk.type == 0x2005 then -- Image
-        local cel = chunk.data
-        local buf = love.data.decompress("data", "zlib", cel.data)
-        local imagedat = love.image.newImageData(
-          cel.width, cel.height, "rgba8", buf)
-        local image = love.graphics.newImage(imagedat)
-        local canvas = love.graphics.newCanvas(self.width, self.height)
+          love.graphics.setCanvas(canvas)
+          love.graphics.draw(image, cel.x, cel.y)
+          love.graphics.setCanvas()
 
-        love.graphics.setCanvas(canvas)
-        love.graphics.draw(image, cel.x, cel.y)
-        love.graphics.setCanvas()
+          table.insert(self.frames, {
+            image = canvas,
+            duration = frame.frame_duration / 1000
+          })
 
-        table.insert(self.frames, {
-          image = canvas,
-          duration = frame.frame_duration / 1000
-        })
+          image:release()
+          imagedat:release()
+        elseif chunk.type == 0x2018 then
+          for i, tag in ipairs(chunk.data.tags) do
+            if i == 1 then
+              self.activetag = tag.name
+            end
 
-        image:release()
-        imagedat:release()
-      elseif chunk.type == 0x2018 then
-        for i, tag in ipairs(chunk.data.tags) do
-          if i == 1 then
-            self.activetag = tag.name
+            self.tags[tag.name] = {
+              from = tag.from + 1,
+              to = tag.to + 1,
+              framec = tag.to - tag.from,
+            }
           end
-
-          self.tags[tag.name] = {
-            from = tag.from + 1,
-            to = tag.to + 1,
-            framec = tag.to - tag.from,
-          }
         end
       end
     end
+  else -- Other file format
+    local image = love.graphics.newImage(path)
+    self.width = image:getWidth()
+    self.height = image:getHeight()
+
+    table.insert(self.layers, {
+      visible = true,
+      blend = "alpha",
+      alpha = 1
+    })
+
+    table.insert(self.frames, {
+      image = image,
+      duration = 0.1,
+    })
   end
 end
 
@@ -144,6 +162,11 @@ end
 function Sprite:draw(x, y, r, sx, sy, kx, ky)
   local layerc = #self.layers
   local start = self.currentframe * layerc - 1
+
+  sx = sx or 1
+  sy = sy or sx
+  kx = kx or 0
+  ky = ky or 0
 
   for i=1, layerc do
     local offset = i
