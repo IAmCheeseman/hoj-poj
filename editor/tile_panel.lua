@@ -4,6 +4,9 @@ local ui = require("editor.ui")
 local data = require("editor.data")
 local Sprite = require("sprite")
 
+local RadioButton = require("editor.radio_button")
+local TileSelector = require("editor.tile_selector")
+
 local TilePanel = lui.Element()
 
 function TilePanel:init()
@@ -11,8 +14,44 @@ function TilePanel:init()
   self.maxnamelen = 10
   self.maxtabs = 5
 
-  local tileset = data.getTileset("Brick")
-  self.brick = Sprite(tileset.image)
+  local ontsclick = function(btn)
+    self.selected = btn.index
+
+    local tab = self.tabs[btn.index]
+    self.tileselec.tsid = tab.tsid
+    self.tileselec.sprite = tab.sprite
+  end
+
+  self.tileselec = TileSelector()
+  self:addChild(self.tileselec)
+
+  local tsids = data.getTilesetIds()
+  self.selected = 1
+  self.tabs = {}
+  for i=1, self.maxtabs do
+    local tsid = tsids[i]
+    if not tsid then
+      break
+    end
+
+    local tileset = data.getTileset(tsid)
+    local radio = RadioButton(tileset.name, ontsclick)
+    radio.index = i
+
+    self:addChild(radio)
+    local sprite = Sprite(tileset.image)
+
+    table.insert(self.tabs, {
+      tsid = tsid,
+      radio = radio,
+      sprite = sprite,
+    })
+
+    if i == 1 then
+      radio.selected = true
+      ontsclick(radio)
+    end
+  end
 end
 
 function TilePanel:onRender(x, y, w, h)
@@ -30,47 +69,20 @@ function TilePanel:onRender(x, y, w, h)
   ui.rectangle(ui.olcol, "line", contentr:get())
   ui.rectangle(ui.olcol, "line", barr:get())
 
-  local tsids = data.getTilesetIds()
   local rows = tabsr:rows(self.maxtabs)
   for i=1, self.maxtabs do
     local tabr = rows[i]
+    local tab = self.tabs[i]
 
-    if not tsids[i] then
+    if not tab then
       break
     end
 
-    local tileset = data.getTileset(tsids[i])
     tabr = tabr:padPixels(ui.padding, 0)
-    ui.rectangle(ui.olcol, "line", tabr:get())
-
-    local ttitler, exinfor = tabr:splitHorizontal(0.6, 0.4)
-    local displayname = tileset.name
-    if #displayname > self.maxnamelen then
-      displayname = displayname:sub(1, self.maxnamelen - 3) .. "..."
-    end
-    ui.text(ui.fgcol, ui.font, displayname, "center", ttitler:get())
-
-    local exinfo = ("%dx%d"):format(tileset.tilewidth, tileset.tileheight)
-    ui.text(ui.unimpfgcol, ui.font, exinfo, "center", exinfor:get())
+    tab.radio:render(tabr:get())
   end
 
-  local tileset = data.getTileset("Brick")
-  local rectx, recty = self.brick.width / tileset.tilewidth,
-                       self.brick.height / tileset.tileheight
-
-  local scale = kg.Region(0, 0, self.brick.width, self.brick.height)
-    :getScaleToFit(contentr.w, contentr.h)
-  love.graphics.setColor(1, 1, 1)
-  self.brick:draw(contentr.x, contentr.y, 0, scale)
-  for gx=0, rectx-1 do
-    for gy=0, recty-1 do
-      local dw = tileset.tilewidth * scale
-      local dh = tileset.tileheight * scale
-      local dx = contentr.x + gx * dw
-      local dy = contentr.y + gy * dh
-      ui.rectangle(ui.olcol, "line", dx, dy, dw, dh)
-    end
-  end
+  self.tileselec:render(contentr:get())
 end
 
 return TilePanel
