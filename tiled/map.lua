@@ -9,7 +9,7 @@ local TiledMap = class()
 
 local function loadLayer(map, dir, data)
   if data.type == "imagelayer" then
-    return ImageLayer(dir, data)
+    return ImageLayer(map, dir, data)
   elseif data.type == "tilelayer" then
     return TileLayer(map, data)
   elseif data.type == "objectgroup" then
@@ -31,6 +31,14 @@ end
 function TiledMap:init(path)
   -- love.filesystem.load allows for loading from save directory.
   local tiledData = love.filesystem.load(path)()
+
+  self.width = tiledData.width
+  self.height = tiledData.height
+  self.tileWidth = tiledData.tilewidth
+  self.tileHeight = tiledData.tileheight
+
+  self.pxWidth = self.width * self.tileWidth
+  self.pxHeight = self.height * self.tileHeight
 
   self.globalIds = {}
   self.tilesets = {}
