@@ -1,7 +1,5 @@
 local game = require("game")
 
-local loaded
-
 local helptext = [[
 Usage:
   --help, -h
@@ -23,14 +21,13 @@ function love.load(args)
     end
   end
 
-  loaded = game
-  loaded.load(args)
+  game.load(args)
 end
 
 function love.update(dt)
-  loaded.update(dt)
+  game.update(dt)
 end
 
 function love.draw()
-  loaded.draw()
+  game.draw()
 end
