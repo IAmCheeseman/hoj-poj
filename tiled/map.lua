@@ -3,6 +3,7 @@ local class = require("class")
 
 local ImageLayer = require("tiled.image_layer")
 local TileLayer = require("tiled.tile_layer")
+local InfiniteTileLayer = require("tiled.infinite_tile_layer")
 local Tileset = require("tiled.tileset")
 
 local TiledMap = class()
@@ -11,7 +12,11 @@ local function loadLayer(map, dir, data)
   if data.type == "imagelayer" then
     return ImageLayer(map, dir, data)
   elseif data.type == "tilelayer" then
-    return TileLayer(map, data)
+    if data.chunks then
+      return InfiniteTileLayer(map, data)
+    else
+      return TileLayer(map, data)
+    end
   elseif data.type == "objectgroup" then
     return nil
   end

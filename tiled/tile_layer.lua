@@ -8,6 +8,9 @@ function TileLayer:init(map, data)
   self.width = data.width
   self.height = data.height
 
+  self.offsetx = data.offsetx
+  self.offsety = data.offsety
+
   self.parallaxx = data.parallaxx
   self.parallaxy = data.parallaxy
 
@@ -29,8 +32,8 @@ function TileLayer:regenerateBatches()
 
   for i, tile in ipairs(self.data) do
     if tile ~= 0 then
-      local x = i % self.width
-      local y = math.floor(i / self.height)
+      local x = (i - 1) % self.width
+      local y = math.floor((i - 1) / self.height)
 
       local tileset = self.map.globalIds[tile]
       local batch = self.spriteBatches[tileset]
@@ -42,8 +45,13 @@ function TileLayer:regenerateBatches()
 end
 
 function TileLayer:draw()
+  -- love.graphics.rectangle(
+  --   "line",
+  --   self.offsetx, self.offsety,
+  --   self.width * self.map.tileWidth,
+  --   self.height * self.map.tileHeight)
   for _, batch in pairs(self.spriteBatches) do
-    love.graphics.draw(batch)
+    love.graphics.draw(batch, self.offsetx, self.offsety)
   end
 end
 
