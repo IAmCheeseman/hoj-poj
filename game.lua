@@ -5,7 +5,6 @@ local physics = require("physics")
 local Viewport = require("viewport")
 local World = require("world")
 local DebugScreen = require("debugscreen")
-local Player = require("player")
 local TiledMap = require("tiled.map")
 
 physics.initialize(0, 0)
@@ -14,9 +13,6 @@ guiViewport = Viewport(320 * 5, 180 * 5)
 guiViewport.centered = false
 
 world = World()
-world:add(DebugScreen())
-
-local map = TiledMap(mainViewport, "assets/maps/testinf.lua")
 
 playerGroup = -1
 
@@ -24,15 +20,19 @@ envCategory = 1
 playerCategory = 2
 enemyCategory = 3
 
+require("player")
+
 input.addAction("walk_up",    "kb", "w")
 input.addAction("walk_left",  "kb", "a")
 input.addAction("walk_down",  "kb", "s")
 input.addAction("walk_right", "kb", "d")
 
+local map = TiledMap(world, mainViewport, "assets/maps/start.lua")
+world:add(DebugScreen())
+
 local game = {}
 
 function game.load()
-  world:add(Player())
 end
 
 function game.update()

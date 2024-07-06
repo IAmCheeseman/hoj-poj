@@ -60,15 +60,15 @@ function Body:getPosition()
 end
 
 function Body:setPosition(x, y)
-  return self.body:setPosition(x, y)
-end
-
-function Body:setBounce(bounce)
-  return self.fixture:setRestitution(bounce)
+  self.body:setPosition(x, y)
 end
 
 function Body:getBounce()
   return self.fixture:getRestitution()
+end
+
+function Body:setBounce(bounce)
+  self.fixture:setRestitution(bounce)
 end
 
 function Body:setCategory(category, to)

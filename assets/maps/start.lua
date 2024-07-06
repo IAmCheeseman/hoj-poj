@@ -278,17 +278,19 @@ return {
       objects = {
         {
           id = 3,
-          name = "Player",
+          name = "",
           type = "",
           shape = "rectangle",
-          x = 169.75,
-          y = 208.875,
+          x = 216.125,
+          y = 206.375,
           width = 10,
           height = 14,
           rotation = 0,
           gid = 469,
           visible = true,
-          properties = {}
+          properties = {
+            ["className"] = "Player"
+          }
         }
       }
     }

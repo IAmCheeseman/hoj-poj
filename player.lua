@@ -5,6 +5,7 @@ local input = require("input")
 local physics = require("physics")
 local Sprite = require("sprite")
 local VecAnimPicker = require("animpicker")
+local TiledMap = require("tiled.map")
 
 local Player = class()
 
@@ -87,8 +88,8 @@ function Player:update(dt)
   local animSpeed = 1 - (vec.length(vx, vy) / self.speed)^2 * 0.5
   self.tex:animate(animSpeed)
 
-  local lookahead = 0.1
-  mainViewport:setCamPos(self.x + vx * lookahead, self.y + vy * lookahead)
+  local lookAhead = 0.1
+  mainViewport:setCamPos(self.x + vx * lookAhead, self.y + vy * lookAhead)
 end
 
 function Player:draw()
@@ -98,5 +99,11 @@ function Player:draw()
   self.tex:draw(self.x, self.y, 0, 1, -0.5, -0.5, 0)
   -- self.body:draw()
 end
+
+TiledMap.s_addSpawner("Player", function(world, object)
+  local player = Player()
+  player.body:setPosition(object.x, object.y)
+  world:add(player)
+end)
 
 return Player

@@ -118,6 +118,6 @@
 </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="3" template="../player/player.tx" x="169.75" y="208.875"/>
+  <object id="3" template="../player/player.tx" x="216.125" y="206.375"/>
  </objectgroup>
 </map>
