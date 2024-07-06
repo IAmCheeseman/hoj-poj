@@ -56,8 +56,8 @@ return {
       offsety = 0,
       parallaxx = 1,
       parallaxy = 1,
-      repeatx = false,
-      repeaty = false,
+      repeatx = true,
+      repeaty = true,
       properties = {}
     },
     {

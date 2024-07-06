@@ -4,7 +4,7 @@
   <export target="testinf.lua" format="lua"/>
  </editorsettings>
  <tileset firstgid="1" source="../env/brick.tsx"/>
- <imagelayer id="2" name="Image Layer 1">
+ <imagelayer id="2" name="Image Layer 1" repeatx="1" repeaty="1">
   <image source="../env/grass_bg.png" width="64" height="64"/>
  </imagelayer>
  <layer id="1" name="Tile Layer 1" width="50" height="50">
