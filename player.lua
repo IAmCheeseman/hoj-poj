@@ -87,7 +87,8 @@ function Player:update(dt)
   local animSpeed = 1 - (vec.length(vx, vy) / self.speed)^2 * 0.5
   self.tex:animate(animSpeed)
 
-  mainViewport:setCamPos(math.floor(self.x), math.floor(self.y))
+  local lookahead = 0.1
+  mainViewport:setCamPos(self.x + vx * lookahead, self.y + vy * lookahead)
 end
 
 function Player:draw()
