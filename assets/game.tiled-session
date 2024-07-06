@@ -22,11 +22,11 @@
             "scaleInEditor": 1
         },
         "maps/start.tmx": {
-            "scale": 2,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 271.25,
-                "y": 108
+                "x": 339.66666666666663,
+                "y": 274.66666666666663
             }
         },
         "maps/testinf.tmx": {

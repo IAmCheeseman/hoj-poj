@@ -84,7 +84,7 @@ function Player:update(dt)
 
   self.tex:setActiveTag(tagDir .. anim)
   self.scalex = sx
-  local animSpeed = 1.5 - (vec.length(vx, vy) / self.speed)^2 * 0.5
+  local animSpeed = 1 - (vec.length(vx, vy) / self.speed)^2 * 0.5
   self.tex:animate(animSpeed)
 
   mainViewport:setCamPos(math.floor(self.x), math.floor(self.y))
