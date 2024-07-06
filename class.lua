@@ -1,7 +1,7 @@
-local classmt = {}
-classmt.__index = classmt
+local classMt = {}
+classMt.__index = classMt
 
-function classmt:__call(...)
+function classMt:__call(...)
   local inst = setmetatable({}, self)
   if inst.init then
     inst:init(...)
@@ -9,7 +9,7 @@ function classmt:__call(...)
   return inst
 end
 
-function classmt:base(fnname, ...)
+function classMt:base(fnname, ...)
   local mt = getmetatable(self)
   local i = mt.__inherits
   if not i then
@@ -24,7 +24,7 @@ function classmt:base(fnname, ...)
 end
 
 local function class(inherits)
-  local c = setmetatable({}, classmt)
+  local c = setmetatable({}, classMt)
 
   if inherits then
     for k, v in pairs(inherits) do

@@ -12,7 +12,7 @@ function Player:init()
   self.tex = Sprite("assets/player/player.ase")
   self.tex:alignedOffset("center", "bottom")
 
-  self.animpicker = VecAnimPicker {
+  self.animPicker = VecAnimPicker {
     {"d",   0,  1, { 1,  1}},
     {"u",   0, -1, { 1,  1}},
     {"ds",  1,  1, { 1,  1}},
@@ -26,8 +26,8 @@ function Player:init()
   self.x = 0
   self.y = 0
 
-  self.facedirx = 0
-  self.facediry = 0
+  self.faceDirX = 0
+  self.faceDirY = 0
 
   self.speed = 75
   self.accel = 10
@@ -69,25 +69,25 @@ function Player:update(dt)
 
   -- Prevents the sprite from facing down when standing still
   if vx ~= 0 then
-    self.facedirx = vx
+    self.faceDirX = vx
   end
   if vy ~= 0 then
-    self.facediry = vy
+    self.faceDirY = vy
   end
 
-  local tagdir, sx, _ = self.animpicker:pick(
-    vec.normalize(self.facedirx, self.facediry))
+  local tagDir, sx, _ = self.animPicker:pick(
+    vec.normalize(self.faceDirX, self.faceDirY))
   local anim = "walk"
   if vec.length(vx, vy) < 5 then
     anim = "idle"
   end
 
-  self.tex:setActiveTag(tagdir .. anim)
+  self.tex:setActiveTag(tagDir .. anim)
   self.scalex = sx
-  local animspeed = 1.5 - (vec.length(vx, vy) / self.speed)^2 * 0.5
-  self.tex:animate(animspeed)
+  local animSpeed = 1.5 - (vec.length(vx, vy) / self.speed)^2 * 0.5
+  self.tex:animate(animSpeed)
 
-  mainvp:setCamPos(math.floor(self.x), math.floor(self.y))
+  mainViewport:setCamPos(math.floor(self.x), math.floor(self.y))
 end
 
 function Player:draw()

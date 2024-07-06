@@ -6,14 +6,17 @@ local Viewport = require("viewport")
 local World = require("world")
 local DebugScreen = require("debugscreen")
 local Player = require("player")
+local TiledMap = require("tiled.map")
 
 physics.initialize(0, 0)
-mainvp = Viewport(320, 180)
-guivp = Viewport(320 * 5, 180 * 5)
-guivp.centered = false
+mainViewport = Viewport(320, 180)
+guiViewport = Viewport(320 * 5, 180 * 5)
+guiViewport.centered = false
 
 world = World()
 world:add(DebugScreen())
+
+local map = TiledMap("assets/maps/start.lua")
 
 playerGroup = -1
 
@@ -38,21 +41,22 @@ function game.update()
 end
 
 function game.draw()
-  mainvp:apply()
+  mainViewport:apply()
     love.graphics.clear(0.7, 0.7, 0.7)
+    map:draw()
     world:draw()
     love.graphics.setColor(1, 1, 1)
-  mainvp:stop()
+  mainViewport:stop()
 
-  guivp:apply()
+  guiViewport:apply()
     love.graphics.clear(0, 0, 0, 0)
     world:drawGui()
     love.graphics.setColor(1, 1, 1)
-  guivp:stop()
+  guiViewport:stop()
 
   love.graphics.setColor(1, 1, 1)
-  mainvp:draw()
-  guivp:draw()
+  mainViewport:draw()
+  guiViewport:draw()
 end
 
 return game

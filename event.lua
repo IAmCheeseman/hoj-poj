@@ -25,17 +25,17 @@ function Event:call(...)
   end
 
   -- Remove dead objects
-  local remq = {}
+  local toRemove = {}
   for i, c in ipairs(self.connections) do
     if c.world:hasObj(c.obj) then
       c.fn(c.obj, ...)
     else
-      table.insert(remq, i)
+      table.insert(toRemove, i)
     end
   end
 
-  for i=#remq, 1, -1 do
-    local pos = remq[i]
+  for i=#toRemove, 1, -1 do
+    local pos = toRemove[i]
 
     local last = self.connections[#self.connections]
     self.connections[pos] = last

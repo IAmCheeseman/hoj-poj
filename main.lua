@@ -1,12 +1,9 @@
 local game = require("game")
-local editor = require("editor")
 
 local loaded
 
 local helptext = [[
 Usage:
-  --editor, -E
-    Launch the editor.
   --help, -h
     Display this text.
 ]]
@@ -17,11 +14,8 @@ local function displayHelp(exitcode)
 end
 
 function love.load(args)
-  local loadeditor = false
   for _, arg in ipairs(args) do
-    if arg == "--editor" or arg == "-E" then
-      loadeditor = true
-    elseif arg == "--help" or arg == "-h" then
+    if arg == "--help" or arg == "-h" then
       displayHelp(0)
     else
       print("Unknown arg '" .. arg .. "'")
@@ -29,12 +23,7 @@ function love.load(args)
     end
   end
 
-  if loadeditor then
-    loaded = editor
-  else
-    loaded = game
-  end
-
+  loaded = game
   loaded.load(args)
 end
 

@@ -3,42 +3,42 @@ local class = require("class")
 local World = class()
 
 function World:init()
-  self.objmeta = {}
-  self.addq = {}
-  self.remq = {}
+  self.objMeta = {}
+  self.addQueue = {}
+  self.removeQueue = {}
   self.objs = {}
 end
 
 function World:add(obj)
-  table.insert(self.addq, obj)
+  table.insert(self.addQueue, obj)
 end
 
 function World:remove(obj)
-  if not self.objmeta[obj] then
+  if not self.objMeta[obj] then
     error("Cannot remove an object which is not in the world.", 1)
   end
-  table.insert(self.remq, obj)
+  table.insert(self.removeQueue, obj)
 end
 
 function World:m_flushQueues()
-  for _, obj in ipairs(self.addq) do
+  for _, obj in ipairs(self.addQueue) do
     table.insert(self.objs, obj)
     local meta = {
       index = #self.objs,
     }
-    self.objmeta[obj] = meta
+    self.objMeta[obj] = meta
 
     if obj.added then
       obj:added(self)
     end
   end
-  self.addq = {}
+  self.addQueue = {}
 
-  for _, obj in ipairs(self.remq) do
-    local meta = self.objmeta[obj]
+  for _, obj in ipairs(self.removeQueue) do
+    local meta = self.objMeta[obj]
 
     local new = self.objs[#self.objs]
-    self.objmeta[new].index = meta.index
+    self.objMeta[new].index = meta.index
 
     self.objs[meta.index] = self.objs[#self.objs]
     self.objs[#self.objs] = nil
@@ -47,11 +47,11 @@ function World:m_flushQueues()
       obj:removed(self)
     end
   end
-  self.remq = {}
+  self.removeQueue = {}
 end
 
 function World:hasObj(obj)
-  return self.objmeta[obj] ~= nil
+  return self.objMeta[obj] ~= nil
 end
 
 function World:update()

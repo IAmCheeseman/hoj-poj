@@ -4,8 +4,8 @@ local input = {}
 
 local actions = {}
 local keybinds = {}
-local keytoname = {}
-local mousetoname = {}
+local keyToName = {}
+local mouseToName = {}
 
 function input.addKeybind(name, ...)
   local args = {...}
@@ -34,24 +34,24 @@ function input.isKeybindPressed(name)
     error("keybind '" .. keybind .. "' does not exist.", 1)
   end
 
-  local allpressed = true
+  local allPressed = true
   for _, action in ipairs(keybind) do
     if action.type == "kb" then
-      allpressed = allpressed and love.keyboard.isDown(action.id)
+      allPressed = allPressed and love.keyboard.isDown(action.id)
     elseif action.type == "mouse" then
-      allpressed = allpressed and love.mouse.isDown(action.id)
+      allPressed = allPressed and love.mouse.isDown(action.id)
     end
   end
 
-  return allpressed
+  return allPressed
 end
 
 function input.addAction(name, type, id)
   actions[name] = {type=type, id=id}
   if type == "kb" then
-    keytoname[id] = name
+    keyToName[id] = name
   elseif type == "mouse" then
-    mousetoname[id] = name
+    mouseToName[id] = name
   end
 end
 
@@ -70,9 +70,9 @@ end
 
 function input.inputToAction(type, id)
   if type == "kb" then
-    return keytoname[id]
+    return keyToName[id]
   elseif type == "mouse" then
-    return mousetoname[id]
+    return mouseToName[id]
   end
   return nil
 end

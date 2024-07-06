@@ -17,8 +17,8 @@ function Sprite:init(path)
   self.offsetx = 0
   self.offsety = 0
 
-  self.currentframe = 1
-  self.animtime = 0
+  self.currentFrame = 1
+  self.animTime = 0
 
   self.layers = {}
   self.frames = {}
@@ -50,9 +50,9 @@ function Sprite:init(path)
         elseif chunk.type == 0x2005 then -- Image
           local cel = chunk.data
           local buf = love.data.decompress("data", "zlib", cel.data)
-          local imagedat = love.image.newImageData(
+          local imageData = love.image.newImageData(
             cel.width, cel.height, "rgba8", buf)
-          local image = love.graphics.newImage(imagedat)
+          local image = love.graphics.newImage(imageData)
           local canvas = love.graphics.newCanvas(self.width, self.height)
 
           love.graphics.setCanvas(canvas)
@@ -65,11 +65,11 @@ function Sprite:init(path)
           })
 
           image:release()
-          imagedat:release()
+          imageData:release()
         elseif chunk.type == 0x2018 then
           for i, tag in ipairs(chunk.data.tags) do
             if i == 1 then
-              self.activetag = tag.name
+              self.activeTag = tag.name
             end
 
             self.tags[tag.name] = {
@@ -117,51 +117,51 @@ function Sprite:alignedOffset(x, y)
   end
 end
 
-function Sprite:setActiveTag(name, preserveframe)
+function Sprite:setActiveTag(name, preserveFrame)
   if name and not self.tags[name] then
     error("No tag named '" .. name .. "'", 1)
   end
 
   -- Try to keep the same relative frame in the new animation
-  if preserveframe then
-    local tag = self.tags[self.activetag]
-    local dist = self.currentframe - tag.from
+  if preserveFrame then
+    local tag = self.tags[self.activeTag]
+    local dist = self.currentFrame - tag.from
 
     local new = self.tags[name]
-    self.currentframe = new.from + (dist % new.framec)
+    self.currentFrame = new.from + (dist % new.framec)
   end
 
-  self.activetag = name
+  self.activeTag = name
 end
 
-function Sprite:animate(speedmod)
-  speedmod = speedmod or 1
+function Sprite:animate(speedMod)
+  speedMod = speedMod or 1
 
   local dt = love.timer.getDelta()
 
   local from = 1
   local to = #self.frames
-  local frame = self.frames[self.currentframe]
+  local frame = self.frames[self.currentFrame]
 
-  if self.activetag then
-    from = self.tags[self.activetag].from
-    to = self.tags[self.activetag].to
+  if self.activeTag then
+    from = self.tags[self.activeTag].from
+    to = self.tags[self.activeTag].to
   end
 
-  self.animtime = self.animtime + dt
-  if self.animtime > frame.duration * speedmod then
-    self.animtime = 0
-    self.currentframe = self.currentframe + 1
+  self.animTime = self.animTime + dt
+  if self.animTime > frame.duration * speedMod then
+    self.animTime = 0
+    self.currentFrame = self.currentFrame + 1
   end
 
-  if self.currentframe < from or self.currentframe > to then
-    self.currentframe = from
+  if self.currentFrame < from or self.currentFrame > to then
+    self.currentFrame = from
   end
 end
 
 function Sprite:draw(x, y, r, sx, sy, kx, ky)
   local layerc = #self.layers
-  local start = self.currentframe * layerc - 1
+  local start = self.currentFrame * layerc - 1
 
   sx = sx or 1
   sy = sy or sx

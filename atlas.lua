@@ -89,15 +89,15 @@ function SpriteAtlas:addSprite(texture, quad)
     width, height,
     self.width, self.height)
 
-  local cacheid = #self.cache + 1
-  self.cache[cacheid] = {
+  local cacheId = #self.cache + 1
+  self.cache[cacheId] = {
     quad = atlasquad,
     x = node.x,
     y = node.y,
     width = width,
     height = height,
   }
-  return cacheid
+  return cacheId
 end
 
 function SpriteAtlas:draw(cacheid, x, y, r, sx, sy, ox, oy, kx, ky)

@@ -13,7 +13,7 @@ function physics.update()
   world:update(love.timer.getDelta())
 end
 
-local drawmet = {
+local drawFunctions = {
   ["CircleShape"] = function(body ,shape)
     love.graphics.setColor(1, 0, 0, 0.5)
     local x, y = body:getWorldCenter()
@@ -107,8 +107,8 @@ function Body:setFixedRotation(fixed)
 end
 
 function Body:draw()
-  local drawfn = drawmet[self.shape:type()]
-  drawfn(self.body, self.shape)
+  local drawFunc = drawFunctions[self.shape:type()]
+  drawFunc(self.body, self.shape)
 end
 
 return physics
