@@ -46,6 +46,10 @@ local function loadTileset(map, dir, data)
     return Tileset(map, dir, data)
   end
 
+  -- Keep global ids aligned
+  for i=1, #data.tiles do
+    table.insert(map.globalIds, i)
+  end
   log.info("Ignored tileset '" .. data.name .. "'.")
   -- Ignore collections of images
   return nil
