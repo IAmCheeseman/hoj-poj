@@ -20,6 +20,7 @@ function Tileset:init(map, dir, data)
 
   local xTiles = math.floor(data.imagewidth / data.tilewidth)
   local yTiles = math.floor(data.imageheight / data.tileheight)
+  local i = 1
   for y=0, yTiles-1 do
     for x=0, xTiles-1 do
       local pixelx, pixely = x * data.tilewidth, y * data.tileheight
@@ -28,7 +29,8 @@ function Tileset:init(map, dir, data)
           data.tilewidth, data.tileheight,
           data.imagewidth, data.imageheight)
       table.insert(self.quads, quad)
-      table.insert(map.globalIds, self)
+      map.globalIds[self.firstGid + i] = self
+      i = i + 1
     end
   end
 
