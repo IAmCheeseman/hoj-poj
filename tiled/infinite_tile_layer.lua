@@ -23,6 +23,7 @@ function InfiniteTileLayer:init(map, data)
 end
 
 function InfiniteTileLayer:draw()
+  -- TODO: Only draw chunks on screen
   for _, tileLayer in ipairs(self.tileLayers) do
     tileLayer:draw()
   end
