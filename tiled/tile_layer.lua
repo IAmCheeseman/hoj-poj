@@ -31,7 +31,6 @@ function TileLayer:regenerateBatches()
     if tile ~= 0 then
       local x = i % self.width
       local y = math.floor(i / self.height)
-      print(x, y)
 
       local tileset = self.map.globalIds[tile]
       local batch = self.spriteBatches[tileset]
