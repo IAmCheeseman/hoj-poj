@@ -28,10 +28,11 @@ local function loadTileset(map, dir, data)
   return nil
 end
 
-function TiledMap:init(path)
+function TiledMap:init(viewport, path)
   -- love.filesystem.load allows for loading from save directory.
   local tiledData = love.filesystem.load(path)()
 
+  self.viewport = viewport
   self.width = tiledData.width
   self.height = tiledData.height
   self.tileWidth = tiledData.tilewidth

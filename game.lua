@@ -16,7 +16,7 @@ guiViewport.centered = false
 world = World()
 world:add(DebugScreen())
 
-local map = TiledMap("assets/maps/start.lua")
+local map = TiledMap(mainViewport, "assets/maps/start.lua")
 
 playerGroup = -1
 

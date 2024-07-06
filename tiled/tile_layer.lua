@@ -42,7 +42,6 @@ function TileLayer:regenerateBatches()
 end
 
 function TileLayer:draw()
-  love.graphics.rectangle("line", 0, 0, self.width * 8, self.height * 8)
   for _, batch in pairs(self.spriteBatches) do
     love.graphics.draw(batch)
   end

@@ -46,6 +46,10 @@ function Viewport:getCamPos()
   return self.camx, self.camy
 end
 
+function Viewport:getSize()
+  return self.width, self.height
+end
+
 function Viewport:apply()
   love.graphics.setCanvas(self.canvas)
   love.graphics.push()
