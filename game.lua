@@ -4,8 +4,9 @@ local input = require("input")
 local physics = require("physics")
 local Viewport = require("viewport")
 local World = require("world")
-local DebugScreen = require("debugscreen")
+local DebugScreen = require("objects.debugscreen")
 local TiledMap = require("tiled.map")
+local autoload = require("autoload")
 
 physics.initialize(0, 0)
 mainViewport = Viewport(320, 180)
@@ -20,7 +21,7 @@ envCategory = 1
 playerCategory = 2
 enemyCategory = 3
 
-require("player")
+autoload("objects/")
 
 input.addAction("walk_up",    "kb", "w")
 input.addAction("walk_left",  "kb", "a")
