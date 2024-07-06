@@ -43,7 +43,7 @@ end
 
 function game.draw()
   mainViewport:apply()
-    love.graphics.clear(0.7, 0.7, 0.7)
+    -- love.graphics.clear(0, 0, 0)
     map:draw()
     world:draw()
     love.graphics.setColor(1, 1, 1)
