@@ -27,11 +27,21 @@ input.addAction("walk_up",    "kb", "w")
 input.addAction("walk_left",  "kb", "a")
 input.addAction("walk_down",  "kb", "s")
 input.addAction("walk_right", "kb", "d")
+input.addAction("toggle_collisions", "kb", "f1")
 
 local map = TiledMap(world, mainViewport, "assets/maps/start.lua")
 world:add(DebugScreen())
 
 local game = {}
+
+local drawCollisions = false
+
+input.actionTriggered:on(function(action, _, isRepeat)
+  if action == "toggle_collisions" and not isRepeat then
+    print(action)
+    drawCollisions = not drawCollisions
+  end
+end)
 
 function game.load()
 end
@@ -46,6 +56,9 @@ function game.draw()
     -- love.graphics.clear(0, 0, 0)
     map:draw()
     world:draw()
+    if drawCollisions then
+      physics.draw()
+    end
     love.graphics.setColor(1, 1, 1)
   mainViewport:stop()
 

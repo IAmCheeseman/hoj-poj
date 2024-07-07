@@ -1,9 +1,11 @@
 local class = require("class")
 local mathf = require("mathf")
+local input = require("input")
 
 local world
 
 local physics = {}
+local bodies = {}
 
 function physics.initialize(gx, gy)
   world = love.physics.newWorld(gx, gy)
@@ -11,6 +13,24 @@ end
 
 function physics.update()
   world:update(love.timer.getDelta())
+end
+
+function physics.draw()
+  local toRemove = {}
+  for i, body in ipairs(bodies) do
+    body:draw()
+    if body.body:isDestroyed() then
+      table.insert(toRemove, i)
+    end
+  end
+
+  for i=#toRemove, 1, -1 do
+    local pos = toRemove[i]
+
+    local last = bodies[#bodies]
+    bodies[pos] = last
+    bodies[#bodies] = nil
+  end
 end
 
 local drawFunctions = {
@@ -45,6 +65,8 @@ function Body:init(anchor, type, shape)
   self.fixture:setFilterData(self.categories, self.masks, self.group)
 
   self:setBounce(0)
+
+  table.insert(bodies, self)
 end
 
 function Body:getVelocity()
