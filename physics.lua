@@ -15,6 +15,27 @@ function physics.update()
   world:update(love.timer.getDelta())
 end
 
+function physics.diamondShape(...)
+  local args = {...}
+  local ox, oy, w, h
+  if #args == 2 then
+    ox, oy = 0, 0
+    w = args[1]
+    h = args[2]
+  elseif #args == 4 then
+    ox = args[1]
+    oy = args[2]
+    w = args[3]
+    h = args[4]
+  end
+
+  return love.physics.newPolygonShape(
+    ox, oy - h / 2,
+    ox - w / 2, oy,
+    ox, oy + h / 2,
+    ox + w / 2, oy)
+end
+
 function physics.draw()
   local toRemove = {}
   for i, body in ipairs(bodies) do

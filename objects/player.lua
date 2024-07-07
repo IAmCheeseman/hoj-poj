@@ -36,7 +36,7 @@ function Player:init()
 
   self.body = physics.Body(
     self, "dynamic",
-    love.physics.newRectangleShape(0, -8, 10, 16))
+    physics.diamondShape(0, -8, 10, 16))
   self.body:setFixedRotation(true)
 
   self.body:setGroup(playerGroup)
