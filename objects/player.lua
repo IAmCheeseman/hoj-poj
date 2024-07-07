@@ -36,7 +36,7 @@ function Player:init()
 
   self.body = physics.Body(
     self, "dynamic",
-    love.physics.newCircleShape(0, -5, 4))
+    love.physics.newRectangleShape(0, -8, 10, 16))
   self.body:setFixedRotation(true)
 
   self.body:setGroup(playerGroup)
@@ -88,8 +88,7 @@ function Player:update(dt)
   local animSpeed = 1 - (vec.length(vx, vy) / self.speed)^2 * 0.5
   self.tex:animate(animSpeed)
 
-  local lookAhead = 0.1
-  mainViewport:setCamPos(self.x + vx * lookAhead, self.y + vy * lookAhead)
+  mainViewport:setCamPos(self.x, self.y)
 end
 
 function Player:draw()
@@ -97,7 +96,6 @@ function Player:draw()
   self.tex:draw(self.x, self.y, 0, self.scalex, 1)
   love.graphics.setColor(0, 0, 0, 0.5)
   self.tex:draw(self.x, self.y, 0, 1, -0.5, -0.5, 0)
-  -- self.body:draw()
 end
 
 TiledMap.s_addSpawner("Player", function(world, object)

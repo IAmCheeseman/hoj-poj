@@ -5,6 +5,7 @@ local ImageLayer = require("tiled.image_layer")
 local TileLayer = require("tiled.tile_layer")
 local InfiniteTileLayer = require("tiled.infinite_tile_layer")
 local Tileset = require("tiled.tileset")
+local physics = require("physics")
 
 local world
 local objectSpawners = {}
@@ -13,6 +14,40 @@ local TiledMap = class()
 
 function TiledMap.s_addSpawner(className, spawner)
   objectSpawners[className] = spawner
+end
+
+local function createObjects(data)
+  for _, object in ipairs(data.objects) do
+    local className = object.properties.className
+    if className then
+      local spawner = objectSpawners[className]
+      if spawner then
+        spawner(world, object)
+      else
+        log.error("No spawner named '" .. tostring(className) .. "'")
+      end
+    end
+  end
+end
+
+local function createCollisions(data)
+  for _, object in ipairs(data.objects) do
+    local shape
+    if object.shape == "rectangle" then
+      shape = love.physics.newRectangleShape(
+        object.width / 2, object.height / 2,
+        object.width, object.height)
+    else
+      log.error("Invalid shape '" .. tostring(object.shape) .. "'. Ingoring.")
+    end
+
+    if shape then
+      local xy = {x=object.x, y=object.y}
+      local body = physics.Body(xy, "static", shape)
+      body:setCategory(envCategory, true)
+      body:setMask(playerCategory, true)
+    end
+  end
 end
 
 local function loadLayer(map, dir, data)
@@ -25,16 +60,10 @@ local function loadLayer(map, dir, data)
       return TileLayer(map, data)
     end
   elseif data.type == "objectgroup" then
-    for _, object in ipairs(data.objects) do
-      local className = object.properties.className
-      if className then
-        local spawner = objectSpawners[className]
-        if spawner then
-          spawner(world, object)
-        else
-          log.error("No spawner named '" .. tostring(className) .. "'")
-        end
-      end
+    if data.properties.isCollision then
+      createCollisions(data)
+    else
+      createObjects(data)
     end
     return nil
   end
