@@ -27,7 +27,7 @@ input.addAction("walk_up",    "kb", "w")
 input.addAction("walk_left",  "kb", "a")
 input.addAction("walk_down",  "kb", "s")
 input.addAction("walk_right", "kb", "d")
-input.addAction("toggle_collisions", "kb", "f1")
+input.addAction("toggle_collisions", "kb", "f2")
 
 local map = TiledMap(world, mainViewport, "assets/maps/start.lua")
 world:add(DebugScreen())

@@ -1,7 +1,7 @@
 local class = require("class")
 local input = require("input")
 
-input.addAction("open_debug_menu", "kb", "`")
+input.addAction("open_debug_menu", "kb", "f1")
 
 local font = love.graphics.newFont(24)
 

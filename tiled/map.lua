@@ -37,8 +37,22 @@ local function createCollisions(data)
       shape = love.physics.newRectangleShape(
         object.width / 2, object.height / 2,
         object.width, object.height)
+    elseif object.shape == "polygon" then
+      local vertices = {}
+      for _, vertex in ipairs(object.polygon) do
+        table.insert(vertices, vertex.x)
+        table.insert(vertices, vertex.y)
+      end
+
+      local maxVertices = 8
+      if #vertices > maxVertices * 2 then
+        log.error("Polygon collision has more than 8 vertices. Ingoring.")
+      else
+        shape = love.physics.newPolygonShape(vertices)
+      end
     else
-      log.error("Invalid shape '" .. tostring(object.shape) .. "'. Ingoring.")
+      log.error(
+        "Invalid map collision '" .. tostring(object.shape) .. "'. Ingoring.")
     end
 
     if shape then
