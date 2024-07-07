@@ -87,7 +87,9 @@ return {
       parallaxy = 1,
       repeatx = true,
       repeaty = true,
-      properties = {}
+      properties = {
+        ["zIndex"] = -1
+      }
     },
     {
       type = "tilelayer",
@@ -348,6 +350,7 @@ return {
       parallaxx = 1,
       parallaxy = 1,
       properties = {
+        ["cutHole"] = true,
         ["zIndex"] = 1
       },
       encoding = "lua",
@@ -502,9 +505,9 @@ return {
           type = "",
           shape = "rectangle",
           x = 0,
-          y = -24,
+          y = -56,
           width = 112,
-          height = 72,
+          height = 104,
           rotation = 0,
           visible = true,
           properties = {}
@@ -515,9 +518,9 @@ return {
           type = "",
           shape = "rectangle",
           x = -144,
-          y = -48,
+          y = -80,
           width = 112,
-          height = 160,
+          height = 192,
           rotation = 0,
           visible = true,
           properties = {}

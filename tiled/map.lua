@@ -111,6 +111,7 @@ function TiledMap:init(mapWorld, viewport, path)
   for _, data in ipairs(tiledData.layers) do
     local layer = loadLayer(self, dir, data)
     if layer then
+      world:add(layer)
       table.insert(self.layers, layer)
     end
   end
@@ -119,11 +120,11 @@ function TiledMap:init(mapWorld, viewport, path)
 end
 
 function TiledMap:draw()
-  for _, layer in ipairs(self.layers) do
-    if layer.draw then
-      layer:draw()
-    end
-  end
+  -- for _, layer in ipairs(self.layers) do
+  --   if layer.draw then
+  --     layer:draw()
+  --   end
+  -- end
 end
 
 return TiledMap

@@ -7,6 +7,9 @@
  <tileset firstgid="113" source="../env/shadows.tsx"/>
  <imagelayer id="3" name="Background" repeatx="1" repeaty="1">
   <image source="../env/grass_bg.png" width="64" height="64"/>
+  <properties>
+   <property name="zIndex" type="int" value="-1"/>
+  </properties>
  </imagelayer>
  <layer id="4" name="Shadows" width="30" height="20">
   <properties>
@@ -182,6 +185,7 @@
  </objectgroup>
  <layer id="1" name="Buildings" width="30" height="20">
   <properties>
+   <property name="cutHole" type="bool" value="true"/>
    <property name="zIndex" type="int" value="1"/>
   </properties>
   <data encoding="csv">
@@ -299,7 +303,7 @@
   <properties>
    <property name="isCollision" type="bool" value="true"/>
   </properties>
-  <object id="3" x="0" y="-24" width="112" height="72"/>
-  <object id="7" x="-144" y="-48" width="112" height="160"/>
+  <object id="3" x="0" y="-56" width="112" height="104"/>
+  <object id="7" x="-144" y="-80" width="112" height="192"/>
  </objectgroup>
 </map>

@@ -21,6 +21,8 @@ function ImageLayer:init(map, dir, data)
   self.repeatx = data.repeatx
   self.repeaty = data.repeaty
 
+  self.zIndex = data.properties.zIndex or 0
+
   local vpWidth, vpHeight = self.map.viewport:getSize()
   local iWidth, iHeight = self.image:getDimensions()
 
@@ -36,6 +38,8 @@ function ImageLayer:init(map, dir, data)
 end
 
 function ImageLayer:draw()
+  love.graphics.setColor(1, 1, 1)
+
   local camx, camy = self.map.viewport:getCamPos()
   if self.repeatx then
     camx = mathf.snapped(camx, self.quadWidth) - self.quadWidth

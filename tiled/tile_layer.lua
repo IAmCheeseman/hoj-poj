@@ -14,6 +14,8 @@ function TileLayer:init(map, data)
   self.parallaxx = data.parallaxx
   self.parallaxy = data.parallaxy
 
+  self.zIndex = data.properties.zIndex or 0
+
   self.spriteBatches = {}
 
   for _, tileset in ipairs(map.tilesets) do
@@ -45,11 +47,7 @@ function TileLayer:regenerateBatches()
 end
 
 function TileLayer:draw()
-  -- love.graphics.rectangle(
-  --   "line",
-  --   self.offsetx, self.offsety,
-  --   self.width * self.map.tileWidth,
-  --   self.height * self.map.tileHeight)
+  love.graphics.setColor(1, 1, 1)
   for _, batch in pairs(self.spriteBatches) do
     love.graphics.draw(batch, self.offsetx, self.offsety)
   end

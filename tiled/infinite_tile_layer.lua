@@ -7,6 +7,8 @@ function InfiniteTileLayer:init(map, data)
   self.map = map
   self.tileLayers = {}
 
+  self.zIndex = data.properties.zIndex or 0
+
   for _, chunk in ipairs(data.chunks) do
     local mockData = {
       width = chunk.width,
@@ -16,6 +18,7 @@ function InfiniteTileLayer:init(map, data)
       parallaxx = data.parallaxx,
       parallaxy = data.parallaxy,
       data = chunk.data,
+      properties = data.properties,
     }
 
     table.insert(self.tileLayers, TileLayer(map, mockData))

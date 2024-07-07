@@ -7,6 +7,8 @@ function World:init()
   self.addQueue = {}
   self.removeQueue = {}
   self.objs = {}
+
+  self.nextId = 1
 end
 
 function World:add(obj)
@@ -25,8 +27,10 @@ function World:m_flushQueues()
     table.insert(self.objs, obj)
     local meta = {
       index = #self.objs,
+      id = self.nextId,
     }
     self.objMeta[obj] = meta
+    self.nextId = self.nextId + 1
 
     if obj.added then
       obj:added(self)
@@ -66,6 +70,16 @@ function World:update()
 end
 
 function World:draw()
+  table.sort(self.objs, function(a, b)
+    local az = a.zIndex or 0
+    local bz = b.zIndex or 0
+    if az == bz then
+      az = self.objMeta[a].id
+      bz = self.objMeta[b].id
+    end
+    return az < bz
+  end)
+
   for _, obj in ipairs(self.objs) do
     if type(obj.draw) == "function" then
       obj:draw()
