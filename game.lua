@@ -38,7 +38,6 @@ local drawCollisions = false
 
 input.actionTriggered:on(function(action, _, isRepeat)
   if action == "toggle_collisions" and not isRepeat then
-    print(action)
     drawCollisions = not drawCollisions
   end
 end)

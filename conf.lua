@@ -1,5 +1,5 @@
 function love.conf(t)
-  t.window.title = "Untitled"
+  t.window.title = "Hoj Poj"
   t.window.icon = nil
   t.window.width = 320 * 3
   t.window.height = 180 * 3
