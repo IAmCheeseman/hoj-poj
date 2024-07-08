@@ -1,8 +1,8 @@
-local shadow = require "shadow"
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 local input = require("input")
 local physics = require("physics")
+local shadow = require("shadow")
 local Viewport = require("viewport")
 local World = require("world")
 local DebugScreen = require("objects.debugscreen")

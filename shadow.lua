@@ -33,36 +33,16 @@ function shadow.init(world, vp)
   world:add(ShadowRenderer())
 end
 
-local function drawSlant(s)
-  s.drawFunc(s.sprite, s.x, s.y, 0, s.sx, s.sy * -0.5, -0.5 * s.sx, 0)
+local function drawShadow(s)
+  love.graphics.ellipse(
+    "fill", math.floor(s.x), math.floor(s.y), s.width, 2, 10)
 end
 
-local function drawNormal(s)
-  s.drawFunc(s.sprite, s.x, s.y, 0, s.sx, s.sy)
-end
-
-function shadow.queueDraw(sprite, x, y, sx, sy, drawStraight)
-  drawStraight = drawStraight or false
+function shadow.queueDraw(sprite, x, y, sx, sy)
   sx = sx or 1
   sy = sy or sx
   table.insert(queue, {
-    sprite = sprite,
-    drawFunc = sprite.draw,
-    drawStraight = drawStraight,
-    x = x,
-    y = y,
-    sx = sx,
-    sy = sy,
-  })
-end
-
-function shadow.queueDrawGeneric(func, sprite, x, y, sx, sy, drawStraight)
-  sx = sx or 1
-  sy = sy or sx
-  table.insert(queue, {
-    sprite = sprite,
-    drawFunc = func,
-    drawStraight = drawStraight,
+    width = sprite.width / 2 + 3,
     x = x,
     y = y,
     sx = sx,
@@ -78,11 +58,7 @@ function shadow.renderAll()
 
   love.graphics.setColor(0, 0, 0)
   for _, s in ipairs(queue) do
-    if s.drawStraight then
-      drawNormal(s)
-    else
-      drawSlant(s)
-    end
+    drawShadow(s)
   end
 
   queue = {}

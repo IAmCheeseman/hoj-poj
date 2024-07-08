@@ -34,6 +34,8 @@ function TileLayer:regenerateBatches()
     batch:clear()
   end
 
+  local tileWidth = self.map.tileWidth
+  local tileHeight = self.map.tileHeight
   for i, tile in ipairs(self.data) do
     if tile ~= 0 then
       local x = (i - 1) % self.width
@@ -43,7 +45,7 @@ function TileLayer:regenerateBatches()
       local batch = self.spriteBatches[tileset]
       local quad = tileset:getQuad(tile)
 
-      batch:add(quad, x * tileset.tileWidth, y * tileset.tileHeight)
+      batch:add(quad, x * tileWidth, y * tileHeight)
     end
   end
 end
