@@ -98,9 +98,10 @@ local function loadTileset(map, dir, data)
   return nil
 end
 
-function TiledMap:init(mapWorld, viewport, path)
+function TiledMap:init(mapWorld, viewport, path, callbacks)
   -- love.filesystem.load allows for loading from save directory.
   local tiledData = love.filesystem.load(path)()
+  callbacks = callbacks or {}
 
   world = mapWorld
   self.viewport = viewport
@@ -119,7 +120,11 @@ function TiledMap:init(mapWorld, viewport, path)
   local dir = path:gsub([[%/[^/]-%..+$]], "")
 
   for _, data in ipairs(tiledData.tilesets) do
-    table.insert(self.tilesets, loadTileset(self, dir, data))
+    local tileset = loadTileset(self, dir, data)
+    table.insert(self.tilesets, tileset)
+    if callbacks.tileset then
+      callbacks.tileset(tileset, data)
+    end
   end
 
   for _, data in ipairs(tiledData.layers) do
@@ -127,6 +132,10 @@ function TiledMap:init(mapWorld, viewport, path)
     if layer then
       world:add(layer)
       table.insert(self.layers, layer)
+
+      if callbacks.layer then
+        callbacks.layer(layer, data)
+      end
     end
   end
 

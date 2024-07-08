@@ -1,3 +1,4 @@
+local shadow = require "shadow"
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 local input = require("input")
@@ -29,7 +30,19 @@ input.addAction("walk_down",  "kb", "s")
 input.addAction("walk_right", "kb", "d")
 input.addAction("toggle_collisions", "kb", "f2")
 
-local map = TiledMap(world, mainViewport, "assets/maps/start.lua")
+shadow.init(world, mainViewport)
+
+local curriedShadowDraw = function(drawable, x, y, _, sx, sy)
+  shadow.queueDrawGeneric(love.graphics.draw, drawable, x, y, sx, sy, true)
+end
+
+local map = TiledMap(world, mainViewport, "assets/maps/start.lua", {
+  layer = function(layer, data)
+    if data.properties.isShadow then
+      layer.drawFunc = curriedShadowDraw
+    end
+  end
+})
 world:add(DebugScreen())
 
 local game = {}
@@ -58,6 +71,8 @@ function game.draw()
     if drawCollisions then
       physics.draw()
     end
+
+    shadow.renderAll()
     love.graphics.setColor(1, 1, 1)
   mainViewport:stop()
 

@@ -24,6 +24,8 @@ function TileLayer:init(map, data)
 
   self.data = data.data
 
+  self.drawFunc = love.graphics.draw
+
   self:regenerateBatches()
 end
 
@@ -49,7 +51,7 @@ end
 function TileLayer:draw()
   love.graphics.setColor(1, 1, 1)
   for _, batch in pairs(self.spriteBatches) do
-    love.graphics.draw(batch, self.offsetx, self.offsety)
+    self.drawFunc(batch, self.offsetx, self.offsety)
   end
 end
 

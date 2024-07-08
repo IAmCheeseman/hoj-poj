@@ -21,6 +21,15 @@ function Viewport:m_scaleAndPos()
   return scale, x, y
 end
 
+function Viewport:getTranslate()
+  local camx, camy = -math.floor(self.camx), -math.floor(self.camy)
+  if self.centered then
+    camx = camx + self.width / 2
+    camy = camy + self.height / 2
+  end
+  return camx, camy
+end
+
 function Viewport:mousePos()
   local scale, x, y = self:m_scaleAndPos()
   local camx, camy = self.camx, self.camy
@@ -54,11 +63,7 @@ function Viewport:apply()
   love.graphics.setCanvas(self.canvas)
   love.graphics.push()
   love.graphics.origin()
-  local camx, camy = -math.floor(self.camx), -math.floor(self.camy)
-  if self.centered then
-    camx = camx + self.width / 2
-    camy = camy + self.height / 2
-  end
+  local camx, camy = self:getTranslate()
   love.graphics.translate(camx, camy)
 end
 

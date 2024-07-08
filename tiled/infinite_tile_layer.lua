@@ -9,6 +9,8 @@ function InfiniteTileLayer:init(map, data)
 
   self.zIndex = data.properties.zIndex or 0
 
+  self.drawFunc = love.graphics.draw
+
   for _, chunk in ipairs(data.chunks) do
     local mockData = {
       width = chunk.width,
@@ -28,6 +30,7 @@ end
 function InfiniteTileLayer:draw()
   -- TODO: Only draw chunks on screen
   for _, tileLayer in ipairs(self.tileLayers) do
+    tileLayer.drawFunc = self.drawFunc
     tileLayer:draw()
   end
 end
