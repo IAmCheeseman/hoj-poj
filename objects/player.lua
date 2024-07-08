@@ -94,7 +94,7 @@ end
 function Player:draw()
   love.graphics.setColor(1, 1, 1)
   self.tex:draw(self.x, self.y, 0, self.scalex, 1)
-  love.graphics.setColor(0, 0, 0, 0.5)
+  love.graphics.setColor(0, 0, 0, 0.33)
   self.tex:draw(self.x, self.y, 0, 1, -0.5, -0.5, 0)
 end
 
