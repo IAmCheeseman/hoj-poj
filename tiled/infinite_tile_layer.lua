@@ -30,8 +30,15 @@ end
 function InfiniteTileLayer:draw()
   -- TODO: Only draw chunks on screen
   for _, tileLayer in ipairs(self.tileLayers) do
-    tileLayer.drawFunc = self.drawFunc
-    tileLayer:draw()
+    local pxWidth = tileLayer.width * self.map.tileWidth
+    local pxHeight = tileLayer.height * self.map.tileHeight
+    local x = tileLayer.offsetx
+    local y = tileLayer.offsety
+
+    if self.map.viewport:hasRect(x, y, pxWidth, pxHeight) then
+      tileLayer.drawFunc = self.drawFunc
+      tileLayer:draw()
+    end
   end
 end
 

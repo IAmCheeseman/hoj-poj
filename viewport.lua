@@ -59,6 +59,20 @@ function Viewport:getSize()
   return self.width, self.height
 end
 
+function Viewport:hasRect(x, y, w, h)
+  local camx, camy = self:getTranslate()
+  camx = -camx
+  camy = -camy
+  return x < camx + self.width
+     and camx < x + w
+     and y < camy + self.height
+     and camy < y + h
+end
+
+function Viewport:hasPoint(x, y)
+  return Viewport:hasRect(x, y, 0,0)
+end
+
 function Viewport:apply()
   love.graphics.setCanvas(self.canvas)
   love.graphics.push()

@@ -338,7 +338,456 @@ return {
         }
       },
       tilecount = 15,
-      tiles = {}
+      tiles = {
+        {
+          id = 0,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 3,
+                y = 3,
+                width = 5,
+                height = 5,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 1,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 3,
+                width = 8,
+                height = 5,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 2,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 4,
+                width = 4,
+                height = 4,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 3,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 8,
+                height = 8,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 4,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 8,
+                height = 8,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 5,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 3,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 2,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 2,
+                y = 0,
+                width = 6,
+                height = 8,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 7,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 4,
+                height = 8,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 8,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 8,
+                height = 8,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 9,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 8,
+                height = 8,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 10,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 2,
+                y = 0,
+                width = 6,
+                height = 5,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 11,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 8,
+                height = 6,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 12,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 4,
+                height = 5,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 13,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 8,
+                height = 8,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 14,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = 0,
+                y = 0,
+                width = 8,
+                height = 8,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   layers = {
