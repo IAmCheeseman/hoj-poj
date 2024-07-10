@@ -1,8 +1,8 @@
-local class = require("class")
+local object = require("object")
 local Sprite = require("sprite")
 local TiledMap = require("tiled.map")
 
-local StaticProp = class()
+local StaticProp = object()
 
 function StaticProp:init(sprite, x, y)
   self.sprite = sprite

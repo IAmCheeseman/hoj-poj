@@ -1,8 +1,8 @@
-local class = require("class")
+local object = require("object")
 local Sprite = require("sprite")
-local vec = require("vec")
+local core = require("core")
 
-local Gun = class()
+local Gun = object()
 
 function Gun:init(anchor, offsetx, offsety)
   self.anchor = anchor
@@ -23,13 +23,13 @@ end
 
 function Gun:draw()
   local ax, ay = math.cos(self.angle), math.sin(self.angle)
-  local anchorZ = self.anchor.zIndex or 0
-  if vec.dot(0, -1, ax, ay) > 0 then
+  local anchorZ = self.anchor.zIndex
+  if core.vec.dot(0, -1, ax, ay) > 0 then
     self.zIndex = anchorZ - 1
   else
     self.zIndex = anchorZ + 1
   end
-  local isLeft = vec.dot(-1, 0, ax, ay) > 0
+  local isLeft = core.vec.dot(-1, 0, ax, ay) > 0
   local scaley = isLeft and -1 or 1
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y, self.angle, 1, scaley)

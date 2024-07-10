@@ -1,12 +1,18 @@
-local classMt = {}
-classMt.__index = classMt
+local class = {}
 
-function classMt:__call(...)
-  local inst = setmetatable({}, self)
+function class.instance(c, t, ...)
+  local inst = setmetatable(t, c)
   if inst.init then
     inst:init(...)
   end
   return inst
+end
+
+local classMt = {}
+classMt.__index = classMt
+
+function classMt:__call(...)
+  return class.instance(self, {}, ...)
 end
 
 function classMt:base(fnname, ...)
@@ -23,8 +29,10 @@ function classMt:base(fnname, ...)
   return res
 end
 
-local function class(inherits)
-  local c = setmetatable({}, classMt)
+function class.new(inherits, mt)
+  mt = mt or classMt
+
+  local c = setmetatable({}, mt)
 
   if inherits then
     for k, v in pairs(inherits) do
@@ -38,5 +46,15 @@ local function class(inherits)
 
   return c
 end
+
+function class.getDefaultMt()
+  return classMt
+end
+
+local mt = {
+  __call = class.new
+}
+
+setmetatable(class, mt)
 
 return class

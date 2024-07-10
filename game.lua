@@ -1,26 +1,12 @@
 love.graphics.setDefaultFilter("nearest", "nearest")
 
+local core = require("core")
 local input = require("input")
 local physics = require("physics")
 local shadow = require("shadow")
-local Viewport = require("viewport")
-local World = require("world")
 local DebugScreen = require("objects.debugscreen")
 local TiledMap = require("tiled.map")
 local autoload = require("autoload")
-
-physics.initialize(0, 0)
-mainViewport = Viewport(320, 180)
-guiViewport = Viewport(320 * 5, 180 * 5)
-guiViewport.centered = false
-
-world = World()
-
-playerGroup = -1
-
-envCategory = 1
-playerCategory = 2
-enemyCategory = 3
 
 autoload("objects/")
 
@@ -30,20 +16,18 @@ input.addAction("walk_down",  "kb", "s")
 input.addAction("walk_right", "kb", "d")
 input.addAction("toggle_collisions", "kb", "f2")
 
-shadow.init(world, mainViewport)
-
 local curriedShadowDraw = function(drawable, x, y, _, sx, sy)
   shadow.queueDrawGeneric(love.graphics.draw, drawable, x, y, sx, sy, true)
 end
 
-local map = TiledMap(world, mainViewport, "assets/maps/start.lua", {
+local map = TiledMap(core.world, core.mainViewport, "assets/maps/start.lua", {
   layer = function(layer, data)
     if data.properties.isShadow then
       layer.drawFunc = curriedShadowDraw
     end
   end
 })
-world:add(DebugScreen())
+core.world:add(DebugScreen())
 
 local game = {}
 
@@ -60,31 +44,31 @@ end
 
 function game.update()
   physics.update()
-  world:update()
+  core.world:update()
 end
 
 function game.draw()
-  mainViewport:apply()
+  core.mainViewport:apply()
     -- love.graphics.clear(0, 0, 0)
     map:draw()
-    world:draw()
+    core.world:draw()
     if drawCollisions then
       physics.draw()
     end
 
     shadow.renderAll()
     love.graphics.setColor(1, 1, 1)
-  mainViewport:stop()
+  core.mainViewport:stop()
 
-  guiViewport:apply()
+  core.guiViewport:apply()
     love.graphics.clear(0, 0, 0, 0)
-    world:drawGui()
+    core.world:drawGui()
     love.graphics.setColor(1, 1, 1)
-  guiViewport:stop()
+  core.guiViewport:stop()
 
   love.graphics.setColor(1, 1, 1)
-  mainViewport:draw()
-  guiViewport:draw()
+  core.mainViewport:draw()
+  core.guiViewport:draw()
 end
 
 return game

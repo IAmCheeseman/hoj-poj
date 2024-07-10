@@ -71,8 +71,8 @@ end
 
 function World:draw()
   table.sort(self.objs, function(a, b)
-    local az = a.zIndex or 0
-    local bz = b.zIndex or 0
+    local az = a.zIndex
+    local bz = b.zIndex
     if az == bz then
       az = self.objMeta[a].id
       bz = self.objMeta[b].id

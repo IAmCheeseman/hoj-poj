@@ -1,18 +1,18 @@
-local class = require("class")
-local input = require("input")
+local object = require("object")
+local core  = require("core")
 
-input.addAction("open_debug_menu", "kb", "f1")
+core.input.addAction("open_debug_menu", "kb", "f1")
 
 local font = love.graphics.newFont(24)
 
-local DebugScreen = class()
+local DebugScreen = object()
 
 function DebugScreen:init()
   self.visible = false
 end
 
 function DebugScreen:added(world)
-  input.actionTriggered:connect(world, self.m_onActionDown, self)
+  core.input.actionTriggered:connect(world, self.m_onActionDown, self)
 end
 
 function DebugScreen:m_onActionDown(action, _, isrepeat)
