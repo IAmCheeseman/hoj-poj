@@ -2,7 +2,7 @@ local physics = require("physics")
 local Viewport = require("viewport")
 local World = require("world")
 local shadow = require("shadow")
-local autoload = require("autoload")
+local Event = require("event")
 
 local core = {}
 
@@ -23,6 +23,12 @@ core.math = require("mathf")
 core.input = require("input")
 core.physics = require("physics")
 core.Body = core.physics.Body
+
+core.update = Event()
+core.postUpdate = Event()
+core.draw = Event()
+core.gui = Event()
+core.postDraw = Event()
 
 shadow.init(core.world, core.mainViewport)
 

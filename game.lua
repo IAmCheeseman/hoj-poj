@@ -42,9 +42,11 @@ end)
 function game.load()
 end
 
-function game.update()
+function game.update(dt)
   physics.update()
+  core.update:call(dt)
   core.world:update()
+  core.postUpdate:call(dt)
 end
 
 function game.draw()
@@ -57,14 +59,19 @@ function game.draw()
     end
 
     shadow.renderAll()
+
+    core.draw:call()
     love.graphics.setColor(1, 1, 1)
   core.mainViewport:stop()
 
   core.guiViewport:apply()
     love.graphics.clear(0, 0, 0, 0)
     core.world:drawGui()
+    core.gui:call()
     love.graphics.setColor(1, 1, 1)
   core.guiViewport:stop()
+
+  core.postDraw:call()
 
   love.graphics.setColor(1, 1, 1)
   core.mainViewport:draw()
