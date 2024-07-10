@@ -10,7 +10,7 @@ return {
   tilewidth = 8,
   tileheight = 8,
   nextlayerid = 7,
-  nextobjectid = 40,
+  nextobjectid = 288,
   properties = {},
   tilesets = {
     {
@@ -69,32 +69,6 @@ return {
       properties = {},
       wangsets = {},
       tilecount = 9,
-      tiles = {}
-    },
-    {
-      name = "path",
-      firstgid = 478,
-      class = "",
-      tilewidth = 32,
-      tileheight = 32,
-      spacing = 0,
-      margin = 0,
-      columns = 0,
-      objectalignment = "unspecified",
-      tilerendersize = "tile",
-      fillmode = "stretch",
-      tileoffset = {
-        x = 0,
-        y = 0
-      },
-      grid = {
-        orientation = "orthogonal",
-        width = 32,
-        height = 32
-      },
-      properties = {},
-      wangsets = {},
-      tilecount = 0,
       tiles = {}
     },
     {
@@ -788,6 +762,45 @@ return {
           }
         }
       }
+    },
+    {
+      name = "objects",
+      firstgid = 511,
+      class = "",
+      tilewidth = 16,
+      tileheight = 16,
+      spacing = 0,
+      margin = 0,
+      columns = 0,
+      objectalignment = "unspecified",
+      tilerendersize = "tile",
+      fillmode = "stretch",
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 1,
+        height = 1
+      },
+      properties = {},
+      wangsets = {},
+      tilecount = 2,
+      tiles = {
+        {
+          id = 0,
+          image = "../player/tiled_display.png",
+          width = 10,
+          height = 14
+        },
+        {
+          id = 1,
+          image = "../env/bush.png",
+          width = 16,
+          height = 16
+        }
+      }
     }
   },
   layers = {
@@ -1266,16 +1279,16 @@ return {
       properties = {},
       objects = {
         {
-          id = 1,
+          id = 287,
           name = "",
           type = "",
           shape = "rectangle",
           x = 344,
-          y = 88,
+          y = 96,
           width = 10,
           height = 14,
           rotation = 0,
-          gid = 0,
+          gid = 511,
           visible = true,
           properties = {
             ["className"] = "Player"
@@ -1300,7 +1313,7 @@ return {
       parallaxy = 1,
       properties = {
         ["cutHole"] = true,
-        ["zIndex"] = 1
+        ["zIndex"] = 1000
       },
       encoding = "lua",
       chunks = {

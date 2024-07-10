@@ -6,13 +6,15 @@ local physics = require("physics")
 local Sprite = require("sprite")
 local VecAnimPicker = require("animpicker")
 local TiledMap = require("tiled.map")
+local Gun = require("objects.gun")
 local shadow   = require("shadow")
 
 local Player = class()
 
 function Player:init()
-  self.tex = Sprite("assets/player/player.ase")
-  self.tex:alignedOffset("center", "bottom")
+  self.sprite = Sprite("assets/player/player.ase")
+  self.sprite:alignedOffset("center", "bottom")
+  self.sprite:setLayerVisible("hands", false)
 
   self.animPicker = VecAnimPicker {
     {"d",   0,  1, { 1,  1}},
@@ -43,6 +45,11 @@ function Player:init()
   self.body:setGroup(playerGroup)
   self.body:setCategory(playerCategory, true)
   self.body:setMask(envCategory, true)
+end
+
+function Player:added(world)
+  self.gun = Gun(self, 0, -5)
+  world:add(self.gun)
 end
 
 function Player:update(dt)
@@ -77,25 +84,33 @@ function Player:update(dt)
     self.faceDirY = vy
   end
 
+  local mx, my = mainViewport:mousePos()
+  local dirx, diry = vec.direction(self.x, self.y, mx, my)
+
   local tagDir, sx, _ = self.animPicker:pick(
-    vec.normalize(self.faceDirX, self.faceDirY))
+    dirx, diry)
+    -- vec.normalize(self.faceDirX, self.faceDirY))
   local anim = "walk"
   if vec.length(vx, vy) < 5 then
     anim = "idle"
   end
 
-  self.tex:setActiveTag(tagDir .. anim)
+  self.sprite:setActiveTag(tagDir .. anim)
   self.scalex = sx
   local animSpeed = 1 - (vec.length(vx, vy) / self.speed)^2 * 0.5
-  self.tex:animate(animSpeed)
+  self.sprite:animate(animSpeed)
 
   mainViewport:setCamPos(self.x, self.y)
+
+  -- Update gun angle
+  local gunx, guny = self.gun.x, self.gun.y
+  self.gun.angle = vec.angleToPoint(gunx, guny, mx, my)
 end
 
 function Player:draw()
   love.graphics.setColor(1, 1, 1)
-  self.tex:draw(self.x, self.y, 0, self.scalex, 1)
-  shadow.queueDraw(self.tex, self.x, self.y, self.scalex, 1)
+  self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
+  shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
 end
 
 TiledMap.s_addSpawner("Player", function(world, object)

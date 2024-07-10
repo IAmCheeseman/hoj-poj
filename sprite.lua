@@ -32,7 +32,7 @@ function Sprite:init(path)
 
     for _, frame in ipairs(file.header.frames) do
       for _, chunk in ipairs(frame.chunks) do
-        if chunk.type == 0x2004 then
+        if chunk.type == 0x2004 then -- Layer
           local layerdat = chunk.data
           if layerdat.type == 0 then
             local layer = {}
@@ -46,6 +46,7 @@ function Sprite:init(path)
             layer.alpha = 1 - layerdat.opacity / 255
 
             table.insert(self.layers, layer)
+            self.layers[layerdat.name] = layer
           end
         elseif chunk.type == 0x2005 then -- Image
           local cel = chunk.data
@@ -66,7 +67,7 @@ function Sprite:init(path)
 
           image:release()
           imageData:release()
-        elseif chunk.type == 0x2018 then
+        elseif chunk.type == 0x2018 then -- Tag
           for i, tag in ipairs(chunk.data.tags) do
             if i == 1 then
               self.activeTag = tag.name
@@ -117,6 +118,13 @@ function Sprite:alignedOffset(x, y)
   end
 end
 
+function Sprite:setLayerVisible(name, visible)
+  if not self.layers[name] then
+    error("No layer named '" .. name .. "'.", 1)
+  end
+  self.layers[name].visible = visible
+end
+
 function Sprite:setActiveTag(name, preserveFrame)
   if name and not self.tags[name] then
     error("No tag named '" .. name .. "'", 1)
@@ -154,21 +162,22 @@ function Sprite:animate(speedMod)
     self.currentFrame = self.currentFrame + 1
   end
 
-  if self.currentFrame < from or self.currentFrame > to then
+  if self.currentFrame < from or self.currentFrame > to - 1 then
     self.currentFrame = from
   end
 end
 
 function Sprite:draw(x, y, r, sx, sy, kx, ky)
-  local layerc = #self.layers
-  local start = self.currentFrame * layerc - 1
+  local layerCount = #self.layers
+  local start = self.currentFrame * layerCount - layerCount
 
   sx = sx or 1
   sy = sy or sx
   kx = kx or 0
   ky = ky or 0
 
-  for i=1, layerc do
+  local i = 1
+  repeat
     local offset = i
     local layer = self.layers[i]
     if layer.visible then
@@ -179,7 +188,9 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
         r, sx, sy, self.offsetx, self.offsety, kx, ky)
       love.graphics.setBlendMode("alpha")
     end
-  end
+
+    i = i + 1
+  until i > layerCount
 end
 
 return Sprite

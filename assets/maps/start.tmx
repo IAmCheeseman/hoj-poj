@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="8" tileheight="8" infinite="1" nextlayerid="7" nextobjectid="40">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="8" tileheight="8" infinite="1" nextlayerid="7" nextobjectid="288">
  <editorsettings>
   <export target="start.lua" format="lua"/>
  </editorsettings>
  <tileset firstgid="1" source="../env/brick.tsx"/>
  <tileset firstgid="469" source="../env/shadows.tsx"/>
  <tileset firstgid="478" source="../env/path.tsx"/>
- <tileset firstgid="478" source="../env/path.tsx"/>
  <tileset firstgid="496" source="../env/trees.tsx"/>
+ <tileset firstgid="511" source="../objects.tsx"/>
  <imagelayer id="3" name="Background" repeatx="1" repeaty="1">
-  <image source="../env/grass_bg.png" width="64" height="64"/>
+  <image source="../env/grass_bg.png" width="160" height="90"/>
   <properties>
    <property name="zIndex" type="int" value="-3"/>
   </properties>
@@ -382,12 +382,12 @@
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="1" template="../player/player.tx" x="344" y="88"/>
+  <object id="287" template="../player/player.tx" x="344" y="96"/>
  </objectgroup>
  <layer id="1" name="Buildings" width="30" height="20">
   <properties>
    <property name="cutHole" type="bool" value="true"/>
-   <property name="zIndex" type="int" value="1"/>
+   <property name="zIndex" type="int" value="1000"/>
   </properties>
   <data encoding="csv">
    <chunk x="-32" y="-16" width="16" height="16">

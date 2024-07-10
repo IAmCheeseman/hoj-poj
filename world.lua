@@ -80,9 +80,10 @@ function World:draw()
     return az < bz
   end)
 
-  for _, obj in ipairs(self.objs) do
+  for i, obj in ipairs(self.objs) do
     if type(obj.draw) == "function" then
       obj:draw()
+      self.objMeta[obj].index = i
     end
   end
 end
