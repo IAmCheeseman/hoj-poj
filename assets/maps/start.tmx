@@ -11,12 +11,12 @@
  <imagelayer id="3" name="Background" repeatx="1" repeaty="1">
   <image source="../env/grass_bg.png" width="160" height="90"/>
   <properties>
-   <property name="zIndex" type="int" value="-3"/>
+   <property name="zIndex" type="int" value="-100000"/>
   </properties>
  </imagelayer>
  <layer id="6" name="Ground" width="30" height="20">
   <properties>
-   <property name="zIndex" type="int" value="-2"/>
+   <property name="zIndex" type="int" value="-1000"/>
   </properties>
   <data encoding="csv">
    <chunk x="-32" y="-16" width="16" height="16">
@@ -387,7 +387,8 @@
  <layer id="1" name="Buildings" width="30" height="20">
   <properties>
    <property name="cutHole" type="bool" value="true"/>
-   <property name="zIndex" type="int" value="1000"/>
+   <property name="ySort" type="bool" value="true"/>
+   <property name="zIndex" type="int" value="10"/>
   </properties>
   <data encoding="csv">
    <chunk x="-32" y="-16" width="16" height="16">

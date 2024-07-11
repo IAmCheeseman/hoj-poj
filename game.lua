@@ -20,7 +20,7 @@ local curriedShadowDraw = function(drawable, x, y, _, sx, sy)
   shadow.queueDrawGeneric(love.graphics.draw, drawable, x, y, sx, sy, true)
 end
 
-local map = TiledMap(core.world, core.mainViewport, "assets/maps/start.lua", {
+local map = TiledMap(core.mainViewport, "assets/maps/start.lua", {
   layer = function(layer, data)
     if data.properties.isShadow then
       layer.drawFunc = curriedShadowDraw

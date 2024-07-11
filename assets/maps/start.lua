@@ -819,7 +819,7 @@ return {
       repeatx = true,
       repeaty = true,
       properties = {
-        ["zIndex"] = -3
+        ["zIndex"] = -100000
       }
     },
     {
@@ -838,7 +838,7 @@ return {
       parallaxx = 1,
       parallaxy = 1,
       properties = {
-        ["zIndex"] = -2
+        ["zIndex"] = -1000
       },
       encoding = "lua",
       chunks = {
@@ -1313,7 +1313,8 @@ return {
       parallaxy = 1,
       properties = {
         ["cutHole"] = true,
-        ["zIndex"] = 1000
+        ["ySort"] = true,
+        ["zIndex"] = 10
       },
       encoding = "lua",
       chunks = {

@@ -1,13 +1,12 @@
 local log = require("log")
 local class = require("class")
+local core = require("core")
 
 local ImageLayer = require("tiled.image_layer")
 local TileLayer = require("tiled.tile_layer")
 local InfiniteTileLayer = require("tiled.infinite_tile_layer")
 local Tileset = require("tiled.tileset")
-local physics = require("physics")
 
-local world
 local objectSpawners = {}
 
 local TiledMap = class()
@@ -22,7 +21,7 @@ local function createObjects(data)
     if className then
       local spawner = objectSpawners[className]
       if spawner then
-        spawner(world, object)
+        spawner(core.world, object)
       else
         log.error("No spawner named '" .. tostring(className) .. "'")
       end
@@ -57,9 +56,9 @@ local function createCollisions(data)
 
     if shape then
       local xy = {x=object.x, y=object.y}
-      local body = physics.Body(xy, "static", shape)
-      body:setCategory(envCategory, true)
-      body:setMask(playerCategory, true)
+      local body = core.Body(xy, "static", shape)
+      body:setCategory(core.envCategory, true)
+      body:setMask(core.playerCategory, true)
     end
   end
 end
@@ -98,12 +97,11 @@ local function loadTileset(map, dir, data)
   return nil
 end
 
-function TiledMap:init(mapWorld, viewport, path, callbacks)
+function TiledMap:init(viewport, path, callbacks)
   -- love.filesystem.load allows for loading from save directory.
   local tiledData = love.filesystem.load(path)()
   callbacks = callbacks or {}
 
-  world = mapWorld
   self.viewport = viewport
   self.width = tiledData.width
   self.height = tiledData.height
@@ -130,7 +128,7 @@ function TiledMap:init(mapWorld, viewport, path, callbacks)
   for _, data in ipairs(tiledData.layers) do
     local layer = loadLayer(self, dir, data)
     if layer then
-      world:add(layer)
+      core.world:add(layer)
       table.insert(self.layers, layer)
 
       if callbacks.layer then

@@ -1,6 +1,7 @@
-local class = require("class")
+local object = require("object")
+local core = require("core")
 
-local TileLayer = class()
+local TileLayer = object()
 
 function TileLayer:init(map, data)
   self.map = map
