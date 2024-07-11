@@ -17,6 +17,13 @@ function TileLayer:init(map, data)
 
   self.zIndex = data.properties.zIndex or 0
 
+  local zIndexAuto = data.properties.zIndexAuto
+  if zIndexAuto == "topmost" then
+    self.zIndex = self.zIndex + self.offsety + self.height * self.map.tileHeight
+  elseif zIndexAuto == "bottommost" then
+    self.zIndex = self.zIndex + self.offsety
+  end
+
   self.spriteBatches = {}
   self.usedBatches = {}
 

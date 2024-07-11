@@ -10,7 +10,7 @@ return {
   tilewidth = 8,
   tileheight = 8,
   nextlayerid = 8,
-  nextobjectid = 290,
+  nextobjectid = 299,
   properties = {},
   tilesets = {
     {
@@ -819,7 +819,8 @@ return {
       repeatx = true,
       repeaty = true,
       properties = {
-        ["zIndex"] = -100000
+        ["zIndex"] = -1,
+        ["zIndexAuto"] = "bottommost"
       }
     },
     {
@@ -961,8 +962,8 @@ return {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 478, 479, 479, 479, 479, 479,
             0, 0, 0, 0, 0, 0, 0, 478, 479, 479, 494, 487, 491, 491, 491, 491,
             0, 0, 0, 0, 0, 478, 479, 494, 487, 491, 491, 492, 0, 0, 0, 0,
-            0, 0, 0, 478, 479, 494, 0, 491, 492, 0, 0, 0, 0, 0, 0, 0,
-            0, 478, 479, 494, 487, 491, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 478, 479, 494, 485, 487, 492, 0, 0, 0, 0, 0, 0, 0,
+            0, 478, 479, 494, 487, 491, 491, 492, 0, 0, 0, 0, 0, 0, 0, 0,
             479, 494, 487, 491, 492, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             485, 487, 492, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             485, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -1102,13 +1103,13 @@ return {
             0, 0, 0, 0, 0, 0, 0, 484, 487, 492, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 478, 494, 486, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 478, 494, 487, 492, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 478, 494, 487, 492, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 478, 479, 494, 487, 492, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 484, 487, 491, 492, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 484, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 478, 494, 493, 480, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 484, 485, 485, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            479, 494, 485, 495, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 478, 494, 483, 486, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 478, 479, 494, 485, 485, 486, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 484, 485, 485, 485, 487, 492, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 484, 485, 483, 487, 492, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 478, 494, 485, 485, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 484, 485, 485, 485, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            479, 494, 485, 485, 487, 492, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             485, 485, 485, 485, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             485, 485, 489, 483, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             483, 485, 485, 495, 486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1293,6 +1294,118 @@ return {
           properties = {
             ["className"] = "Player"
           }
+        },
+        {
+          id = 290,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 208,
+          y = 88,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 512,
+          visible = true,
+          properties = {
+            ["className"] = "Bush"
+          }
+        },
+        {
+          id = 291,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 232,
+          y = 96,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 512,
+          visible = true,
+          properties = {
+            ["className"] = "Bush"
+          }
+        },
+        {
+          id = 292,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 216,
+          y = 104,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 512,
+          visible = true,
+          properties = {
+            ["className"] = "Bush"
+          }
+        },
+        {
+          id = 293,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 248,
+          y = 104,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 512,
+          visible = true,
+          properties = {
+            ["className"] = "Bush"
+          }
+        },
+        {
+          id = 295,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 240,
+          y = 112,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 512,
+          visible = true,
+          properties = {
+            ["className"] = "Bush"
+          }
+        },
+        {
+          id = 296,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 256,
+          y = 112,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 512,
+          visible = true,
+          properties = {
+            ["className"] = "Bush"
+          }
+        },
+        {
+          id = 298,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 254.667,
+          y = 104.667,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 512,
+          visible = true,
+          properties = {
+            ["className"] = "Bush"
+          }
         }
       }
     },
@@ -1313,7 +1426,8 @@ return {
       parallaxy = 1,
       properties = {
         ["cutHole"] = true,
-        ["zIndex"] = -1
+        ["zIndex"] = 0,
+        ["zIndexAuto"] = "bottommost"
       },
       encoding = "lua",
       chunks = {
@@ -1587,7 +1701,8 @@ return {
       parallaxx = 1,
       parallaxy = 1,
       properties = {
-        ["zIndex"] = 10
+        ["zIndex"] = 1,
+        ["zIndexAuto"] = "topmost"
       },
       encoding = "lua",
       chunks = {

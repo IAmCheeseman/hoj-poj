@@ -23,6 +23,13 @@ function ImageLayer:init(map, dir, data)
 
   self.zIndex = data.properties.zIndex or 0
 
+  local zIndexAuto = data.properties.zIndexAuto
+  if zIndexAuto == "topmost" then
+    self.zIndex = math.huge
+  elseif zIndexAuto == "bottommost" then
+    self.zIndex = -math.huge
+  end
+
   local vpWidth, vpHeight = self.map.viewport:getSize()
   local iWidth, iHeight = self.image:getDimensions()
 

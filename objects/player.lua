@@ -95,6 +95,8 @@ function Player:update(dt)
   local animSpeed = 1 - (core.vec.length(vx, vy) / self.speed)^2 * 0.5
   self.sprite:animate(animSpeed)
 
+  self.zIndex = self.y
+
   core.mainViewport:setCamPos(self.x, self.y)
 
   -- Update gun angle

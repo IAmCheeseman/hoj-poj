@@ -8,7 +8,7 @@ function StaticProp:init(sprite, x, y)
   self.sprite = sprite
   self.x = x
   self.y = y
-  self.zIndex = -1
+  self.zIndex = self.y
 end
 
 function StaticProp:draw()
@@ -18,7 +18,7 @@ end
 
 local bushSprite = Sprite("assets/env/bush.png")
 bushSprite:alignedOffset("left", "bottom")
-TiledMap.s_addSpawner("Bush", function(world, object)
-  local prop = StaticProp(bushSprite, object.x, object.y)
+TiledMap.s_addSpawner("Bush", function(world, obj)
+  local prop = StaticProp(bushSprite, obj.x, obj.y)
   world:add(prop)
 end)

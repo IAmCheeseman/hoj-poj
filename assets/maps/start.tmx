@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="8" tileheight="8" infinite="1" nextlayerid="8" nextobjectid="290">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="8" tileheight="8" infinite="1" nextlayerid="8" nextobjectid="299">
  <editorsettings>
   <export target="start.lua" format="lua"/>
  </editorsettings>
@@ -11,7 +11,8 @@
  <imagelayer id="3" name="Background" repeatx="1" repeaty="1">
   <image source="../env/grass_bg.png" width="160" height="90"/>
   <properties>
-   <property name="zIndex" type="int" value="-100000"/>
+   <property name="zIndex" type="int" value="-1"/>
+   <property name="zIndexAuto" value="bottommost"/>
   </properties>
  </imagelayer>
  <layer id="6" name="Ground" width="30" height="20">
@@ -121,8 +122,8 @@
 0,0,0,0,0,0,0,0,0,0,478,479,479,479,479,479,
 0,0,0,0,0,0,0,478,479,479,494,487,491,491,491,491,
 0,0,0,0,0,478,479,494,487,491,491,492,0,0,0,0,
-0,0,0,478,479,494,0,491,492,0,0,0,0,0,0,0,
-0,478,479,494,487,491,0,0,0,0,0,0,0,0,0,0,
+0,0,0,478,479,494,485,487,492,0,0,0,0,0,0,0,
+0,478,479,494,487,491,491,492,0,0,0,0,0,0,0,0,
 479,494,487,491,492,0,0,0,0,0,0,0,0,0,0,0,
 485,487,492,0,0,0,0,0,0,0,0,0,0,0,0,0,
 485,486,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -241,13 +242,13 @@
 0,0,0,0,0,0,0,484,487,492,0,0,0,0,0,0,
 0,0,0,0,0,0,478,494,486,0,0,0,0,0,0,0,
 0,0,0,0,0,478,494,487,492,0,0,0,0,0,0,0,
-0,0,0,0,478,494,487,492,0,0,0,0,0,0,0,0,
-0,0,478,479,494,487,492,0,0,0,0,0,0,0,0,0,
-0,0,484,487,491,492,0,0,0,0,0,0,0,0,0,0,
-0,0,484,486,0,0,0,0,0,0,0,0,0,0,0,0,
-0,478,494,493,480,0,0,0,0,0,0,0,0,0,0,0,
-0,484,485,485,486,0,0,0,0,0,0,0,0,0,0,0,
-479,494,485,495,486,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,478,494,483,486,0,0,0,0,0,0,0,0,
+0,0,478,479,494,485,485,486,0,0,0,0,0,0,0,0,
+0,0,484,485,485,485,487,492,0,0,0,0,0,0,0,0,
+0,0,484,485,483,487,492,0,0,0,0,0,0,0,0,0,
+0,478,494,485,485,486,0,0,0,0,0,0,0,0,0,0,
+0,484,485,485,485,486,0,0,0,0,0,0,0,0,0,0,
+479,494,485,485,487,492,0,0,0,0,0,0,0,0,0,0,
 485,485,485,485,486,0,0,0,0,0,0,0,0,0,0,0,
 485,485,489,483,486,0,0,0,0,0,0,0,0,0,0,0,
 483,485,485,495,486,0,0,0,0,0,0,0,0,0,0,0,
@@ -383,11 +384,19 @@
  </layer>
  <objectgroup id="2" name="Objects">
   <object id="287" template="../player/player.tx" x="344" y="96"/>
+  <object id="290" template="../env/bush.tx" x="208" y="88"/>
+  <object id="291" template="../env/bush.tx" x="232" y="96"/>
+  <object id="292" template="../env/bush.tx" x="216" y="104"/>
+  <object id="293" template="../env/bush.tx" x="248" y="104"/>
+  <object id="295" template="../env/bush.tx" x="240" y="112"/>
+  <object id="296" template="../env/bush.tx" x="256" y="112"/>
+  <object id="298" template="../env/bush.tx" x="254.667" y="104.667"/>
  </objectgroup>
  <layer id="1" name="LowerLayer" width="30" height="20">
   <properties>
    <property name="cutHole" type="bool" value="true"/>
-   <property name="zIndex" type="int" value="-1"/>
+   <property name="zIndex" type="int" value="0"/>
+   <property name="zIndexAuto" value="bottommost"/>
   </properties>
   <data encoding="csv">
    <chunk x="0" y="-16" width="16" height="16">
@@ -610,7 +619,8 @@
  </layer>
  <layer id="7" name="UpperLayer" width="30" height="20">
   <properties>
-   <property name="zIndex" type="int" value="10"/>
+   <property name="zIndex" type="int" value="1"/>
+   <property name="zIndexAuto" value="topmost"/>
   </properties>
   <data encoding="csv">
    <chunk x="-32" y="-16" width="16" height="16">

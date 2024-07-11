@@ -11,6 +11,9 @@ function InfiniteTileLayer:init(map, data)
 
   self.drawFunc = love.graphics.draw
 
+  local highestPoint = math.huge
+  local lowestPoint = -math.huge
+
   for _, chunk in ipairs(data.chunks) do
     local mockData = {
       width = chunk.width,
@@ -23,7 +26,23 @@ function InfiniteTileLayer:init(map, data)
       properties = data.properties,
     }
 
+    local top = mockData.offsety
+    local bottom = mockData.offsety + mockData.height * map.tileHeight
+    if bottom > lowestPoint then
+      lowestPoint = bottom
+    end
+    if top < highestPoint then
+      highestPoint = top
+    end
+
     table.insert(self.tileLayers, TileLayer(map, mockData))
+  end
+
+  local zIndexAuto = data.properties.zIndexAuto
+  if zIndexAuto == "topmost" then
+    self.zIndex = self.zIndex + lowestPoint
+  elseif zIndexAuto == "bottommost" then
+    self.zIndex = self.zIndex + highestPoint
   end
 end
 
