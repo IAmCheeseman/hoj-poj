@@ -33,7 +33,8 @@ function Player:init()
 
   self.body = core.Body(
     self, "dynamic",
-    core.physics.diamondShape(0, -8, 7, 13))
+    love.physics.newCircleShape(0, -4, 4))
+    -- core.physics.diamondShape(0, -8, 7, 13))
   self.body:setFixedRotation(true)
 
   self.body:setGroup(core.playerGroup)
