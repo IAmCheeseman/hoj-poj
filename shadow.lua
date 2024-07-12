@@ -1,4 +1,5 @@
 local class = require("class")
+local mathf = require("mathf")
 
 local shadow = {}
 
@@ -23,7 +24,7 @@ function ShadowRenderer:draw()
   love.graphics.push()
   love.graphics.origin()
   love.graphics.setColor(0, 0, 0, 0.33)
-  love.graphics.draw(canvas)
+  love.graphics.draw(canvas, mathf.frac(viewport.camx), mathf.frac(viewport.camy))
   love.graphics.pop()
 end
 

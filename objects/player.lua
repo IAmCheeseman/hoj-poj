@@ -97,7 +97,7 @@ function Player:update(dt)
 
   self.zIndex = self.y
 
-  core.mainViewport:setCamPos(self.x, self.y)
+  core.mainViewport:setCamPos(math.floor(self.x), math.floor(self.y))
 
   -- Update gun angle
   local gunx, guny = self.gun.x, self.gun.y

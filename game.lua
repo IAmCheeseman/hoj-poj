@@ -58,9 +58,10 @@ function game.draw()
       physics.draw()
     end
 
+    core.draw:call()
+
     shadow.renderAll()
 
-    core.draw:call()
     love.graphics.setColor(1, 1, 1)
   core.mainViewport:stop()
 

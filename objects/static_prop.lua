@@ -1,5 +1,6 @@
 local object = require("object")
 local Sprite = require("sprite")
+local shadow = require("shadow")
 local TiledMap = require("tiled.map")
 
 local StaticProp = object()
@@ -14,6 +15,7 @@ end
 function StaticProp:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y)
+  shadow.queueDraw(self.sprite, self.x + self.sprite.width / 2, self.y)
 end
 
 local bushSprite = Sprite("assets/env/bush.png")
