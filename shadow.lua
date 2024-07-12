@@ -24,19 +24,20 @@ function ShadowRenderer:draw()
   love.graphics.push()
   love.graphics.origin()
   love.graphics.setColor(0, 0, 0, 0.33)
-  love.graphics.draw(canvas, mathf.frac(viewport.camx), mathf.frac(viewport.camy))
+  love.graphics.draw(canvas)--mathf.frac(viewport.camx), mathf.frac(viewport.camy))
   love.graphics.pop()
 end
 
 function shadow.init(world, vp)
   viewport = vp
-  canvas = love.graphics.newCanvas(viewport:getSize())
+  local w, h = viewport:getSize()
+  canvas = love.graphics.newCanvas(w + 1, h + 1)
   world:add(ShadowRenderer())
 end
 
 local function drawShadow(s)
   love.graphics.ellipse(
-    "fill", math.floor(s.x), math.floor(s.y), s.width, 2, 10)
+    "fill", math.floor(s.x), math.floor(s.y) + 0.5, s.width, 3/2, 10)
 end
 
 function shadow.queueDraw(sprite, x, y, sx, sy)

@@ -12,10 +12,13 @@ function StaticProp:init(sprite, x, y)
   self.zIndex = self.y
 end
 
+function StaticProp:update()
+  shadow.queueDraw(self.sprite, self.x + self.sprite.width / 2, self.y)
+end
+
 function StaticProp:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y)
-  shadow.queueDraw(self.sprite, self.x + self.sprite.width / 2, self.y)
 end
 
 local bushSprite = Sprite("assets/env/bush.png")

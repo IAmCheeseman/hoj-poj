@@ -102,12 +102,13 @@ function Player:update(dt)
   -- Update gun angle
   local gunx, guny = self.gun.x, self.gun.y
   self.gun.angle = core.vec.angleToPoint(gunx, guny, mx, my)
+
+  shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
 end
 
 function Player:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
-  shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
 end
 
 TiledMap.s_addSpawner("Player", function(world, object)

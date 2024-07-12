@@ -52,6 +52,8 @@ end
 function game.draw()
   core.mainViewport:apply()
     -- love.graphics.clear(0, 0, 0)
+    shadow.renderAll()
+
     map:draw()
     core.world:draw()
     if drawCollisions then
@@ -59,8 +61,6 @@ function game.draw()
     end
 
     core.draw:call()
-
-    shadow.renderAll()
 
     love.graphics.setColor(1, 1, 1)
   core.mainViewport:stop()
