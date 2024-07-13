@@ -54,6 +54,7 @@ function DebugScreen:gui()
     "I: " .. stats.images .. ", C: " .. stats.canvases
     .. ", F: " .. stats.fonts,
     x, y)
+  y = self:m_drawText("Objects: " .. core.world:getObjCount(), x, y)
 end
 
 return DebugScreen

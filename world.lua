@@ -22,6 +22,10 @@ function World:remove(obj)
   table.insert(self.removeQueue, obj)
 end
 
+function World:getObjCount()
+  return #self.objs
+end
+
 function World:m_flushQueues()
   for _, obj in ipairs(self.addQueue) do
     table.insert(self.objs, obj)

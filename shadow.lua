@@ -40,11 +40,19 @@ local function drawShadow(s)
     "fill", math.floor(s.x), math.floor(s.y) + 0.5, s.width, 3/2, 10)
 end
 
-function shadow.queueDraw(sprite, x, y, sx, sy)
+function shadow.queueDraw(spriteOrWidth, x, y, sx, sy)
   sx = sx or 1
   sy = sy or sx
+
+  local width = 0
+  if type(spriteOrWidth) == "table" then
+    width = spriteOrWidth.width / 2 + 3
+  elseif type(spriteOrWidth) == "number" then
+    width = spriteOrWidth + 3
+  end
+
   table.insert(queue, {
-    width = sprite.width / 2 + 3,
+    width = width,
     x = x,
     y = y,
     sx = sx,
