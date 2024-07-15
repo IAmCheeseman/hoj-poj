@@ -797,8 +797,8 @@ return {
         {
           id = 1,
           image = "../env/bush.png",
-          width = 16,
-          height = 16
+          width = 12,
+          height = 11
         }
       }
     }

@@ -48,6 +48,7 @@ function Player:added(world)
 end
 
 function Player:update(dt)
+  if love.keyboard.isDown("space") then print("---") end
   local vx, vy = self.body:getVelocity()
 
   local ix, iy = 0, 0

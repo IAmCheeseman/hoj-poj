@@ -44,15 +44,20 @@ function World:m_flushQueues()
 
   for _, obj in ipairs(self.removeQueue) do
     local meta = self.objMeta[obj]
+    if meta ~= nil then
+      local last = self.objs[#self.objs]
+      self.objMeta[last].index = meta.index
 
-    local new = self.objs[#self.objs]
-    self.objMeta[new].index = meta.index
+      self.objs[meta.index] = last
+      if meta.index ~= #self.objs then
+        self.objs[#self.objs] = nil
+      end
 
-    self.objs[meta.index] = self.objs[#self.objs]
-    self.objs[#self.objs] = nil
+      self.objMeta[obj] = nil
 
-    if obj.removed then
-      obj:removed(self)
+      if obj.removed then
+        obj:removed(self)
+      end
     end
   end
   self.removeQueue = {}

@@ -11,6 +11,24 @@ function Bullet:init(x, y, rot, speed)
   self.speed = speed
 
   self.lifetime = 5
+
+  self.body = core.Body(self, "dynamic", love.physics.newCircleShape(2))
+  self.body:setCategory(core.envCategory, true)
+  self.body:setMask(core.envCategory, true)
+  self.body:setMask(core.playerCategory, false)
+  self.body:setSensor(true)
+
+  core.physics.endContact:connect(core.world, self.onContact, self)
+end
+
+function Bullet:removed()
+  self.body:destroy()
+end
+
+function Bullet:onContact(a, b, _)
+  if a == self.body or b == self.body then
+    core.world:remove(self)
+  end
 end
 
 function Bullet:update(dt)
@@ -26,6 +44,8 @@ function Bullet:update(dt)
   end
 
   shadow.queueDraw(2, self.x, self.y + 5)
+
+  self.body:setPosition(self.x, self.y)
 end
 
 function Bullet:draw()

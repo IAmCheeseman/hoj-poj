@@ -1,14 +1,35 @@
 local class = require("class")
 local mathf = require("mathf")
 local input = require("input")
+local Event = require("event")
 
 local world
 
 local physics = {}
 local bodies = {}
 
+physics.beginContact = Event()
+physics.endContact = Event()
+physics.preSolve = Event()
+physics.postSolve = Event()
+
+local function curryEventCall(event)
+  return function(a, b, coll)
+    return event:call(a:getUserData(), b:getUserData(), coll)
+  end
+end
+
 function physics.initialize(gx, gy)
   world = love.physics.newWorld(gx, gy)
+  world:setCallbacks(
+    curryEventCall(physics.beginContact),
+    curryEventCall(physics.endContact),
+    curryEventCall(physics.preSolve),
+    function(a, b, coll, normalImpulse, tangentImpulse)
+      return physics.postSolve:call(
+        a:getUserData(), b:getUserData(), coll,
+        normalImpulse, tangentImpulse)
+    end)
 end
 
 function physics.update()
@@ -38,19 +59,15 @@ end
 
 function physics.draw()
   local toRemove = {}
-  for i, body in ipairs(bodies) do
+  for body, _ in pairs(bodies) do
     body:draw()
     if body.body:isDestroyed() then
-      table.insert(toRemove, i)
+      table.insert(toRemove, body)
     end
   end
 
-  for i=#toRemove, 1, -1 do
-    local pos = toRemove[i]
-
-    local last = bodies[#bodies]
-    bodies[pos] = last
-    bodies[#bodies] = nil
+  for _, body in ipairs(toRemove) do
+    bodies[body] = nil
   end
 end
 
@@ -84,10 +101,23 @@ function Body:init(anchor, type, shape)
   self.fixture = love.physics.newFixture(self.body, self.shape)
 
   self.fixture:setFilterData(self.categories, self.masks, self.group)
+  self.fixture:setUserData(self)
 
   self:setBounce(0)
 
-  table.insert(bodies, self)
+  bodies[self] = #bodies
+end
+
+function Body:getPos()
+  return self.body:getPosition()
+end
+
+function Body:isSensor()
+  self.fixture:isSensor()
+end
+
+function Body:setSensor(isSensor)
+  self.fixture:setSensor(isSensor)
 end
 
 function Body:getVelocity()
@@ -147,6 +177,12 @@ end
 
 function Body:setFixedRotation(fixed)
   self.body:setFixedRotation(fixed)
+end
+
+function Body:destroy()
+  bodies[self] = nil
+  self.body:release()
+  self.fixture:release()
 end
 
 function Body:draw()
