@@ -44,7 +44,6 @@ function game.load()
 end
 
 function game.update(dt)
-  physics.update()
   core.update:call(dt)
   core.world:update()
   core.postUpdate:call(dt)
@@ -58,7 +57,7 @@ function game.draw()
     map:draw()
     core.world:draw()
     if drawCollisions then
-      physics.draw()
+      core.physics.world:draw()
     end
 
     core.draw:call()

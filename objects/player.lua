@@ -13,6 +13,9 @@ function Player:init()
   self.sprite:alignedOffset("center", "bottom")
   self.sprite:setLayerVisible("hands", false)
 
+  self.velx = 0
+  self.vely = 0
+
   self.animPicker = VecAnimPicker {
     {"d",   0,  1, { 1,  1}},
     {"u",   0, -1, { 1,  1}},
@@ -31,15 +34,14 @@ function Player:init()
   self.accel = 10
   self.frict = 15
 
-  self.body = core.Body(
-    self, "dynamic",
-    love.physics.newCircleShape(0, -4, 4))
-    -- core.physics.diamondShape(0, -8, 7, 13))
-  self.body:setFixedRotation(true)
+  self.body = core.ResolverBody(self, 8, 8, {
+    offsetx = -4,
+    offsety = -8,
 
-  self.body:setGroup(core.playerGroup)
-  self.body:setCategory(core.playerCategory, true)
-  self.body:setMask(core.envCategory, true)
+    layers = {"player"},
+    mask = {"env"},
+  })
+  core.physics.world:addBody(self.body)
 end
 
 function Player:added(world)
@@ -48,9 +50,6 @@ function Player:added(world)
 end
 
 function Player:update(dt)
-  if love.keyboard.isDown("space") then print("---") end
-  local vx, vy = self.body:getVelocity()
-
   local ix, iy = 0, 0
   if core.input.isActionDown("walk_up")    then iy = iy - 1 end
   if core.input.isActionDown("walk_left")  then ix = ix - 1 end
@@ -60,24 +59,22 @@ function Player:update(dt)
   ix, iy = core.vec.normalize(ix, iy)
 
   local ld = self.accel
-  local cdx, cdy = core.vec.normalize(vx, vy)
+  local cdx, cdy = core.vec.normalize(self.velx, self.vely)
   if core.vec.dot(cdx, cdy, ix, iy) < 0.5 then
     ld = self.frict
   end
 
-  vx = core.math.dtLerp(vx, ix * self.speed, ld)
-  vy = core.math.dtLerp(vy, iy * self.speed, ld)
+  self.velx = core.math.dtLerp(self.velx, ix * self.speed, ld)
+  self.vely = core.math.dtLerp(self.vely, iy * self.speed, ld)
 
-  self.body:setVelocity(vx, vy)
-
-  self.x, self.y = self.body:getPosition()
+  self.velx, self.vely = self.body:moveAndCollide(self.velx, self.vely)
 
   -- Prevents the sprite from facing down when standing still
-  if vx ~= 0 then
-    self.faceDirX = vx
+  if self.velx ~= 0 then
+    self.faceDirX = self.velx
   end
-  if vy ~= 0 then
-    self.faceDirY = vy
+  if self.vely ~= 0 then
+    self.faceDirY = self.vely
   end
 
   local mx, my = core.mainViewport:mousePos()
@@ -87,13 +84,13 @@ function Player:update(dt)
     dirx, diry)
     -- vec.normalize(self.faceDirX, self.faceDirY))
   local anim = "walk"
-  if core.vec.length(vx, vy) < 5 then
+  if core.vec.length(self.velx, self.vely) < 5 then
     anim = "idle"
   end
 
   self.sprite:setActiveTag(tagDir .. anim)
   self.scalex = sx
-  local animSpeed = 1 - (core.vec.length(vx, vy) / self.speed)^2 * 0.5
+  local animSpeed = 1 - (core.vec.length(self.velx, self.vely) / self.speed)^2 * 0.5
   self.sprite:animate(animSpeed)
 
   self.zIndex = self.y
@@ -110,11 +107,14 @@ end
 function Player:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
+
+  -- self.body:drawNeighbors()
 end
 
-TiledMap.s_addSpawner("Player", function(world, object)
+TiledMap.s_addSpawner("Player", function(world, data)
   local player = Player()
-  player.body:setPosition(object.x, object.y)
+  player.x = data.x
+  player.y = data.y
   world:add(player)
 end)
 

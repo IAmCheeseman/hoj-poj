@@ -8,6 +8,7 @@ function class.instance(c, t, ...)
   return inst
 end
 
+
 local classMt = {}
 classMt.__index = classMt
 
@@ -15,19 +16,26 @@ function classMt:__call(...)
   return class.instance(self, {}, ...)
 end
 
-function classMt:base(fnname, ...)
+function classMt:base(funcName, ...)
   local mt = getmetatable(self)
-  local i = mt.__inherits
-  if not i then
+  local base = mt.__inherits
+  if not base then
     error("No base class.", 1)
   end
 
-  mt.__inherits = i.__inherits
-  local res = i[fnname](self, ...)
-  mt.__inherits = i
+  mt.__inherits = base.__inherits
+  local fn = base[funcName]
+  local res = nil
+  if fn then
+    res = fn(self, ...)
+  else
+    error("No function '" .. funcName .. "' in base class.")
+  end
+  mt.__inherits = base
 
   return res
 end
+
 
 function class.new(inherits, mt)
   mt = mt or classMt
@@ -52,7 +60,9 @@ function class.getDefaultMt()
 end
 
 local mt = {
-  __call = class.new
+  __call = function(_, ...)
+    return class.new(...)
+  end
 }
 
 setmetatable(class, mt)

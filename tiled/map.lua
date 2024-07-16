@@ -31,34 +31,20 @@ end
 
 local function createCollisions(data)
   for _, object in ipairs(data.objects) do
-    local shape
+    local w, h
     if object.shape == "rectangle" then
-      shape = love.physics.newRectangleShape(
-        object.width / 2, object.height / 2,
-        object.width, object.height)
-    elseif object.shape == "polygon" then
-      local vertices = {}
-      for _, vertex in ipairs(object.polygon) do
-        table.insert(vertices, vertex.x)
-        table.insert(vertices, vertex.y)
-      end
-
-      local maxVertices = 8
-      if #vertices > maxVertices * 2 then
-        log.error("Polygon collision has more than 8 vertices. Ingoring.")
-      else
-        shape = love.physics.newPolygonShape(vertices)
-      end
+      w, h = object.width, object.height
     else
       log.error(
         "Invalid map collision '" .. tostring(object.shape) .. "'. Ingoring.")
     end
 
-    if shape then
-      local xy = {x=object.x, y=object.y}
-      local body = core.Body(xy, "static", shape)
-      body:setCategory(core.envCategory, true)
-      body:setMask(core.playerCategory, true)
+    if w and h then
+      local xy = {x=object.x, y=object.y, velx=0, vely=0}
+      local body = core.ResolverBody(xy, w, h, {
+        layers = {"env"},
+      })
+      core.physics.world:addBody(body)
     end
   end
 end
