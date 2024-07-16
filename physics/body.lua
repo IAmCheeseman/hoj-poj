@@ -43,6 +43,41 @@ local function verifyAnchor(anchor, errIndex)
   end
 end
 
+local function getOffset(offsetx, offsety, w, h)
+  offsetx = offsetx or 0
+  offsety = offsety or 0
+
+  if type(offsetx) == "string" then
+    if offsetx == "left" then
+      offsetx = 0
+    elseif offsetx == "center" then
+      offsetx = -w / 2
+    elseif offsetx == "right" then
+      offsetx = -w
+    else
+      error(
+        "Invalid value for 'offsetx'. Valid values are 'left', 'center', and 'right'",
+        2)
+    end
+  end
+
+  if type(offsety) == "string" then
+    if offsety == "top" then
+      offsety = 0
+    elseif offsety == "center" then
+      offsety = -h / 2
+    elseif offsety == "bottom" then
+      offsety = -h
+    else
+      error(
+        "Invalid value for 'offsety'. Valid values are 'top', 'center', and 'bottom'",
+        2)
+    end
+  end
+
+  return offsetx, offsety
+end
+
 function Body:init(type, anchor, w, h, options)
   verifyAnchor(anchor, 1)
 
@@ -50,8 +85,8 @@ function Body:init(type, anchor, w, h, options)
   self.anchor = anchor
   self.w = w
   self.h = h
-  self.offsetx = options.offsetx or 0
-  self.offsety = options.offsety or 0
+
+  self.offsetx, self.offsety = getOffset(options.offsetx, options.offsety, w, h)
 
   local layers = options.layers or {}
   local mask = options.mask or {}
@@ -83,17 +118,16 @@ function Body:i_setWorld(world)
   self.world = world
 end
 
-function Body:drawNeighbors()
-  local points = self.world.chunker:getNeighborPoints(self)
-  love.graphics.setColor(1, 0, 0)
-  for _, point in ipairs(points) do
-    love.graphics.circle("fill", point.x, point.y, 3)
-  end
+function Body:drawNeighbors(radius)
+  radius = radius or 3
+  local neighborChunks = self.world.chunker:getNeighborChunks(self)
 
-  for body in self.world.chunker:iterateNeighbors(self) do
-    love.graphics.setColor(body:getColor())
-    local x, y = body:getPosition()
-    love.graphics.rectangle("fill", x, y, body.w, body.h)
+  for _, chunk in ipairs(neighborChunks) do
+    for _, body in ipairs(chunk) do
+      love.graphics.setColor(body:getColor())
+      local x, y = body:getPosition()
+      love.graphics.rectangle("fill", x, y, body.w, body.h)
+    end
   end
 end
 

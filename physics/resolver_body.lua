@@ -55,9 +55,13 @@ function ResolverBody:moveAndCollide(velx, vely)
   self.isOnLeftWall = false
   self.isOnRightWall = false
 
-  for body in self.world.chunker:iterateNeighbors(self) do
-    if self:canCollideWith(body) then
-      velx, vely = self:resolve(body, velx, vely)
+  local neighborChunks = self.world.chunker:getNeighborChunks(self)
+
+  for _, chunk in ipairs(neighborChunks) do
+    for _, body in ipairs(chunk) do
+      if self:canCollideWith(body) then
+        velx, vely = self:resolve(body, velx, vely)
+      end
     end
   end
 

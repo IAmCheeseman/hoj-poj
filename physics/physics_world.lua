@@ -23,13 +23,16 @@ function PhysicsWorld:draw()
   love.graphics.setColor(1,1,1)
   for x=-20, 20 do
     for y=-20, 20 do
-      local dx = x * self.chunker.size
-      local dy = y * self.chunker.size
-      love.graphics.rectangle("line", dx, dy, self.chunker.size, self.chunker.size)
+      local dx = x * self.chunker.chunkSize
+      local dy = y * self.chunker.chunkSize
+      love.graphics.rectangle(
+        "line",
+        dx, dy,
+        self.chunker.chunkSize, self.chunker.chunkSize)
     end
   end
 
-  for body, _ in pairs(self.chunker.bodies) do
+  for body, _ in pairs(self.chunker.bodyMeta) do
     love.graphics.setColor(body:getColor())
     local x, y = body:getPosition()
     love.graphics.rectangle("fill", x, y, body.w, body.h)

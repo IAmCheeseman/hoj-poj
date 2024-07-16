@@ -8,121 +8,95 @@ local function hashVector(x, y)
   return math.ceil(x + y + ((x + 1) / 2)^2)
 end
 
-function Chunker:init(size, chunkCount)
+function Chunker:init(chunkSize, chunkCount)
   chunkCount = chunkCount or 32
 
-  self.size = size or 64
-  self.chunk = {}
-  self.bodies = {}
-
-  for _=1, chunkCount do
-    table.insert(self.chunk, {})
-  end
+  self.chunkSize = chunkSize or 64
+  self.chunks = {}
+  self.bodyMeta = {}
 end
 
-function Chunker:iterateNeighbors(body)
-  local chunks = self:getNeighborChunks(body)
-  local chunkIndex, chunk = next(chunks)
-  local bodyIndex = nil
-  return function()
-    local nextBody
-    bodyIndex, nextBody = next(chunk, bodyIndex)
-    if not nextBody then
-      chunkIndex, chunk = next(chunks, chunkIndex)
-      if not chunk then
-        return nil
-      end
-      bodyIndex, nextBody = next(chunk, bodyIndex)
-    end
-    return nextBody
-  end
-end
+function Chunker:getNeighborChunks(body, chunkRadius)
+  chunkRadius = chunkRadius or 3
 
-function Chunker:getNeighborChunks(body)
-  local ax, ay = body:getPosition()
+  local chunkx, chunky = self:getChunkCoordsFor(body:getPosition())
 
   local neighbors = {}
-  local added = {}
 
-  local width   = self.size / 2
-  local height  = self.size / 2
+  for i=0, chunkRadius^2-1 do
+    local x = i % chunkRadius - math.floor(chunkRadius / 2)
+    local y = math.floor(i / chunkRadius) - math.floor(chunkRadius / 2)
 
-  for i=0, 3*3-1 do
-    local ox = i % 3 - 1
-    local oy = math.floor(i / 3) - 1
-
-    local index = self:findChunkFor(ax + ox * width, ay + oy * height)
-    if not added[index] then
-      table.insert(neighbors, self.chunk[index])
+    local key = self:makeKey(chunkx + x, chunky + y)
+    if self.chunks[key] then
+      table.insert(neighbors, self.chunks[key])
     end
-    added[index] = true
   end
 
   return neighbors
 end
 
-function Chunker:getNeighborPoints(body)
-  local ax, ay = body:getPosition()
-
-  local points = {}
-
-  local width   = self.size / 2
-  local height  = self.size / 2
-
-  for i=0, 3*3-1 do
-    local ox = i % 3 - 1
-    local oy = math.floor(i / 3) - 1
-
-    local point = {x=ax + ox * width, y=ay + oy * height}
-    table.insert(points, point)
-  end
-
-  return points
+function Chunker:makeKey(x, y)
+  return tostring(x) .. "," .. tostring(y)
 end
 
-function Chunker:findChunkFor(bx, by)
-  local x, y = math.floor(bx / self.size), math.floor(by / self.size)
-  local hash = hashVector(x, y)
-  return math.floor(hash % #self.chunk) + 1
+function Chunker:getChunkCoordsFor(bodyx, bodyy)
+  local x = math.floor(bodyx / self.chunkSize)
+  local y = math.floor(bodyy / self.chunkSize)
+  return x, y
+end
+
+function Chunker:findChunkFor(bodyx, bodyy)
+  local x, y = self:getChunkCoordsFor(bodyx, bodyy)
+  local key = self:makeKey(x, y)
+  if not self.chunks[key] then
+    self.chunks[key] = {}
+  end
+  return key
 end
 
 function Chunker:updateBody(body)
-  local bodyIndex = self.bodies[body]
-  local chunk = self:findChunkFor(body:getPosition())
-  if chunk == bodyIndex.chunk then
-    return
+  -- Updates the chunk that a body is in
+  local meta = self.bodyMeta[body]
+  local chunkKey = meta.chunk
+  local index = meta.index
+
+  local chunk = self.chunks[chunkKey]
+
+  if #chunk ~= 1 then
+    -- Remove from chunk
+    local last = chunk[#chunk]
+    chunk[index] = last
+    chunk[#chunk] = nil
+  else
+    -- This chunk is now empty; remove.
+    self.chunks[chunkKey] = nil
   end
 
-  local removing = self.chunk[bodyIndex.chunk]
-  local last = removing[#removing]
-  removing[bodyIndex.index] = last
-  removing[#removing] = nil
-
-  if self.bodies[last] then
-    self.bodies[last].index = bodyIndex.index
-  end
-
-  table.insert(self.chunk[chunk], body)
-  bodyIndex.chunk = chunk
-  bodyIndex.index = #self.chunk[chunk]
+  -- Find new chunk that it's in, and insert
+  local newChunkKey = self:findChunkFor(body:getPosition())
+  local newChunk = self.chunks[newChunkKey]
+  table.insert(newChunk, body)
+  meta.chunk = newChunkKey
+  meta.index = #newChunk
 end
 
 function Chunker:getBodyChunk(body)
-  return self.bodies[body].chunk
+  return self.bodyMeta[body].chunk
 end
 
 function Chunker:addBody(body)
-  local maxSize = self.size
+  local maxSize = self.chunkSize
   if body.w > maxSize or body.h > maxSize then
     error(
       ("Body's size is %dx%d, max is %dx%d"):format(
         body.w, body.h, maxSize, maxSize))
   end
-  local c = self:findChunkFor(body:getPosition())
-  table.insert(self.chunk[c], body)
-  self.bodies[body] = {
-    chunk = c,
-    index = #self.chunk[c]
+  local key = self:findChunkFor(body:getPosition())
+  table.insert(self.chunks[key], body)
+  self.bodyMeta[body] = {
+    chunk = key,
+    index = #self.chunks[key]
   }
 end
 
