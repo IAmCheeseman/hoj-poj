@@ -34,10 +34,7 @@ function Player:init()
   self.accel = 10
   self.frict = 15
 
-  self.body = core.ResolverBody(self, 10, 8, {
-    offsetx = "center",
-    offsety = "bottom",
-
+  self.body = core.ResolverBody(self, core.physics.rect(-5, -8, 10, 8), {
     layers = {"player"},
     mask = {"env"},
   })
@@ -107,8 +104,6 @@ end
 function Player:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
-
-  self.body:drawNeighbors()
 end
 
 TiledMap.s_addSpawner("Player", function(world, data)

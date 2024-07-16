@@ -12,23 +12,18 @@ function Bullet:init(x, y, rot, speed)
 
   self.lifetime = 5
 
-  self.body = core.Body(self, "dynamic", love.physics.newCircleShape(2))
-  self.body:setCategory(core.envCategory, true)
-  self.body:setMask(core.envCategory, true)
-  self.body:setMask(core.playerCategory, false)
-  self.body:setSensor(true)
+  self.body = core.SensorBody(self, core.physics.rect(-2, -2, 4, 4), {
+    offsetx = "center",
+    offsety = "center",
 
-  core.physics.endContact:connect(core.world, self.onContact, self)
+    layers = {"bullet"},
+    mask = {"env"}
+  })
+  core.physics.world:addBody(self.body)
 end
 
 function Bullet:removed()
-  self.body:destroy()
-end
-
-function Bullet:onContact(a, b, _)
-  if a == self.body or b == self.body then
-    core.world:remove(self)
-  end
+  core.physics.world:removeBody(self.body)
 end
 
 function Bullet:update(dt)
@@ -39,13 +34,11 @@ function Bullet:update(dt)
 
   self.lifetime = self.lifetime - dt
 
-  if self.lifetime < 0 then
+  if self.lifetime < 0 or self.body:isColliding() then
     core.world:remove(self)
   end
 
   shadow.queueDraw(2, self.x, self.y + 5)
-
-  self.body:setPosition(self.x, self.y)
 end
 
 function Bullet:draw()

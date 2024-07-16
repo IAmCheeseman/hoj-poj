@@ -56,7 +56,38 @@ function Chunker:findChunkFor(bodyx, bodyy)
 end
 
 function Chunker:updateBody(body)
-  -- Updates the chunk that a body is in
+  self:removeBodyFromChunk(body)
+
+  -- Find new chunk that it's in, and insert
+  local meta = self.bodyMeta[body]
+
+  local newChunkKey = self:findChunkFor(body:getPosition())
+  local newChunk = self.chunks[newChunkKey]
+  table.insert(newChunk, body)
+  meta.chunk = newChunkKey
+  meta.index = #newChunk
+end
+
+function Chunker:getBodyChunk(body)
+  return self.bodyMeta[body].chunk
+end
+
+function Chunker:addBody(body)
+  -- local maxSize = self.chunkSize
+  -- if body.w > maxSize or body.h > maxSize then
+  --   error(
+  --     ("Body's size is %dx%d, max is %dx%d"):format(
+  --       body.w, body.h, maxSize, maxSize))
+  -- end
+  local key = self:findChunkFor(body:getPosition())
+  table.insert(self.chunks[key], body)
+  self.bodyMeta[body] = {
+    chunk = key,
+    index = #self.chunks[key]
+  }
+end
+
+function Chunker:removeBodyFromChunk(body)
   local meta = self.bodyMeta[body]
   local chunkKey = meta.chunk
   local index = meta.index
@@ -72,32 +103,11 @@ function Chunker:updateBody(body)
     -- This chunk is now empty; remove.
     self.chunks[chunkKey] = nil
   end
-
-  -- Find new chunk that it's in, and insert
-  local newChunkKey = self:findChunkFor(body:getPosition())
-  local newChunk = self.chunks[newChunkKey]
-  table.insert(newChunk, body)
-  meta.chunk = newChunkKey
-  meta.index = #newChunk
 end
 
-function Chunker:getBodyChunk(body)
-  return self.bodyMeta[body].chunk
-end
-
-function Chunker:addBody(body)
-  local maxSize = self.chunkSize
-  if body.w > maxSize or body.h > maxSize then
-    error(
-      ("Body's size is %dx%d, max is %dx%d"):format(
-        body.w, body.h, maxSize, maxSize))
-  end
-  local key = self:findChunkFor(body:getPosition())
-  table.insert(self.chunks[key], body)
-  self.bodyMeta[body] = {
-    chunk = key,
-    index = #self.chunks[key]
-  }
+function Chunker:removeBody(body)
+  self:removeBodyFromChunk(body)
+  self.bodyMeta[body] = nil
 end
 
 return Chunker

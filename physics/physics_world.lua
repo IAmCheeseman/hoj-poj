@@ -15,6 +15,10 @@ function PhysicsWorld:addBody(body)
   self.chunker:addBody(body)
 end
 
+function PhysicsWorld:removeBody(body)
+  self.chunker:removeBody(body)
+end
+
 function PhysicsWorld:getMaxBodySize()
   return self.chunker.size
 end
@@ -34,8 +38,9 @@ function PhysicsWorld:draw()
 
   for body, _ in pairs(self.chunker.bodyMeta) do
     love.graphics.setColor(body:getColor())
-    local x, y = body:getPosition()
-    love.graphics.rectangle("fill", x, y, body.w, body.h)
+    love.graphics.polygon("fill", body:getVerticesInWorld())
+    -- local x, y = body:getPosition()
+    -- love.graphics.rectangle("fill", x, y, body.w, body.h)
   end
   love.graphics.setColor(1, 1, 1)
 end

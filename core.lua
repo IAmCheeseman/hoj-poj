@@ -21,6 +21,7 @@ core.math = require("mathf")
 core.input = require("input")
 core.physics = require("physics")
 core.ResolverBody = core.physics.ResolverBody
+core.SensorBody = core.physics.SensorBody
 
 core.update = Event()
 core.postUpdate = Event()

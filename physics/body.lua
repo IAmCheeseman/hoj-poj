@@ -1,4 +1,5 @@
 local class = require("class")
+local vec = require("vec")
 
 local Body = class()
 
@@ -14,6 +15,84 @@ end
 
 function Body.s_aabb(x1, y1, w1, h1, x2, y2, w2, h2)
   return Body.s_aabbX(x1, w1, x2, w2) and Body.s_aabbY(y1, h1, y2, h2)
+end
+
+local function projectOntoAxis(body, axisx, axisy)
+  local min = vec.dot(
+    axisx, axisy,
+    body.vertices[1] + body.anchor.x, body.vertices[2] + body.anchor.y)
+  local max = min
+
+  for i=1, #body.vertices, 2 do
+    local p = vec.dot(
+      axisx, axisy,
+      body.vertices[i] + body.anchor.x, body.vertices[i + 1] + body.anchor.y)
+    if p < min then
+      min = p
+    elseif p > max then
+      max = p
+    end
+  end
+
+  return {
+    min = min,
+    max = max,
+    length = max - min
+  }
+end
+
+local function checkSat(body1, body2, check, result)
+  for i=1, #check.vertices, 2 do
+    -- Find axis to test
+    local p1x = check.vertices[i] + check.anchor.x
+    local p1y = check.vertices[i+1] + check.anchor.y
+
+    local p2x, p2y
+
+    if i + 2 > #check.vertices then
+      p2x = check.vertices[1] + check.anchor.x
+      p2y = check.vertices[2] + check.anchor.y
+    else
+      p2x = check.vertices[i+2] + check.anchor.x
+      p2y = check.vertices[i+3] + check.anchor.y
+    end
+
+    -- Axis is just the normal of an edge
+    local axisx = -(p1y - p2y)
+    local axisy = p1x - p2x
+    axisx, axisy = vec.normalize(axisx, axisy)
+
+    -- Project the shapes onto the axis
+    local proj1 = projectOntoAxis(body1, axisx, axisy)
+    local proj2 = projectOntoAxis(body2, axisx, axisy)
+    if proj1.max < proj2.min or proj2.max < proj1.min then
+      result.overlaps = false
+      return result
+    else
+      local overlap = math.min(proj1.max - proj2.min, proj2.max - proj1.min)
+      if overlap < result.smallestOverlap then
+        result.smallestOverlap = overlap
+        result.resolvex = axisx * overlap
+        result.resolvey = axisy * overlap
+      end
+    end
+  end
+  return result
+end
+
+function Body.s_sat(body1, body2)
+  local result = {
+    overlaps = true,
+    resolvex = 0,
+    resolvey = 0,
+    smallestOverlap = math.huge
+  }
+
+  checkSat(body1, body2, body1, result)
+  if result.overlaps then
+    checkSat(body1, body2, body2, result)
+  end
+  return result
 end
 
 local function convertArrToSet(arr)
@@ -43,50 +122,15 @@ local function verifyAnchor(anchor, errIndex)
   end
 end
 
-local function getOffset(offsetx, offsety, w, h)
-  offsetx = offsetx or 0
-  offsety = offsety or 0
-
-  if type(offsetx) == "string" then
-    if offsetx == "left" then
-      offsetx = 0
-    elseif offsetx == "center" then
-      offsetx = -w / 2
-    elseif offsetx == "right" then
-      offsetx = -w
-    else
-      error(
-        "Invalid value for 'offsetx'. Valid values are 'left', 'center', and 'right'",
-        2)
-    end
+function Body:init(type, anchor, vertices, options)
+  verifyAnchor(anchor, 0)
+  if not love.math.isConvex(vertices) then
+    error("Shape must be convex")
   end
-
-  if type(offsety) == "string" then
-    if offsety == "top" then
-      offsety = 0
-    elseif offsety == "center" then
-      offsety = -h / 2
-    elseif offsety == "bottom" then
-      offsety = -h
-    else
-      error(
-        "Invalid value for 'offsety'. Valid values are 'top', 'center', and 'bottom'",
-        2)
-    end
-  end
-
-  return offsetx, offsety
-end
-
-function Body:init(type, anchor, w, h, options)
-  verifyAnchor(anchor, 1)
 
   self.type = type
   self.anchor = anchor
-  self.w = w
-  self.h = h
-
-  self.offsetx, self.offsety = getOffset(options.offsetx, options.offsety, w, h)
+  self.vertices = vertices
 
   local layers = options.layers or {}
   local mask = options.mask or {}
@@ -110,8 +154,17 @@ function Body:canCollideWith(other)
   return false
 end
 
+function Body:getVerticesInWorld()
+  local worldVert = {}
+  for i=1, #self.vertices, 2 do
+    table.insert(worldVert, self.vertices[i] + self.anchor.x)
+    table.insert(worldVert, self.vertices[i + 1] + self.anchor.y)
+  end
+  return worldVert
+end
+
 function Body:getPosition()
-  return self.anchor.x + self.offsetx, self.anchor.y + self.offsety
+  return self.anchor.x, self.anchor.y
 end
 
 function Body:i_setWorld(world)

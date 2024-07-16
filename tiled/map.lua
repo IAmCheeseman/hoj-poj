@@ -31,19 +31,26 @@ end
 
 local function createCollisions(data)
   for _, object in ipairs(data.objects) do
-    local w, h
+    local shape
     if object.shape == "rectangle" then
-      w, h = object.width, object.height
+      shape = core.physics.rect(object.width, object.height)
+    elseif object.shape == "polygon" then
+      shape = {}
+      for _, vertex in ipairs(object.polygon) do
+        table.insert(shape, vertex.x)
+        table.insert(shape, vertex.y)
+      end
     else
       log.error(
         "Invalid map collision '" .. tostring(object.shape) .. "'. Ingoring.")
     end
 
-    if w and h then
-      local xy = {x=object.x, y=object.y, velx=0, vely=0}
-      local body = core.ResolverBody(xy, w, h, {
+    if shape then
+      local xy = {x=object.x, y=object.y}
+      local body = core.ResolverBody(xy, shape, {
         layers = {"env"},
       })
+      body.test = 1
       core.physics.world:addBody(body)
     end
   end
