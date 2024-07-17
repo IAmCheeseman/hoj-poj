@@ -12,8 +12,7 @@ function SensorBody:getFirstCollider()
 
   for _, chunk in ipairs(neighborChunks) do
     for _, other in ipairs(chunk) do
-      local isColliding = Body.s_sat(self, other).overlaps
-      if self:canCollideWith(other) and isColliding then
+      if self:canCollideWith(other) and Body.s_sat(self, other).overlaps then
         return other
       end
     end
@@ -33,8 +32,7 @@ function SensorBody:getAllColliders()
 
   for _, chunk in ipairs(neighborChunks) do
     for _, other in ipairs(chunk) do
-      local isColliding = Body.s_sat(self, other).overlaps
-      if self:canCollideWith(other) and isColliding then
+      if self:canCollideWith(other) and Body.s_sat(self, other).overlaps then
         table.insert(neighbors, other)
       end
     end

@@ -10,7 +10,7 @@ return {
   tilewidth = 8,
   tileheight = 8,
   nextlayerid = 8,
-  nextobjectid = 702,
+  nextobjectid = 703,
   properties = {},
   tilesets = {
     {
@@ -767,8 +767,8 @@ return {
       name = "objects",
       firstgid = 511,
       class = "",
-      tilewidth = 16,
-      tileheight = 16,
+      tilewidth = 12,
+      tileheight = 15,
       spacing = 0,
       margin = 0,
       columns = 0,
@@ -786,7 +786,7 @@ return {
       },
       properties = {},
       wangsets = {},
-      tilecount = 2,
+      tilecount = 3,
       tiles = {
         {
           id = 0,
@@ -799,6 +799,12 @@ return {
           image = "../env/bush.png",
           width = 12,
           height = 11
+        },
+        {
+          id = 2,
+          image = "../dummy_tiled_display.png",
+          width = 11,
+          height = 15
         }
       }
     }
@@ -1293,6 +1299,22 @@ return {
           visible = true,
           properties = {
             ["className"] = "Player"
+          }
+        },
+        {
+          id = 702,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 168,
+          y = 96,
+          width = 11,
+          height = 15,
+          rotation = 0,
+          gid = 513,
+          visible = true,
+          properties = {
+            ["className"] = "Dummy"
           }
         }
       }
