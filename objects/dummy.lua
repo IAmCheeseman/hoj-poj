@@ -16,6 +16,8 @@ function Dummy:init(x, y)
   self.velx = 0
   self.vely = 0
 
+  self.hp = 20
+
   self.recentDamage = 0
 
   self.body = core.ResolverBody(self, core.physics.rect(-6, -5, 11, 5), {
@@ -35,6 +37,10 @@ function Dummy:removed()
 end
 
 function Dummy:takeDamage(amount, kbDirX, kbDirY)
+  self.hp = self.hp - amount
+  if self.hp <= 0 then
+    core.world:remove(self)
+  end
   self.recentDamage = amount
 
   self.velx = self.velx + kbDirX
@@ -47,6 +53,8 @@ function Dummy:update(dt)
 
   self.velx, self.vely = self.body:moveAndCollide(self.velx, self.vely)
 
+  self.zIndex = self.y
+
   shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
 end
 
@@ -54,7 +62,7 @@ function Dummy:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y)
 
-  love.graphics.print(self.recentDamage, self.x, self.y)
+  love.graphics.print(self.hp, self.x, self.y)
 end
 
 TiledMap.s_addSpawner("Dummy", function(world, data)

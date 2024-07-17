@@ -45,20 +45,18 @@ function World:m_flushQueues()
   self.addQueue = {}
 
   for _, obj in ipairs(self.removeQueue) do
-    local meta = self.objMeta[obj]
-    if meta ~= nil then
-      local last = self.objs[#self.objs]
-      self.objMeta[last].index = meta.index
-
-      self.objs[meta.index] = last
-      self.objs[#self.objs] = nil
-
-      self.objMeta[obj] = nil
-
-      if obj.removed then
-        obj:removed(self)
-      end
+    if obj.removed then
+      obj:removed(self)
     end
+
+    local meta = self.objMeta[obj]
+    local last = self.objs[#self.objs]
+    self.objMeta[last].index = meta.index
+
+    self.objs[meta.index] = last
+    self.objs[#self.objs] = nil
+
+    self.objMeta[obj] = nil
   end
   self.removeQueue = {}
 end
@@ -90,10 +88,10 @@ function World:draw()
   end)
 
   for i, obj in ipairs(self.objs) do
+    self.objMeta[obj].index = i
     if type(obj.draw) == "function" then
       obj:draw()
     end
-    self.objMeta[obj].index = i
   end
 end
 

@@ -74,12 +74,13 @@ function Chunker:getBodyChunk(body)
 end
 
 function Chunker:addBody(body)
-  -- local maxSize = self.chunkSize
-  -- if body.w > maxSize or body.h > maxSize then
-  --   error(
-  --     ("Body's size is %dx%d, max is %dx%d"):format(
-  --       body.w, body.h, maxSize, maxSize))
-  -- end
+  local maxSize = self.chunkSize
+  local _, _, w, h = body:getAabb()
+  if w > maxSize or h > maxSize then
+    error(
+      ("Body's size is %dx%d, max is %dx%d"):format(
+        body.w, body.h, maxSize, maxSize))
+  end
   self.bodyCount = self.bodyCount + 1
   local key = self:findChunkFor(body:getPosition())
   table.insert(self.chunks[key], body)
@@ -101,6 +102,8 @@ function Chunker:removeBodyFromChunk(body)
     local last = chunk[#chunk]
     chunk[index] = last
     chunk[#chunk] = nil
+
+    self.bodyMeta[last].index = index
   else
     -- This chunk is now empty; remove.
     self.chunks[chunkKey] = nil
