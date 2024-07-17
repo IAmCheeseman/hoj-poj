@@ -173,6 +173,10 @@ function Body:getAabb()
 end
 
 function Body:getShapeCenter()
+  if self.centerx and self.centery then
+    return self.centerx, self.centery
+  end
+
   local sumx, sumy = 0, 0
 
   for i=1, #self.vertices, 2 do
@@ -180,9 +184,10 @@ function Body:getShapeCenter()
     sumy = sumy + self.vertices[i + 1]
   end
 
-  return
-    sumx / #self.vertices + self.anchor.x,
-    sumy / #self.vertices + self.anchor.y
+  self.centerx = sumx / #self.vertices + self.anchor.x
+  self.centery = sumy / #self.vertices + self.anchor.y
+
+  return self.centerx, self.centery
 end
 
 function Body:getPosition()
