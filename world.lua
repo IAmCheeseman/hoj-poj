@@ -1,4 +1,5 @@
 local class = require("class")
+local log = require("log")
 
 local World = class()
 
@@ -18,6 +19,7 @@ end
 function World:remove(obj)
   if not self.objMeta[obj] then
     error("Cannot remove an object which is not in the world.", 1)
+    return
   end
   table.insert(self.removeQueue, obj)
 end
@@ -49,9 +51,7 @@ function World:m_flushQueues()
       self.objMeta[last].index = meta.index
 
       self.objs[meta.index] = last
-      if meta.index ~= #self.objs then
-        self.objs[#self.objs] = nil
-      end
+      self.objs[#self.objs] = nil
 
       self.objMeta[obj] = nil
 
@@ -92,8 +92,8 @@ function World:draw()
   for i, obj in ipairs(self.objs) do
     if type(obj.draw) == "function" then
       obj:draw()
-      self.objMeta[obj].index = i
     end
+    self.objMeta[obj].index = i
   end
 end
 
