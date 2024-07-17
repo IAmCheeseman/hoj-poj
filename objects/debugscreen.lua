@@ -44,10 +44,6 @@ function DebugScreen:gui()
   love.graphics.setFont(font)
 
   local stats = love.graphics.getStats()
-  local rName, rVersion, _, rDevice = love.graphics.getRendererInfo()
-  y = self:m_drawText(love.system.getOS(), x, y)
-  y = self:m_drawText(rName .. " " .. rVersion, x, y)
-  y = self:m_drawText(rDevice, x, y)
   y = self:m_drawText("FPS: " .. love.timer.getFPS(), x, y)
   y = self:m_drawText("Draw calls: " .. stats.drawcalls, x, y)
   y = self:m_drawText(
