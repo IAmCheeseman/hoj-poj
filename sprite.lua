@@ -104,7 +104,7 @@ function Sprite:alignedOffset(x, y)
   if x == "left" then
     self.offsetx = 0
   elseif x == "center" then
-    self.offsetx = self.width / 2
+    self.offsetx = math.ceil(self.width / 2)
   elseif x == "right" then
     self.offsetx = self.width
   end
@@ -112,7 +112,7 @@ function Sprite:alignedOffset(x, y)
   if y == "top" then
     self.offsety = 0
   elseif y == "center" then
-    self.offsety = self.height / 2
+    self.offsety = math.ceil(self.height / 2)
   elseif y == "bottom" then
     self.offsety = self.height
   end
