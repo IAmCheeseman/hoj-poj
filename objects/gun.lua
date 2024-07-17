@@ -30,6 +30,10 @@ function Gun:update(dt)
   self.kickback = core.math.dtLerp(self.kickback, 0, 10)
 
   self.cooldownLeft = self.cooldownLeft - dt
+
+  if core.input.isActionDown("use_item") then
+    self:fire()
+  end
 end
 
 function Gun:draw()
@@ -55,9 +59,20 @@ function Gun:draw()
 
   self.sprite:draw(x, y, angle, 1, scaley)
 
-  if core.input.isActionDown("use_item") then
-    self:fire()
+  local dx, dy =
+    self.x + math.cos(self.angle) * 12,
+    self.y + math.sin(self.angle) * 12
+  local ex, ey =
+    self.x + math.cos(self.angle) * 16 * 5,
+    self.y + math.sin(self.angle) * 16 * 5
+
+  local res = core.physics.world:raycast(dx, dy, ex, ey)
+  if res then
+    love.graphics.setColor(1, 0, 0)
+  else
+    love.graphics.setColor(1, 1, 1)
   end
+  love.graphics.line(dx, dy, ex, ey)
 end
 
 function Gun:fire()

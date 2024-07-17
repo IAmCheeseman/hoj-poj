@@ -17,10 +17,8 @@ function Chunker:init(chunkSize, chunkCount)
   self.bodyMeta = {}
 end
 
-function Chunker:getNeighborChunks(body, chunkRadius)
+function Chunker:getNeighborChunksAroundPos(chunkx, chunky, chunkRadius)
   chunkRadius = chunkRadius or 3
-
-  local chunkx, chunky = self:getChunkCoordsFor(body:getPosition())
 
   local neighbors = {}
 
@@ -35,6 +33,12 @@ function Chunker:getNeighborChunks(body, chunkRadius)
   end
 
   return neighbors
+end
+
+function Chunker:getNeighborChunks(body, chunkRadius)
+  local chunkx, chunky = self:getChunkCoordsFor(body:getPosition())
+
+  return self:getNeighborChunksAroundPos(chunkx, chunky, chunkRadius)
 end
 
 function Chunker:makeKey(x, y)

@@ -3,7 +3,7 @@ local vec = require("vec")
 
 local Body = class()
 
-local function projectOntoAxis(body, axisx, axisy)
+function Body.s_projectOntoAxis(body, axisx, axisy)
   local min = vec.dot(
     axisx, axisy,
     body.vertices[1] + body.anchor.x, body.vertices[2] + body.anchor.y)
@@ -49,8 +49,8 @@ local function checkSat(body1, body2, check, result)
     axisx, axisy = vec.normalize(axisx, axisy)
 
     -- Project the shapes onto the axis
-    local proj1 = projectOntoAxis(body1, axisx, axisy)
-    local proj2 = projectOntoAxis(body2, axisx, axisy)
+    local proj1 = Body.s_projectOntoAxis(body1, axisx, axisy)
+    local proj2 = Body.s_projectOntoAxis(body2, axisx, axisy)
     if proj1.max < proj2.min or proj2.max < proj1.min then
       result.overlaps = false
       return result
