@@ -54,13 +54,13 @@ local function checkSat(body1, body2, check, result)
     if proj1.max < proj2.min or proj2.max < proj1.min then
       result.overlaps = false
       return result
-    else
-      local overlap = math.min(proj1.max - proj2.min, proj2.max - proj1.min)
-      if overlap < result.smallestOverlap then
-        result.smallestOverlap = overlap
-        result.resolvex = axisx * overlap
-        result.resolvey = axisy * overlap
-      end
+    end
+
+    local overlap = math.min(proj1.max - proj2.min, proj2.max - proj1.min)
+    if overlap < result.smallestOverlap then
+      result.smallestOverlap = overlap
+      result.resolvex = axisx * overlap
+      result.resolvey = axisy * overlap
     end
   end
   return result
@@ -178,7 +178,6 @@ function Body:getAabb()
   self.aabby = starty
   self.aabbw = endx-startx
   self.aabbh = endy-starty
-
   return
     self.aabbx + self.anchor.x, self.aabby + self.anchor.y,
     self.aabbw, self.aabbh
