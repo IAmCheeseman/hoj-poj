@@ -78,6 +78,15 @@ function Body.s_sat(body1, body2)
   if result.overlaps then
     checkSat(body1, body2, body2, result)
   end
+
+  local b1x, b1y = body1:getPosition()
+  local b2x, b2y = body2:getPosition()
+  local dirx, diry = vec.direction(b2x, b2y, b1x, b1y)
+  local dot = vec.dot(dirx, diry, result.resolvex, result.resolvey)
+  if dot < 0 then
+    result.resolvex = -result.resolvex
+    result.resolvey = -result.resolvey
+  end
   return result
 end
 

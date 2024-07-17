@@ -13,21 +13,11 @@ function ResolverBody:resolve(other, velx, vely)
     return velx, vely
   end
 
-  -- 2 tests is probably inefficient. TODO: Find a better way to resolve
-  -- collisions
   local collision = Body.s_sat(self, other)
 
   if collision.overlaps then
-    self.anchor.x = self.anchor.x + collision.resolvex * 2
-    self.anchor.y = self.anchor.y + collision.resolvey * 2
-    local secondTest = Body.s_sat(self, other)
-    if secondTest.overlaps then
-      self.anchor.x = self.anchor.x - collision.resolvex * 3
-      self.anchor.y = self.anchor.y - collision.resolvey * 3
-    else
-      self.anchor.x = self.anchor.x - collision.resolvex
-      self.anchor.y = self.anchor.y - collision.resolvey
-    end
+    self.anchor.x = self.anchor.x + collision.resolvex
+    self.anchor.y = self.anchor.y + collision.resolvey
   end
 
   return velx, vely
