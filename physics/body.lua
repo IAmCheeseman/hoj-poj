@@ -159,6 +159,11 @@ function Body:getVerticesInWorld()
 end
 
 function Body:getAabb()
+  if self.aabbx and self.aabby and self.aabbw and self.aabbh then
+    return
+      self.aabbx + self.anchor.x, self.aabby + self.anchor.y,
+      self.aabbw, self.aabbh
+  end
   local startx, starty = self.vertices[1], self.vertices[2]
   local endx, endy = startx, starty
   for i=1, #self.vertices, 2 do
@@ -169,12 +174,19 @@ function Body:getAabb()
     endy = math.max(endy, y)
   end
 
-  return startx, starty, endx-startx, endy-starty
+  self.aabbx = startx
+  self.aabby = starty
+  self.aabbw = endx-startx
+  self.aabbh = endy-starty
+
+  return
+    self.aabbx + self.anchor.x, self.aabby + self.anchor.y,
+    self.aabbw, self.aabbh
 end
 
 function Body:getShapeCenter()
   if self.centerx and self.centery then
-    return self.centerx, self.centery
+    return self.centerx + self.anchor.x, self.centery + self.anchor.y
   end
 
   local sumx, sumy = 0, 0
@@ -184,10 +196,10 @@ function Body:getShapeCenter()
     sumy = sumy + self.vertices[i + 1]
   end
 
-  self.centerx = sumx / #self.vertices + self.anchor.x
-  self.centery = sumy / #self.vertices + self.anchor.y
+  self.centerx = sumx / #self.vertices
+  self.centery = sumy / #self.vertices
 
-  return self.centerx, self.centery
+  return self.centerx + self.anchor.x, self.centery + self.anchor.y
 end
 
 function Body:getPosition()
