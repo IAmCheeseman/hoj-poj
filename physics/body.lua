@@ -79,8 +79,8 @@ function Body.s_sat(body1, body2)
     checkSat(body1, body2, body2, result)
   end
 
-  local b1x, b1y = body1:getPosition()
-  local b2x, b2y = body2:getPosition()
+  local b1x, b1y = body1:getShapeCenter()
+  local b2x, b2y = body2:getShapeCenter()
   local dirx, diry = vec.direction(b2x, b2y, b1x, b1y)
   local dot = vec.dot(dirx, diry, result.resolvex, result.resolvey)
   if dot < 0 then
@@ -170,6 +170,19 @@ function Body:getAabb()
   end
 
   return startx, starty, endx-startx, endy-starty
+end
+
+function Body:getShapeCenter()
+  local sumx, sumy = 0, 0
+
+  for i=1, #self.vertices, 2 do
+    sumx = sumx + self.vertices[i]
+    sumy = sumy + self.vertices[i + 1]
+  end
+
+  return
+    sumx / #self.vertices + self.anchor.x,
+    sumy / #self.vertices + self.anchor.y
 end
 
 function Body:getPosition()
