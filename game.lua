@@ -1,3 +1,4 @@
+local log = require "log"
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 local core = require("core")
@@ -43,6 +44,8 @@ function game.load()
 end
 
 function game.update(dt)
+  local x
+  print(x.x)
   core.update:call(dt)
   core.world:update()
   core.postUpdate:call(dt)
