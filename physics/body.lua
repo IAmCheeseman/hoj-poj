@@ -1,5 +1,6 @@
 local class = require("class")
 local vec = require("vec")
+local stats = require("physics.stats")
 
 local Body = class()
 
@@ -73,6 +74,8 @@ function Body.s_sat(body1, body2)
     resolvey = 0,
     smallestOverlap = math.huge
   }
+
+  stats.collisionChecks = stats.collisionChecks + 1
 
   checkSat(body1, body2, body1, result)
   if result.overlaps then

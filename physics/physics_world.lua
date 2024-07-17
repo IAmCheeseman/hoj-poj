@@ -2,6 +2,7 @@ local class = require("class")
 local vec = require("vec")
 local Chunker = require("physics.chunker")
 local Body = require("physics.body")
+local stats = require("physics.stats")
 
 local PhysicsWorld = class()
 
@@ -36,6 +37,8 @@ local function rcTestAxis(axisx, axisy, startx, starty, endx, endy, body)
 end
 
 function PhysicsWorld:raycast(startx, starty, endx, endy)
+  stats.raycasts = stats.raycasts + 1
+
   local vecx, vecy = endx - startx, endy - starty
 
   local dirx, diry = vec.normalize(vecx, vecy)
@@ -128,6 +131,12 @@ function PhysicsWorld:draw()
     love.graphics.polygon("fill", body:getVerticesInWorld())
   end
   love.graphics.setColor(1, 1, 1)
+end
+
+function PhysicsWorld:update()
+  stats.collisionChecks = 0
+  stats.resolutions = 0
+  stats.raycasts = 0
 end
 
 return PhysicsWorld

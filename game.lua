@@ -59,6 +59,7 @@ function game.load()
 end
 
 function game.update(dt)
+  core.physics.world:update()
   core.update:call(dt)
   core.world:update()
   core.postUpdate:call(dt)

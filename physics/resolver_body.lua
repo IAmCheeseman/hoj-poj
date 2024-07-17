@@ -1,5 +1,6 @@
 local class = require("class")
 local vec = require("vec")
+local stats = require("physics.stats")
 local Body = require("physics.body")
 
 local ResolverBody = class(Body)
@@ -18,6 +19,7 @@ function ResolverBody:resolve(other, velx, vely)
   if collision.overlaps then
     self.anchor.x = self.anchor.x + collision.resolvex
     self.anchor.y = self.anchor.y + collision.resolvey
+    stats.resolutions = stats.resolutions + 1
   end
 
   return velx, vely

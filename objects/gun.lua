@@ -58,21 +58,6 @@ function Gun:draw()
   local angle = self.angle - self.kickback * scaley * 0.1
 
   self.sprite:draw(x, y, angle, 1, scaley)
-
-  local dx, dy =
-    self.x + math.cos(self.angle) * 12,
-    self.y + math.sin(self.angle) * 12
-  local ex, ey =
-    self.x + math.cos(self.angle) * 16 * 5,
-    self.y + math.sin(self.angle) * 16 * 5
-
-  local res = core.physics.world:raycast(dx, dy, ex, ey)
-  if res then
-    love.graphics.setColor(1, 0, 0)
-  else
-    love.graphics.setColor(1, 1, 1)
-  end
-  love.graphics.line(dx, dy, ex, ey)
 end
 
 function Gun:fire()

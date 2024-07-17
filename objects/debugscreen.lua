@@ -1,5 +1,6 @@
 local object = require("object")
 local core  = require("core")
+local physicsStats = require("physics.stats")
 
 core.input.addAction("open_debug_menu", "kb", "f1")
 
@@ -52,6 +53,9 @@ function DebugScreen:gui()
     x, y)
   y = self:m_drawText("Objects: " .. core.world:getObjCount(), x, y)
   y = self:m_drawText("Physics Bodies: " .. core.physics.world:getBodyCount(), x, y)
+  y = self:m_drawText(("CC: %d, R: %d, RC: %d"):format(
+    physicsStats.collisionChecks, physicsStats.resolutions, physicsStats.raycasts),
+    x, y)
 end
 
 return DebugScreen
