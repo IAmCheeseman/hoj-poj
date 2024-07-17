@@ -1,4 +1,4 @@
-local log = require "log"
+local start = os.clock()
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 local core = require("core")
@@ -41,11 +41,24 @@ input.actionTriggered:on(function(action, _, isRepeat)
 end)
 
 function game.load()
+  local metaInfo = require("meta_info")
+
+  core.log.info(
+    "Initialized. Took "
+    .. tostring(math.floor((os.clock() - start) * 1000 + 0.5)) .. " ms")
+
+  core.log.info(metaInfo.name .. " " .. metaInfo.version.str)
+
+  core.log.info("Operating System: " .. love.system.getOS())
+
+  local name, version, vendor, device = love.graphics.getRendererInfo()
+  core.log.info("Renderer name: " .. name)
+  core.log.info("Renderer version: " .. version)
+  core.log.info("Renderer deveice: " .. device)
+  core.log.info("Renderer vendor: " .. vendor)
 end
 
 function game.update(dt)
-  local x
-  print(x.x)
   core.update:call(dt)
   core.world:update()
   core.postUpdate:call(dt)

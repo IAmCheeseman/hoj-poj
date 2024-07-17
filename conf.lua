@@ -1,5 +1,7 @@
+local metaInfo = require("meta_info")
+
 function love.conf(t)
-  t.window.title = "Hoj Poj"
+  t.window.title = metaInfo.name .. " " .. metaInfo.version.str
   t.window.icon = nil
   t.window.width = 320 * 3
   t.window.height = 180 * 3

@@ -7,9 +7,6 @@ local Event = require("event")
 
 local log = require("log")
 
-local os = love.system.getOS()
-log.info(os)
-
 local core = {}
 
 core.mainViewport = Viewport(320, 180)
