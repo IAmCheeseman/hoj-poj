@@ -46,11 +46,10 @@ local function createCollisions(data)
     end
 
     if shape then
-      local xy = {x=object.x, y=object.y}
-      local body = core.ResolverBody(xy, shape, {
+      local anchor = {x=object.x, y=object.y}
+      local body = core.ResolverBody(anchor, shape, {
         layers = {"env"},
       })
-      body.test = 1
       core.physics.world:addBody(body)
     end
   end

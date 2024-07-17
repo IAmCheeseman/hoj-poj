@@ -2,7 +2,6 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 
 local core = require("core")
 local input = require("input")
-local physics = require("physics")
 local shadow = require("shadow")
 local DebugScreen = require("objects.debugscreen")
 local TiledMap = require("tiled.map")

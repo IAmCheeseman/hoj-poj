@@ -12,6 +12,7 @@ function Chunker:init(chunkSize, chunkCount)
   chunkCount = chunkCount or 32
 
   self.chunkSize = chunkSize or 64
+  self.bodyCount = 0
   self.chunks = {}
   self.bodyMeta = {}
 end
@@ -79,6 +80,7 @@ function Chunker:addBody(body)
   --     ("Body's size is %dx%d, max is %dx%d"):format(
   --       body.w, body.h, maxSize, maxSize))
   -- end
+  self.bodyCount = self.bodyCount + 1
   local key = self:findChunkFor(body:getPosition())
   table.insert(self.chunks[key], body)
   self.bodyMeta[body] = {
@@ -106,6 +108,7 @@ function Chunker:removeBodyFromChunk(body)
 end
 
 function Chunker:removeBody(body)
+  self.bodyCount = self.bodyCount - 1
   self:removeBodyFromChunk(body)
   self.bodyMeta[body] = nil
 end

@@ -10,6 +10,10 @@ function PhysicsWorld:init(gridSize, partitionCount)
   self.chunker = Chunker(gridSize, partitionCount)
 end
 
+function PhysicsWorld:getBodyCount()
+  return self.chunker.bodyCount
+end
+
 function PhysicsWorld:addBody(body)
   body:i_setWorld(self)
   self.chunker:addBody(body)
@@ -39,8 +43,6 @@ function PhysicsWorld:draw()
   for body, _ in pairs(self.chunker.bodyMeta) do
     love.graphics.setColor(body:getColor())
     love.graphics.polygon("fill", body:getVerticesInWorld())
-    -- local x, y = body:getPosition()
-    -- love.graphics.rectangle("fill", x, y, body.w, body.h)
   end
   love.graphics.setColor(1, 1, 1)
 end

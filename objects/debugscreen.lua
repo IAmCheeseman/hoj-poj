@@ -55,6 +55,7 @@ function DebugScreen:gui()
     .. ", F: " .. stats.fonts,
     x, y)
   y = self:m_drawText("Objects: " .. core.world:getObjCount(), x, y)
+  y = self:m_drawText("Physics Bodies: " .. core.physics.world:getBodyCount(), x, y)
 end
 
 return DebugScreen

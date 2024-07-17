@@ -3,20 +3,6 @@ local vec = require("vec")
 
 local Body = class()
 
-function Body.s_aabbX(x1, w1, x2, w2)
-  return x1 + w1 > x2
-     and x2 + w2 > x1
-end
-
-function Body.s_aabbY(y1, h1, y2, h2)
-  return y1 + h1 > y2
-     and y2 + h2 > y1
-end
-
-function Body.s_aabb(x1, y1, w1, h1, x2, y2, w2, h2)
-  return Body.s_aabbX(x1, w1, x2, w2) and Body.s_aabbY(y1, h1, y2, h2)
-end
-
 local function projectOntoAxis(body, axisx, axisy)
   local min = vec.dot(
     axisx, axisy,
@@ -163,6 +149,20 @@ function Body:getVerticesInWorld()
   return worldVert
 end
 
+function Body:getAabb()
+  local startx, starty = self.vertices[1], self.vertices[2]
+  local endx, endy = startx, starty
+  for i=1, #self.vertices, 2 do
+    local x, y = self.vertices[i], self.vertices[i+1]
+    startx = math.min(startx, x)
+    starty = math.min(starty, y)
+    endx = math.max(endx, x)
+    endy = math.max(endy, y)
+  end
+
+  return startx, starty, endx-startx, endy-starty
+end
+
 function Body:getPosition()
   return self.anchor.x, self.anchor.y
 end
@@ -178,8 +178,7 @@ function Body:drawNeighbors(radius)
   for _, chunk in ipairs(neighborChunks) do
     for _, body in ipairs(chunk) do
       love.graphics.setColor(body:getColor())
-      local x, y = body:getPosition()
-      love.graphics.rectangle("fill", x, y, body.w, body.h)
+      love.graphics.polygon("fill", body:getVerticesInWorld())
     end
   end
 end
