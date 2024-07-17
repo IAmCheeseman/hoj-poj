@@ -39,11 +39,21 @@ function Player:init()
     mask = {"env"},
   })
   core.physics.world:addBody(self.body)
+
+  self.hitbox = core.SensorBody(self, core.physics.diamond(0, -3, 8, 6), {
+    layers = {"player"},
+  })
+  core.physics.world:addBody(self.hitbox)
 end
 
 function Player:added(world)
   self.gun = Gun(self, 0, -5)
   world:add(self.gun)
+end
+
+function Player:removed(world)
+  core.physics.world:removeBody(self.body)
+  core.physics.world:removeBody(self.hitbox)
 end
 
 function Player:update(dt)

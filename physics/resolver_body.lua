@@ -13,6 +13,8 @@ function ResolverBody:resolve(other, velx, vely)
     return velx, vely
   end
 
+  -- 2 tests is probably inefficient. TODO: Find a better way to resolve
+  -- collisions
   local collision = Body.s_sat(self, other)
 
   if collision.overlaps then
