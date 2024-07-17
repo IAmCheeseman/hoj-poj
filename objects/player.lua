@@ -34,7 +34,7 @@ function Player:init()
   self.accel = 10
   self.frict = 15
 
-  self.body = core.ResolverBody(self, core.physics.rect(-5, -8, 10, 8), {
+  self.body = core.ResolverBody(self, core.physics.diamond(0, -4, 10, 8), {
     layers = {"player"},
     mask = {"env"},
   })
