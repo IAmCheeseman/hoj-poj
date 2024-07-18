@@ -99,6 +99,8 @@ function Josh:update(dt)
 
   self.zIndex = self.y
   shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
+
+  self.health.hitAnimation = self.sprite.activeTag .. "hit"
 end
 
 function Josh:pursueUpdate()
