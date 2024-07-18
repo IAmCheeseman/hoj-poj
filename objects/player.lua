@@ -102,7 +102,7 @@ function Player:onGunFire(bullet)
   self.sm:setState(self.attackState)
 end
 
-function Player:defaultUpdate(dt)
+function Player:defaultUpdate()
   local ix, iy = 0, 0
   if core.input.isActionDown("walk_up")    then iy = iy - 1 end
   if core.input.isActionDown("walk_left")  then ix = ix - 1 end

@@ -7,6 +7,8 @@ local core = require("core")
 local shadow = require("shadow")
 local object = require("object")
 
+local Bullet = require("objects.bullet")
+
 local Josh = object()
 
 function Josh:init(x, y)
@@ -24,6 +26,8 @@ function Josh:init(x, y)
   self.frict = 10
 
   self.scalex = 1
+
+  self.spitRange = 16 * 4
 
   self.health = Health(self, 20, self.sprite)
   self:register(self.health)
@@ -48,6 +52,12 @@ function Josh:init(x, y)
     update = self.pursueUpdate,
   }
 
+  self.fleeState = {
+    enter = self.fleeEnter,
+    update = self.fleeUpdate,
+    timer = 0,
+  }
+
   self.sm = StateMachine(self, self.idleState)
 
   self.body = core.ResolverBody(self, core.physics.rect(-5, -4, 10, 4), {
@@ -55,7 +65,7 @@ function Josh:init(x, y)
   })
   core.physics.world:addBody(self.body)
 
-  self.detection = core.SensorBody(self, core.physics.circle(16 * 5, 8), {
+  self.detection = core.SensorBody(self, core.physics.circle(16 * 7, 8), {
     mask = {"player"},
   })
   core.physics.world:addBody(self.detection)
@@ -110,6 +120,51 @@ function Josh:pursueUpdate()
   self.scalex = scalex
   self.sprite:setActiveTag(tag, true)
   self.sprite:animate()
+
+  local dist = core.vec.distance(self.x, self.y, self.target.x, self.target.y)
+  if dist < self.spitRange then
+    self.sm:setState(self.fleeState)
+  end
+end
+
+function Josh:fleeEnter()
+  -- Spit here
+  local rot = core.vec.angleToPoint(self.x, self.y, self.target.x, self.target.y)
+  local speed = 150
+
+  local offset = 16
+
+  local x, y =
+    self.x + math.cos(rot) * offset,
+    self.y + math.sin(rot) * offset
+
+  local bullet = Bullet(self.anchor, x, y, rot, speed)
+  bullet.damage = 6
+  core.world:add(bullet)
+
+  self.fleeState.timer = 1
+end
+
+function Josh:fleeUpdate(dt)
+  local dirx, diry = core.vec.direction(
+    self.x, self.y, self.target.x, self.target.y)
+  dirx, diry = -dirx, -diry
+
+  local delta = self.accel
+  local currentDirX, currentDirY = core.vec.normalize(self.velx, self.vely)
+  if core.vec.dot(dirx, diry, currentDirX, currentDirY) > 0.5 then
+    delta = self.frict
+  end
+
+  self.velx = core.math.dtLerp(self.velx, dirx * self.speed, delta)
+  self.vely = core.math.dtLerp(self.vely, diry * self.speed, delta)
+
+  self.velx, self.vely = self.body:moveAndCollide(self.velx, self.vely)
+
+  self.fleeState.timer = self.fleeState.timer - dt
+  if self.fleeState.timer < 0 then
+    self.sm:setState(self.pursueState)
+  end
 end
 
 function Josh:idleUpdate()
