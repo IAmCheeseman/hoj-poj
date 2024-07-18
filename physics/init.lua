@@ -23,16 +23,20 @@ function physics.rect(x, y, w, h)
   }
 end
 
-function physics.circle(x, y, r)
+function physics.circle(x, y, r, res)
   if not r then
     r = x
+    res = y
     x = 0
     y = 0
   end
 
   local vertices = {}
 
-  local vertCount = (2 * math.pi * r) / 4
+  local vertCount = res
+  if not vertCount then
+    vertCount = (2 * math.pi * r) / 8
+  end
 
   for i=0, vertCount-1 do
     local angle = (i/vertCount) * math.pi * 2
