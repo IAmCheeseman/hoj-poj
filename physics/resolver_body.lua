@@ -49,6 +49,11 @@ function ResolverBody:moveAndCollide(velx, vely)
 
   self.world.chunker:updateBody(self)
 
+  if vec.length(velx, vely) < 5 then
+    velx = 0
+    vely = 0
+  end
+
   return velx, vely
 end
 
