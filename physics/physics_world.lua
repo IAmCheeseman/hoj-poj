@@ -48,17 +48,18 @@ function PhysicsWorld:raycast(startx, starty, endx, endy)
     math.max(math.abs(vecx),
     math.abs(vecy)) / self.chunker.chunkSize) + 1
 
-  local axis1x = -diry
-  local axis1y = dirx
+  local rcAxisPerpX = -diry
+  local rcAxisPerpY = dirx
 
-  local axis2x = dirx
-  local axis2y = diry
+  local rcAxisParX = dirx
+  local rcAxisParY = diry
 
   local testedChunks = {}
 
   for i=0, steps-1 do
     local percent = i/steps
-    local chunkx, chunky = self.chunker:getChunkCoordsFor(startx + vecx * percent, starty + vecy * percent)
+    local chunkx, chunky = self.chunker:getChunkCoordsFor(
+      startx + vecx * percent, starty + vecy * percent)
     local neighborChunks = self.chunker:getNeighborChunksAroundPos(chunkx, chunky)
 
     for _, chunk in ipairs(neighborChunks) do
@@ -92,8 +93,8 @@ function PhysicsWorld:raycast(startx, starty, endx, endy)
             end
           end
 
-          if rcTestAxis(axis1x, axis1y, startx, starty, endx, endy, body)
-            and rcTestAxis(axis2x, axis2y, startx, starty, endx, endy, body)
+          if rcTestAxis(rcAxisPerpX, rcAxisPerpY, startx, starty, endx, endy, body)
+            and rcTestAxis(rcAxisParX, rcAxisParY, startx, starty, endx, endy, body)
             and allBodyTestPassed then
             return body
           end
