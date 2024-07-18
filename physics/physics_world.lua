@@ -7,7 +7,7 @@ local stats = require("physics.stats")
 local PhysicsWorld = class()
 
 function PhysicsWorld:init(gridSize, partitionCount)
-  gridSize = gridSize or (128 * 2)
+  gridSize = gridSize or (8 * 16)
   partitionCount = partitionCount or 64
 
   self.chunker = Chunker(gridSize, partitionCount)

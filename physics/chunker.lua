@@ -83,7 +83,7 @@ function Chunker:addBody(body)
   if w > maxSize or h > maxSize then
     error(
       ("Body's size is %dx%d, max is %dx%d"):format(
-        body.w, body.h, maxSize, maxSize))
+        w, h, maxSize, maxSize))
   end
   self.bodyCount = self.bodyCount + 1
   local key = self:findChunkFor(body:getPosition())
