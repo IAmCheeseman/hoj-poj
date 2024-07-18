@@ -26,7 +26,7 @@ end
 function Hitbox:update()
   local colliders = self.sensor:getAllColliders()
   for _, collider in ipairs(colliders) do
-    if collider and collider.anchor.health then
+    if collider.anchor.health and collider:isInGroup("hurtbox") then
       local damage = self.getDamage(self.anchor)
 
       local dirx, diry = self.dirx, self.diry
@@ -40,12 +40,11 @@ function Hitbox:update()
       local kbx, kby = dirx * kbStrength, diry * kbStrength
       collider.anchor.health:takeDamage(self.source, damage, kbx, kby)
       self.damaged:call(collider.anchor, damage, kbx, kby)
-
-      self.hitSomething:call()
-    elseif collider then
+    elseif collider.type == "resolver" then
       self.hitEnv:call()
-      self.hitSomething:call()
     end
+
+    self.hitSomething:call()
   end
 end
 

@@ -22,14 +22,15 @@ function Dummy:init(x, y)
   self.health.damaged:connect(core.world, self.onDamaged, self)
   self.health.hitAnimation = "hit"
 
-  self.hitbox = core.SensorBody(self, core.physics.rect(-6, -15, 11, 15), {
+  self.hurtbox = core.SensorBody(self, core.physics.rect(-6, -15, 11, 15), {
     layers = {"enemy"},
+    groups = {"hurtbox"}
   })
-  core.physics.world:addBody(self.hitbox)
+  core.physics.world:addBody(self.hurtbox)
 end
 
 function Dummy:removed()
-  core.physics.world:removeBody(self.hitbox)
+  core.physics.world:removeBody(self.hurtbox)
 end
 
 function Dummy:onDamaged(_, _, kbx, _)

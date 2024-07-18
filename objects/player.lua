@@ -36,19 +36,19 @@ function Player:init()
   self.frict = 15
 
   self.health = Health(self, 20, self.sprite)
+  self.health.died:connect(core.world, self.onDied, self)
   self:register(self.health)
 
   self.body = core.ResolverBody(self, core.physics.diamond(0, -4, 10, 8), {
-    layers = {"player"},
     mask = {"env"},
   })
   core.physics.world:addBody(self.body)
 
-  self.hitbox = core.SensorBody(self, core.physics.diamond(0, -3, 8, 6), {
+  self.hurtbox = core.SensorBody(self, core.physics.diamond(0, -3, 8, 6), {
     layers = {"player"},
-    groups = {"player"},
+    groups = {"hurtbox", "player"},
   })
-  core.physics.world:addBody(self.hitbox)
+  core.physics.world:addBody(self.hurtbox)
 end
 
 function Player:added(world)
@@ -58,7 +58,13 @@ end
 
 function Player:removed(world)
   core.physics.world:removeBody(self.body)
-  core.physics.world:removeBody(self.hitbox)
+  core.physics.world:removeBody(self.hurtbox)
+
+  core.world:remove(self.gun)
+end
+
+function Player:onDied()
+  core.world:remove(self)
 end
 
 function Player:update(dt)

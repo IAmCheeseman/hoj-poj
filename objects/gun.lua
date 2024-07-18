@@ -68,7 +68,7 @@ function Gun:fire()
   local rot = self.angle
   local speed = 300
 
-  local offset = 6
+  local offset = 8
 
   self.kickback = 4
 

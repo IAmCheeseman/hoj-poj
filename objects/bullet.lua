@@ -25,7 +25,7 @@ function Bullet:init(source, x, y, rot, speed)
       offsety = "center",
 
       layers = {"bullet"},
-      mask = {"env", "enemy"}
+      mask = {"env", "enemy", "player"}
     }))
   self.hitbox.source = source
 

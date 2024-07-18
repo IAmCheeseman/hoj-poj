@@ -60,20 +60,21 @@ function Josh:init(x, y)
   })
   core.physics.world:addBody(self.detection)
 
-  self.hitbox = core.SensorBody(self, core.physics.rect(-5, -12, 10, 12), {
+  self.hurtbox = core.SensorBody(self, core.physics.rect(-5, -12, 10, 12), {
     layers = {"enemy"},
+    groups = {"hurtbox"},
   })
-  core.physics.world:addBody(self.hitbox)
+  core.physics.world:addBody(self.hurtbox)
 end
 
 function Josh:removed()
   core.physics.world:removeBody(self.body)
   core.physics.world:removeBody(self.detection)
-  core.physics.world:removeBody(self.hitbox)
+  core.physics.world:removeBody(self.hurtbox)
 end
 
 function Josh:onDamaged(attacker)
-  if attacker.hitbox and attacker.hitbox:isInGroup("player") then
+  if attacker then
     self.target = attacker
     self.sm:setState(self.pursueState)
   end
