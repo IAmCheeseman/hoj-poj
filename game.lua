@@ -1,5 +1,6 @@
 local start = os.clock()
 love.graphics.setDefaultFilter("nearest", "nearest")
+love.graphics.setLineStyle("rough")
 
 local core = require("core")
 local input = require("input")
