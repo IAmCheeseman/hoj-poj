@@ -135,6 +135,10 @@ function Sprite:setActiveTag(name, preserveFrame)
     error("No tag named '" .. name .. "'", 1)
   end
 
+  if name == self.activeTag then
+    return
+  end
+
   -- Try to keep the same relative frame in the new animation
   if preserveFrame then
     local tag = self.tags[self.activeTag]
@@ -169,7 +173,7 @@ function Sprite:animate(speedMod)
     self.currentFrame = self.currentFrame + 1
   end
 
-  if self.currentFrame < from or self.currentFrame > to - 1 then
+  if self.currentFrame < from or self.currentFrame > to then
     self.currentFrame = from
   end
 end
