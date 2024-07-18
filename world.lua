@@ -48,6 +48,9 @@ function World:m_flushQueues()
     if obj.removed then
       obj:removed(self)
     end
+    if type(obj.removeComponents) == "function" then
+      obj:removeComponents()
+    end
 
     local meta = self.objMeta[obj]
     local last = self.objs[#self.objs]

@@ -1,11 +1,11 @@
 local object = require("object")
 local shadow = require("shadow")
 local core = require("core")
+local Hitbox = require("hitbox")
 
 local Bullet = object()
 
 function Bullet:init(source, x, y, rot, speed)
-  self.source = source
   self.x = x
   self.y = y
   self.rot = rot
@@ -17,18 +17,33 @@ function Bullet:init(source, x, y, rot, speed)
 
   self.lifetime = 5
 
-  self.hitbox = core.SensorBody(self, core.physics.rect(-2, -2, 4, 4), {
-    offsetx = "center",
-    offsety = "center",
+  self.hitbox = Hitbox(
+    self,
+    self.getDamage,
+    core.SensorBody(self, core.physics.rect(-2, -2, 4, 4), {
+      offsetx = "center",
+      offsety = "center",
 
-    layers = {"bullet"},
-    mask = {"env", "enemy"}
-  })
-  core.physics.world:addBody(self.hitbox)
+      layers = {"bullet"},
+      mask = {"env", "enemy"}
+    }))
+  self.hitbox.source = source
+
+  self.hitbox.hitSomething:connect(core.world, self.onHit, self)
+
+  self:register(self.hitbox)
 end
 
-function Bullet:removed()
-  core.physics.world:removeBody(self.hitbox)
+function Bullet:getDamage()
+  local damage = self.damage
+  if love.math.random() < self.critChance then
+    damage = damage * self.critMod
+  end
+  return damage
+end
+
+function Bullet:onHit()
+  core.world:remove(self)
 end
 
 function Bullet:update(dt)
@@ -36,23 +51,14 @@ function Bullet:update(dt)
   self.x = self.x + dirx * self.speed * dt
   self.y = self.y + diry * self.speed * dt
 
+  self.hitbox.dirx = dirx
+  self.hitbox.diry = diry
+
   self.zIndex = self.y + 5
 
   self.lifetime = self.lifetime - dt
 
-  local collider = self.hitbox:getFirstCollider()
-  if collider and collider.anchor.health then
-    local damage = self.damage
-    if love.math.random() < self.critChance then
-      damage = damage * self.critMod
-    end
-    local kbStrength = 150
-    collider.anchor.health:takeDamage(
-      self.source,
-      damage,
-      dirx * kbStrength, diry * kbStrength)
-  end
-  if self.lifetime < 0 or collider then
+  if self.lifetime < 0 then
     core.world:remove(self)
   end
 

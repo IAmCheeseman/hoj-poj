@@ -32,6 +32,18 @@ function objectMt:drawComponents()
   end
 end
 
+function objectMt:removeComponents()
+  if type(self.components) ~= "table" then
+    error("Components property has been tampered with.")
+  end
+
+  for _, component in ipairs(self.components) do
+    if component.removed then
+      component:removed()
+    end
+  end
+end
+
 function objectMt:register(...)
   local components = {...}
   for _, v in ipairs(components) do
