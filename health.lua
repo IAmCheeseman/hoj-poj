@@ -52,7 +52,6 @@ function Health:takeDamage(damage, kbx, kby)
     self.damaged:call(damage, self.health, kbx, kby)
     if self.health <= 0 then
       self.died:call()
-      core.world:remove(self.anchor)
     end
   end
 

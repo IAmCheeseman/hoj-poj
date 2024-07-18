@@ -10,7 +10,7 @@ return {
   tilewidth = 8,
   tileheight = 8,
   nextlayerid = 8,
-  nextobjectid = 737,
+  nextobjectid = 738,
   properties = {},
   tilesets = {
     {
@@ -786,7 +786,7 @@ return {
       },
       properties = {},
       wangsets = {},
-      tilecount = 3,
+      tilecount = 4,
       tiles = {
         {
           id = 0,
@@ -805,6 +805,12 @@ return {
           image = "../dummy_tiled_display.png",
           width = 11,
           height = 15
+        },
+        {
+          id = 3,
+          image = "../josh_tiled_display.png",
+          width = 10,
+          height = 13
         }
       }
     }
@@ -1315,6 +1321,22 @@ return {
           visible = true,
           properties = {
             ["className"] = "Dummy"
+          }
+        },
+        {
+          id = 737,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = -32,
+          y = 160,
+          width = 10,
+          height = 13,
+          rotation = 0,
+          gid = 514,
+          visible = true,
+          properties = {
+            ["className"] = "Josh"
           }
         }
       }

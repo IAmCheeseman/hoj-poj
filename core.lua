@@ -36,4 +36,14 @@ core.postDraw = Event()
 
 shadow.init(core.world, core.mainViewport)
 
+local runtime = 0
+
+function core.getRuntime()
+  return runtime
+end
+
+core.update:on(function(dt)
+  runtime = runtime + dt
+end)
+
 return core
