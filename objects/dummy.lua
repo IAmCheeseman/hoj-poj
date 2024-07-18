@@ -33,7 +33,7 @@ function Dummy:removed()
   core.physics.world:removeBody(self.hurtbox)
 end
 
-function Dummy:onDamaged(_, _, kbx, _)
+function Dummy:onDamaged(_, _, _, kbx, _)
   self.scalex = -core.math.sign(kbx)
 end
 
