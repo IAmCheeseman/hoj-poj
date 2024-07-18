@@ -101,7 +101,8 @@ function Player:update(dt)
 
   self.sprite:setActiveTag(tagDir .. anim)
   self.scalex = sx
-  local animSpeed = 1 - (core.vec.length(self.velx, self.vely) / self.speed)^2 * 0.5
+  local animSpeed =
+    1.2 - (core.vec.length(self.velx, self.vely) / self.speed)^2 * 0.5
   self.sprite:animate(animSpeed)
 
   self.zIndex = self.y
