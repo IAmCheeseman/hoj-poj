@@ -37,7 +37,7 @@ function Health:isInvincible()
   return self.invulnerable or self:areIFramesActive()
 end
 
-function Health:takeDamage(damage, kbx, kby)
+function Health:takeDamage(attacker, damage, kbx, kby)
   local finalDamage = damage
   finalDamage = finalDamage * (1 - self.protection)
 
@@ -49,9 +49,9 @@ function Health:takeDamage(damage, kbx, kby)
   if not self:isInvincible() then
     self.health = self.health - finalDamage
 
-    self.damaged:call(damage, self.health, kbx, kby)
+    self.damaged:call(attacker, damage, self.health, kbx, kby)
     if self.health <= 0 then
-      self.died:call()
+      self.died:call(attacker)
     end
   end
 

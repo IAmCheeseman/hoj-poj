@@ -76,7 +76,7 @@ function Gun:fire()
     self.x + math.cos(rot) * offset,
     self.y + math.sin(rot) * offset
 
-  local bullet = Bullet(x, y, rot, speed)
+  local bullet = Bullet(self.anchor, x, y, rot, speed)
   core.world:add(bullet)
 
   self.cooldownLeft = self.cooldown

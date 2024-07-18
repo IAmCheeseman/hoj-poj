@@ -19,6 +19,10 @@ function StateMachine:setState(to)
   end
 end
 
+function StateMachine:getState()
+  return self.state
+end
+
 function StateMachine:call(funcName, ...)
   local func = self.state[funcName]
   if func then

@@ -28,6 +28,7 @@ function Josh:init(x, y)
   self.health = Health(self, 20, self.sprite)
   self:register(self.health)
 
+  self.health.damaged:connect(core.world, self.onDamaged, self)
   self.health.died:connect(core.world, self.onDied, self)
 
   self.animPicker = VecAnimPicker {
@@ -71,12 +72,21 @@ function Josh:removed()
   core.physics.world:removeBody(self.hitbox)
 end
 
+function Josh:onDamaged(attacker)
+  if attacker.hitbox and attacker.hitbox:isInGroup("player") then
+    self.target = attacker
+    self.sm:setState(self.pursueState)
+  end
+end
+
 function Josh:onDied()
   core.world:remove(self)
 end
 
 function Josh:update(dt)
   self.sm:call("update", dt)
+
+  self.zIndex = self.y
   shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
 end
 
@@ -102,10 +112,14 @@ function Josh:pursueUpdate()
 end
 
 function Josh:idleUpdate()
-  self.zIndex = self.y
+  self.velx = core.math.dtLerp(self.velx, 0, self.frict)
+  self.vely = core.math.dtLerp(self.vely, 0, self.frict)
 
-  -- local mx, my = core.mainViewport:mousePos()
-  local dirx, diry = math.cos(core.getRuntime() * 5), math.sin(core.getRuntime() * 5)
+  self.velx, self.vely = self.body:moveAndCollide(self.velx, self.vely)
+
+  local dirx, diry =
+    math.cos(core.getRuntime() * 5),
+    math.sin(core.getRuntime() * 5)
   local tag, scalex, _ = self.animPicker:pick(dirx, diry)
 
   self.scalex = scalex

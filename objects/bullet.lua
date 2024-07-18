@@ -4,7 +4,8 @@ local core = require("core")
 
 local Bullet = object()
 
-function Bullet:init(x, y, rot, speed)
+function Bullet:init(source, x, y, rot, speed)
+  self.source = source
   self.x = x
   self.y = y
   self.rot = rot
@@ -45,7 +46,11 @@ function Bullet:update(dt)
     if love.math.random() < self.critChance then
       damage = damage * self.critMod
     end
-    collider.anchor.health:takeDamage(damage, dirx * 30, diry * 30)
+    local kbStrength = 150
+    collider.anchor.health:takeDamage(
+      self.source,
+      damage,
+      dirx * kbStrength, diry * kbStrength)
   end
   if self.lifetime < 0 or collider then
     core.world:remove(self)
