@@ -10,7 +10,7 @@ local log = require("log")
 local core = {}
 
 core.mainViewport = Viewport(320, 180)
-core.guiViewport = Viewport(320 * 5, 180 * 5)
+core.guiViewport = Viewport(320, 180)
 core.guiViewport.centered = false
 
 core.playerGroup = -1

@@ -2,9 +2,10 @@ local object = require("object")
 local core  = require("core")
 local physicsStats = require("physics.stats")
 
+local font = love.graphics.newImageFont(
+  "assets/font.png",
+  " abcdefghijklmnopqrstuvwxyz0123456789.,:;/\\")
 core.input.addAction("open_debug_menu", "kb", "f1")
-
-local font = love.graphics.newFont(24)
 
 local DebugScreen = object()
 
@@ -45,15 +46,15 @@ function DebugScreen:gui()
   love.graphics.setFont(font)
 
   local stats = love.graphics.getStats()
-  y = self:m_drawText("FPS: " .. love.timer.getFPS(), x, y)
-  y = self:m_drawText("Draw calls: " .. stats.drawcalls, x, y)
+  y = self:m_drawText("fps: " .. love.timer.getFPS(), x, y)
+  y = self:m_drawText("draw calls: " .. stats.drawcalls, x, y)
   y = self:m_drawText(
-    "I: " .. stats.images .. ", C: " .. stats.canvases
-    .. ", F: " .. stats.fonts,
+    "i: " .. stats.images .. ", c: " .. stats.canvases
+    .. ", f: " .. stats.fonts,
     x, y)
-  y = self:m_drawText("Objects: " .. core.world:getObjCount(), x, y)
-  y = self:m_drawText("Physics Bodies: " .. core.physics.world:getBodyCount(), x, y)
-  y = self:m_drawText(("CC: %d, R: %d, RC: %d"):format(
+  y = self:m_drawText("objects: " .. core.world:getObjCount(), x, y)
+  y = self:m_drawText("physics bodies: " .. core.physics.world:getBodyCount(), x, y)
+  y = self:m_drawText(("cc: %d, r: %d, rc: %d"):format(
     physicsStats.collisionChecks, physicsStats.resolutions, physicsStats.raycasts),
     x, y)
 end
