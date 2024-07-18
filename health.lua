@@ -1,12 +1,18 @@
 local class = require("class")
 local core = require("core")
+local Sprite = require("sprite")
 
 local Health = class()
 
 local flash = love.graphics.newShader("vfx/flash.frag")
 
-function Health:init(anchor, maxHealth)
+function Health:init(anchor, maxHealth, sprite)
   self.anchor = anchor
+  self.sprite = sprite
+
+  if self.sprite then
+    self.sprite.transformAL:addStep(self, self.transformSprite)
+  end
 
   self.maxHealth = maxHealth
   self.health = maxHealth
@@ -37,20 +43,14 @@ function Health:takeDamage(damage, kbx, kby)
   end
 end
 
-function Health:drawSprite(sprite, x, y, r, sx, sy, kx, ky)
-  love.graphics.setColor(1, 1, 1)
+function Health:transformSprite(t)
+  local sy = 1 + self.iFramesLeft * 2
+  local sx = 1 - (sy - 1)
 
-  sx = sx or 1
-  sy = sy or sx
+  t.sx = t.sx * sx
+  t.sy = t.sy * sy
 
-  sy = sy * (1 + self.iFramesLeft * 2)
-  sx = sx * (1 - (sy - 1))
-
-  flash:send("amount", math.ceil(self.iFramesLeft))
-
-  love.graphics.setShader(flash)
-  sprite:draw(x, y, r, sx, sy, kx, ky)
-  love.graphics.setShader()
+  return t
 end
 
 return Health

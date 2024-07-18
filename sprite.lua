@@ -1,5 +1,6 @@
 local class = require("class")
 local loadAse = require("ase")
+local AssemblyLine = require("assembly_line")
 
 local blendmodes = {
   [0] = "alpha",
@@ -16,6 +17,8 @@ local Sprite = class()
 function Sprite:init(path)
   self.offsetx = 0
   self.offsety = 0
+
+  self.transformAL = AssemblyLine()
 
   self.currentFrame = 1
   self.animTime = 0
@@ -171,10 +174,17 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
   local layerCount = #self.layers
   local start = self.currentFrame * layerCount - layerCount
 
-  sx = sx or 1
-  sy = sy or sx
-  kx = kx or 0
-  ky = ky or 0
+  local t = self.transformAL:produce({
+    x = x,
+    y = y,
+    r = r or 0,
+    sx = sx or 1,
+    sy = sy or sx or 1,
+    ox = self.offsetx,
+    oy = self.offsety,
+    kx = kx or 0,
+    ky = ky or 0,
+  })
 
   local i = 1
   repeat
@@ -184,8 +194,8 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
       love.graphics.setBlendMode(layer.blend)
       love.graphics.draw(
         self.frames[start + offset].image,
-        math.floor(x), math.floor(y),
-        r, sx, sy, self.offsetx, self.offsety, kx, ky)
+        math.floor(t.x), math.floor(t.y),
+        t.r, t.sx, t.sy, t.ox, t.oy, t.kx, t.ky)
       love.graphics.setBlendMode("alpha")
     end
 

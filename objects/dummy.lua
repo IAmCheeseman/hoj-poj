@@ -14,7 +14,7 @@ function Dummy:init(x, y)
   self.x = x
   self.y = y
 
-  self.health = Health(self, math.huge)
+  self.health = Health(self, math.huge, self.sprite)
   self:register(self.health)
 
   self.hitbox = core.SensorBody(self, core.physics.rect(-6, -15, 11, 15), {
@@ -34,7 +34,8 @@ function Dummy:update()
 end
 
 function Dummy:draw()
-  self.health:drawSprite(self.sprite, self.x, self.y)
+  love.graphics.setColor(1, 1, 1)
+  self.sprite:draw(self.x, self.y)
 end
 
 TiledMap.s_addSpawner("Dummy", function(world, data)

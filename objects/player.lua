@@ -35,7 +35,7 @@ function Player:init()
   self.accel = 10
   self.frict = 15
 
-  self.health = Health(self, 20)
+  self.health = Health(self, 20, self.sprite)
   self:register(self.health)
 
   self.body = core.ResolverBody(self, core.physics.diamond(0, -4, 10, 8), {
@@ -117,7 +117,8 @@ function Player:update(dt)
 end
 
 function Player:draw()
-  self.health:drawSprite(self.sprite, self.x, self.y, 0, self.scalex, 1)
+  love.graphics.setColor(1, 1, 1)
+  self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
 end
 
 TiledMap.s_addSpawner("Player", function(world, data)
