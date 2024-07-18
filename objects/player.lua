@@ -2,6 +2,7 @@ local Sprite = require("sprite")
 local VecAnimPicker = require("animpicker")
 local TiledMap = require("tiled.map")
 local Gun = require("objects.gun")
+local Health = require("health")
 local shadow = require("shadow")
 local core = require("core")
 local object = require("object")
@@ -33,6 +34,9 @@ function Player:init()
   self.speed = 75
   self.accel = 10
   self.frict = 15
+
+  self.health = Health(self, 20)
+  self:register(self.health)
 
   self.body = core.ResolverBody(self, core.physics.diamond(0, -4, 10, 8), {
     layers = {"player"},
@@ -112,8 +116,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
-  love.graphics.setColor(1, 1, 1)
-  self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
+  self.health:drawSprite(self.sprite, self.x, self.y, 0, self.scalex, 1)
 end
 
 TiledMap.s_addSpawner("Player", function(world, data)

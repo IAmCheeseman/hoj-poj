@@ -73,6 +73,9 @@ function World:update()
     if type(obj.update) == "function" then
       obj:update(dt)
     end
+    if type(obj.updateComponents) == "function" then
+      obj:updateComponents()
+    end
   end
 end
 
@@ -91,6 +94,9 @@ function World:draw()
     self.objMeta[obj].index = i
     if type(obj.draw) == "function" then
       obj:draw()
+    end
+    if type(obj.drawComponents) == "function" then
+      obj:drawComponents()
     end
   end
 end

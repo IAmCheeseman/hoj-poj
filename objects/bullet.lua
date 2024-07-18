@@ -40,12 +40,12 @@ function Bullet:update(dt)
   self.lifetime = self.lifetime - dt
 
   local collider = self.hitbox:getFirstCollider()
-  if collider and type(collider.anchor.takeDamage) == "function" then
+  if collider and collider.anchor.health then
     local damage = self.damage
     if love.math.random() < self.critChance then
       damage = damage * self.critMod
     end
-    collider.anchor:takeDamage(damage, dirx * 30, diry * 30)
+    collider.anchor.health:takeDamage(damage, dirx * 30, diry * 30)
   end
   if self.lifetime < 0 or collider then
     core.world:remove(self)
