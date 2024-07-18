@@ -1,10 +1,7 @@
 local class = require("class")
 local core = require("core")
-local Sprite = require("sprite")
 
 local Health = class()
-
-local flash = love.graphics.newShader("vfx/flash.frag")
 
 function Health:init(anchor, maxHealth, sprite)
   self.anchor = anchor
