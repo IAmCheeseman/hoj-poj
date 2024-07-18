@@ -29,7 +29,6 @@ function Dummy:init(x, y)
 end
 
 function Dummy:removed()
-  core.physics.world:removeBody(self.body)
   core.physics.world:removeBody(self.hitbox)
 end
 
@@ -51,3 +50,5 @@ end
 TiledMap.s_addSpawner("Dummy", function(world, data)
   world:add(Dummy(data.x, data.y))
 end)
+
+return Dummy
