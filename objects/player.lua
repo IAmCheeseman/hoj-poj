@@ -4,6 +4,7 @@ local TiledMap = require("tiled.map")
 local Gun = require("objects.gun")
 local Health = require("health")
 local shadow = require("shadow")
+local gui = require("gui")
 local core = require("core")
 local object = require("object")
 local StateMachine = require("state_machine")
@@ -175,6 +176,10 @@ end
 function Player:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
+end
+
+function Player:gui()
+  gui.drawBar(2, 5, 40, 5, self.health:getPercentage(), {0, 0, 0}, {1, 0, 0})
 end
 
 TiledMap.s_addSpawner("Player", function(world, data)

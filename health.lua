@@ -29,6 +29,10 @@ function Health:update(dt)
   self.iFramesLeft = math.max(self.iFramesLeft - dt, 0)
 end
 
+function Health:getPercentage()
+  return self.health / self.maxHealth
+end
+
 function Health:areIFramesActive()
   return self.iFramesLeft > 0
 end
