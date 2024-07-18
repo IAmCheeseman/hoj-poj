@@ -46,6 +46,7 @@ function Player:init()
 
   self.hitbox = core.SensorBody(self, core.physics.diamond(0, -3, 8, 6), {
     layers = {"player"},
+    groups = {"player"},
   })
   core.physics.world:addBody(self.hitbox)
 end

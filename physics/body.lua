@@ -1,6 +1,7 @@
 local class = require("class")
 local vec = require("vec")
 local stats = require("physics.stats")
+local log = require("log")
 
 local Body = class()
 
@@ -132,9 +133,11 @@ function Body:init(type, anchor, vertices, options)
 
   local layers = options.layers or {}
   local mask = options.mask or {}
+  local groups = options.groups or {}
 
   self.layers = convertArrToSet(layers)
   self.mask = convertArrToSet(mask)
+  self.groups = convertArrToSet(groups)
 
   self.isOnFloor = false
   self.isOnCeiling = false
@@ -210,6 +213,21 @@ end
 
 function Body:i_setWorld(world)
   self.world = world
+end
+
+function Body:addToGroup(group)
+  self.groups[group] = true
+end
+
+function Body:removeFromGroup(group)
+  if not self.groups[group] then
+    log.error("Body is not in group '" .. group .. "'. Cannot remove.")
+  end
+  self.groups[group] = nil
+end
+
+function Body:isInGroup(group)
+  return self.groups[group] ~= nil
 end
 
 function Body:drawNeighbors(radius)
