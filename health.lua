@@ -1,11 +1,15 @@
 local class = require("class")
 local core = require("core")
+local Event = require("event")
 
 local Health = class()
 
 function Health:init(anchor, maxHealth, sprite)
   self.anchor = anchor
   self.sprite = sprite
+
+  self.damaged = Event()
+  self.died = Event()
 
   if self.sprite then
     self.sprite.transformAL:addStep(self, self.transformSprite)
@@ -35,7 +39,10 @@ function Health:takeDamage(damage, kbx, kby)
   end
 
   self.health = self.health - finalDamage
+
+  self.damaged:call(damage, self.health, kbx, kby)
   if self.health <= 0 then
+    self.died:call()
     core.world:remove(self.anchor)
   end
 end
