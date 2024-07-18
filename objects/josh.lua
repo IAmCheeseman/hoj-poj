@@ -142,7 +142,7 @@ function Josh:fleeEnter()
   bullet.damage = 6
   core.world:add(bullet)
 
-  self.fleeState.timer = 1
+  self.fleeState.timer = 1.5
 end
 
 function Josh:fleeUpdate(dt)
@@ -165,6 +165,11 @@ function Josh:fleeUpdate(dt)
   if self.fleeState.timer < 0 then
     self.sm:setState(self.pursueState)
   end
+
+  local tag, scalex, _ = self.animPicker:pick(dirx, diry)
+  self.scalex = scalex
+  self.sprite:setActiveTag(tag, true)
+  self.sprite:animate()
 end
 
 function Josh:idleUpdate()
