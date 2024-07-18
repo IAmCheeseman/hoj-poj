@@ -129,7 +129,7 @@ function PhysicsWorld:draw()
 
   for body, _ in pairs(self.chunker.bodyMeta) do
     love.graphics.setColor(body:getColor())
-    love.graphics.polygon("fill", body:getVerticesInWorld())
+    love.graphics.polygon("line", body:getVerticesInWorld())
   end
   love.graphics.setColor(1, 1, 1)
 end
