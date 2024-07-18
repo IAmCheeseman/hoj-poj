@@ -142,10 +142,11 @@ function Sprite:setActiveTag(name, preserveFrame)
   -- Try to keep the same relative frame in the new animation
   if preserveFrame then
     local tag = self.tags[self.activeTag]
-    local dist = self.currentFrame - tag.from
+    local dif = self.currentFrame - tag.from
 
     local new = self.tags[name]
-    self.currentFrame = new.from + (dist % new.framec)
+    local framec = new.framec == 0 and 1 or new.framec
+    self.currentFrame = new.from + (dif % framec)
   else
     self.currentFrame = self.tags[name].from
   end
