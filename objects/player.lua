@@ -99,7 +99,7 @@ function Player:update(dt)
     anim = "idle"
   end
 
-  self.sprite:setActiveTag(tagDir .. anim)
+  self.sprite:setActiveTag(tagDir .. anim, true)
   self.scalex = sx
   local animSpeed =
     1.2 - (core.vec.length(self.velx, self.vely) / self.speed)^2 * 0.5
