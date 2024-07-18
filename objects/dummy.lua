@@ -20,6 +20,7 @@ function Dummy:init(x, y)
   self:register(self.health)
 
   self.health.damaged:connect(core.world, self.onDamaged, self)
+  self.health.hitAnimation = "hit"
 
   self.hitbox = core.SensorBody(self, core.physics.rect(-6, -15, 11, 15), {
     layers = {"enemy"},
@@ -32,12 +33,13 @@ function Dummy:removed()
   core.physics.world:removeBody(self.hitbox)
 end
 
-function Dummy:onDamaged(...)
-  self.scalex = -self.scalex
+function Dummy:onDamaged(_, _, kbx, _)
+  self.scalex = -core.math.sign(kbx)
 end
 
 function Dummy:update()
   self.zIndex = self.y
+  self.sprite:setActiveTag("idle")
   shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
 end
 

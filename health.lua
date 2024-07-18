@@ -12,14 +12,16 @@ function Health:init(anchor, maxHealth, sprite)
   self.died = Event()
 
   if self.sprite then
-    self.sprite.transformAL:addStep(self, self.transformSprite)
+    self.sprite.drawAL:addStep(self, self.spriteDrawStep)
   end
 
   self.maxHealth = maxHealth
   self.health = maxHealth
   self.kbResistence = 0
   self.protection = 0
-  self.iFrames = 0.1
+
+  self.invulnerable = false
+  self.iFrames = 0.2
   self.iFramesLeft = 0
 end
 
@@ -27,9 +29,15 @@ function Health:update(dt)
   self.iFramesLeft = math.max(self.iFramesLeft - dt, 0)
 end
 
-function Health:takeDamage(damage, kbx, kby)
-  self.iFramesLeft = self.iFrames
+function Health:areIFramesActive()
+  return self.iFramesLeft > 0
+end
 
+function Health:isInvincible()
+  return self.invulnerable or self:areIFramesActive()
+end
+
+function Health:takeDamage(damage, kbx, kby)
   local finalDamage = damage
   finalDamage = finalDamage * (1 - self.protection)
 
@@ -38,21 +46,29 @@ function Health:takeDamage(damage, kbx, kby)
     self.anchor.vely = self.anchor.vely + kby * (1 - self.kbResistence)
   end
 
-  self.health = self.health - finalDamage
+  if not self:isInvincible() then
+    self.health = self.health - finalDamage
 
-  self.damaged:call(damage, self.health, kbx, kby)
-  if self.health <= 0 then
-    self.died:call()
-    core.world:remove(self.anchor)
+    self.damaged:call(damage, self.health, kbx, kby)
+    if self.health <= 0 then
+      self.died:call()
+      core.world:remove(self.anchor)
+    end
   end
+
+  self.iFramesLeft = self.iFrames
 end
 
-function Health:transformSprite(t)
+function Health:spriteDrawStep(t)
   local sy = 1 + self.iFramesLeft * 2
   local sx = 1 - (sy - 1)
 
   t.sx = t.sx * sx
   t.sy = t.sy * sy
+
+  if self.hitAnimation and self:areIFramesActive() then
+    t.sprite:setActiveTag(self.hitAnimation)
+  end
 
   return t
 end

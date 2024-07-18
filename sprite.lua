@@ -18,10 +18,12 @@ function Sprite:init(path)
   self.offsetx = 0
   self.offsety = 0
 
-  self.transformAL = AssemblyLine()
+  self.drawAL = AssemblyLine()
 
   self.currentFrame = 1
   self.animTime = 0
+
+  self.previous = {}
 
   self.layers = {}
   self.frames = {}
@@ -140,6 +142,8 @@ function Sprite:setActiveTag(name, preserveFrame)
 
     local new = self.tags[name]
     self.currentFrame = new.from + (dist % new.framec)
+  else
+    self.currentFrame = self.tags[name].from
   end
 
   self.activeTag = name
@@ -171,10 +175,8 @@ function Sprite:animate(speedMod)
 end
 
 function Sprite:draw(x, y, r, sx, sy, kx, ky)
-  local layerCount = #self.layers
-  local start = self.currentFrame * layerCount - layerCount
-
-  local t = self.transformAL:produce({
+  local t = self.drawAL:produce({
+    sprite = self,
     x = x,
     y = y,
     r = r or 0,
@@ -185,6 +187,9 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
     kx = kx or 0,
     ky = ky or 0,
   })
+
+  local layerCount = #self.layers
+  local start = self.currentFrame * layerCount - layerCount
 
   local i = 1
   repeat

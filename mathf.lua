@@ -1,5 +1,9 @@
 local mathf = {}
 
+function mathf.sign(a)
+  return a < 0 and -1 or 1
+end
+
 function mathf.lerp(a, b, d)
   return (b - a) * d + a
 end
