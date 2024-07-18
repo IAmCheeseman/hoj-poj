@@ -1,6 +1,7 @@
 local object = require("object")
 local Sprite = require("sprite")
 local core = require("core")
+local Event = require("event")
 
 local Bullet = require("objects.bullet")
 
@@ -10,6 +11,8 @@ function Gun:init(anchor, offsetx, offsety)
   self.anchor = anchor
   self.offsetx = offsetx or 0
   self.offsety = offsety or 0
+
+  self.fired = Event()
 
   self.x = anchor.x + self.offsetx
   self.y = anchor.y + self.offsety
@@ -80,6 +83,8 @@ function Gun:fire()
   core.world:add(bullet)
 
   self.cooldownLeft = self.cooldown
+
+  self.fired:call(bullet)
 end
 
 return Gun

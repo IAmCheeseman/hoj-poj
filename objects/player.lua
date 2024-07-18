@@ -6,6 +6,7 @@ local Health = require("health")
 local shadow = require("shadow")
 local core = require("core")
 local object = require("object")
+local StateMachine = require("state_machine")
 
 local Player = object()
 
@@ -25,6 +26,19 @@ function Player:init()
     {"ds", -1,  1, {-1,  1}},
     {"us", -1, -1, {-1,  1}},
   }
+
+  self.defaultState = {
+    update = self.defaultUpdate,
+  }
+
+  self.attackState = {
+    enter = self.attackEnter,
+    update = self.attackUpdate,
+  }
+
+  self.sm = StateMachine(self, self.defaultState)
+
+  self.attackTimer = 0
 
   self.scalex = 1
 
@@ -54,6 +68,8 @@ end
 function Player:added(world)
   self.gun = Gun(self, 0, -5)
   world:add(self.gun)
+
+  self.gun.fired:connect(core.world, self.onGunFire, self)
 end
 
 function Player:removed(world)
@@ -68,6 +84,25 @@ function Player:onDied()
 end
 
 function Player:update(dt)
+  self.sm:call("update", dt)
+
+  core.mainViewport:setCamPos(math.floor(self.x), math.floor(self.y))
+
+  self.zIndex = self.y
+  shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
+end
+
+function Player:onGunFire(bullet)
+  self.velx = -math.cos(bullet.rot) * bullet.speed / 2
+  self.vely = -math.sin(bullet.rot) * bullet.speed / 2
+
+  self.attackState.dirx, self.attackState.diry =
+    core.vec.normalize(-self.velx, -self.vely)
+
+  self.sm:setState(self.attackState)
+end
+
+function Player:defaultUpdate(dt)
   local ix, iy = 0, 0
   if core.input.isActionDown("walk_up")    then iy = iy - 1 end
   if core.input.isActionDown("walk_left")  then ix = ix - 1 end
@@ -98,9 +133,7 @@ function Player:update(dt)
   local mx, my = core.mainViewport:mousePos()
   local dirx, diry = core.vec.direction(self.x, self.y, mx, my)
 
-  local tagDir, sx, _ = self.animPicker:pick(
-    dirx, diry)
-    -- vec.normalize(self.faceDirX, self.faceDirY))
+  local tagDir, sx, _ = self.animPicker:pick(dirx, diry)
   local anim = "walk"
   if core.vec.length(self.velx, self.vely) < 5 then
     anim = "idle"
@@ -112,15 +145,31 @@ function Player:update(dt)
     1.2 - (core.vec.length(self.velx, self.vely) / self.speed)^2 * 0.5
   self.sprite:animate(animSpeed)
 
-  self.zIndex = self.y
-
-  core.mainViewport:setCamPos(math.floor(self.x), math.floor(self.y))
-
   -- Update gun angle
   local gunx, guny = self.gun.x, self.gun.y
   self.gun.angle = core.vec.angleToPoint(gunx, guny, mx, my)
+end
 
-  shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
+function Player:attackEnter()
+  self.attackTimer = 0.5
+end
+
+function Player:attackUpdate(dt)
+  self.velx = core.math.dtLerp(self.velx, 0, self.frict)
+  self.vely = core.math.dtLerp(self.vely, 0, self.frict)
+
+  self.velx, self.vely = self.body:moveAndCollide(self.velx, self.vely)
+
+  local dirx, diry = self.attackState.dirx, self.attackState.diry
+  local tagDir, sx, _ = self.animPicker:pick(dirx, diry)
+
+  self.sprite:setActiveTag(tagDir .. "idle", true)
+  self.scalex = sx
+
+  self.attackTimer = self.attackTimer - dt
+  if self.attackTimer <= 0 then
+    self.sm:setState(self.defaultState)
+  end
 end
 
 function Player:draw()
