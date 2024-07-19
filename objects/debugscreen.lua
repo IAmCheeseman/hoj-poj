@@ -10,7 +10,7 @@ core.input.addAction("open_debug_menu", "kb", "f1")
 local DebugScreen = object()
 
 function DebugScreen:init()
-  self.zIndex = 100
+  self.zIndex = math.huge
   self.visible = false
 end
 
