@@ -1,5 +1,5 @@
 local class = require("class")
-local loadAse = require("ase")
+local loadAse = require("aseprite")
 local AssemblyLine = require("assembly_line")
 
 local blendmodes = {
