@@ -1,6 +1,9 @@
 local class = require("class")
 local loadAse = require("aseprite")
 local AssemblyLine = require("assembly_line")
+local SpriteAtlas = require("atlas")
+
+local atlas = SpriteAtlas(1024, 1024)
 
 local blendmodes = {
   [0] = "alpha",
@@ -35,6 +38,8 @@ function Sprite:init(path)
     self.width = file.header.width
     self.height = file.header.height
 
+    local frameIndex = 1
+
     for _, frame in ipairs(file.header.frames) do
       for _, chunk in ipairs(frame.chunks) do
         if chunk.type == 0x2004 then -- Layer
@@ -65,8 +70,11 @@ function Sprite:init(path)
           love.graphics.draw(image, cel.x, cel.y)
           love.graphics.setCanvas()
 
+          local atlasId = atlas:addSprite(canvas, nil, path .. frameIndex)
+          frameIndex = frameIndex + 1
+
           table.insert(self.frames, {
-            image = canvas,
+            image = atlasId,
             duration = frame.frame_duration / 1000
           })
 
@@ -89,6 +97,7 @@ function Sprite:init(path)
     end
   else -- Other file format
     local image = love.graphics.newImage(path)
+    local atlasId = atlas:addSprite(image, nil, path)
     self.width = image:getWidth()
     self.height = image:getHeight()
 
@@ -99,7 +108,7 @@ function Sprite:init(path)
     })
 
     table.insert(self.frames, {
-      image = image,
+      image = atlasId,
       duration = 0.1,
     })
   end
@@ -202,7 +211,7 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
     local layer = self.layers[i]
     if layer.visible then
       love.graphics.setBlendMode(layer.blend)
-      love.graphics.draw(
+      atlas:draw(
         self.frames[start + offset].image,
         math.floor(t.x), math.floor(t.y),
         t.r, t.sx, t.sy, t.ox, t.oy, t.kx, t.ky)

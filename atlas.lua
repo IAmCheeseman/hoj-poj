@@ -10,6 +10,7 @@ function SpriteAtlas:init(width, height)
   self.canvas = love.graphics.newCanvas(width, height)
 
   self.cache = {}
+  self.paths = {}
   self.bin = {
     x = 0,
     y = 0,
@@ -63,7 +64,11 @@ function SpriteAtlas:newQuad(id, x, y, w, h)
   return love.graphics.newQuad(c.x + x, c.y + y, w, h, self.width, self.height)
 end
 
-function SpriteAtlas:addSprite(texture, quad)
+function SpriteAtlas:addSprite(texture, quad, id)
+  if self.paths[id] then
+    return self.paths[id]
+  end
+
   if type(texture) == "string" then
     texture = love.graphics.newImage(texture)
   end
@@ -97,6 +102,9 @@ function SpriteAtlas:addSprite(texture, quad)
     width = width,
     height = height,
   }
+
+  self.paths[id] = cacheId
+  print("Added '" .. id .. "' to sprite atlas.")
   return cacheId
 end
 
