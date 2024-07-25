@@ -104,7 +104,6 @@ function SpriteAtlas:addSprite(texture, quad, id)
   }
 
   self.paths[id] = cacheId
-  print("Added '" .. id .. "' to sprite atlas.")
   return cacheId
 end
 
