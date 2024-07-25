@@ -4,27 +4,60 @@ local kg = require("ui.kirigami")
 local style = require("ui.style")
 local items = require("item_init")
 local Sprite = require("sprite")
+local Slot = require("slot")
 
-local Slot = lui.Element()
+local SlotUI = lui.Element()
 
 local slotNormal = Sprite("assets/ui/slot.png")
 local slotHovered = Sprite("assets/ui/slot_hovered.png")
 
-function Slot:init(inventory, slotIndex)
+function SlotUI:init(inventory, slotIndex)
   self.inventory = inventory
   self.slotIndex = slotIndex
 end
 
-function Slot:onMousePress(_, _, button)
+function SlotUI:onMousePress(_, _, button)
+  local parent = self:getParent()
   if button == 1 then
-    local parent = self:getParent()
     local slot = self.inventory.slots[self.slotIndex]
-    slot, parent.mouseSlot = parent.mouseSlot, slot
-    self.inventory.slots[self.slotIndex] = slot
+    if slot and parent.mouseSlot
+    and slot.itemId == parent.mouseSlot.itemId then
+      -- Add stack from mouse to stack in inventory
+      local maxStack = items[slot.itemId].maxStack
+      local add = math.min(maxStack - slot.stackSize, parent.mouseSlot.stackSize)
+
+      slot.stackSize = slot.stackSize + add
+      parent.mouseSlot.stackSize = parent.mouseSlot.stackSize - add
+
+      if parent.mouseSlot.stackSize <= 0 then
+        parent.mouseSlot = nil
+      end
+    else
+      -- Swap items between mouse slot
+      slot, parent.mouseSlot = parent.mouseSlot, slot
+      self.inventory.slots[self.slotIndex] = slot
+    end
+  elseif button == 2 then
+    local slot = self.inventory.slots[self.slotIndex]
+
+    if slot and parent.mouseSlot
+    and slot.itemId == parent.mouseSlot.itemId then
+      -- Adding to mouse slot
+      slot.stackSize = slot.stackSize - 1
+      parent.mouseSlot.stackSize = parent.mouseSlot.stackSize + 1
+    elseif slot and not parent.mouseSlot then
+      -- Add to empty mouse slot
+      slot.stackSize = slot.stackSize - 1
+      parent.mouseSlot = Slot(slot.itemId, 1)
+    end
+
+    if slot and slot.stackSize <= 0 then
+      self.inventory.slots[self.slotIndex] = nil
+    end
   end
 end
 
-function Slot:onRender(x, y, w, h)
+function SlotUI:onRender(x, y, w, h)
   local isHovered = self:contains(core.guiViewport:mousePos())
 
   local slotImg = isHovered and slotHovered or slotNormal
@@ -55,4 +88,4 @@ function Slot:onRender(x, y, w, h)
   end
 end
 
-return Slot
+return SlotUI
