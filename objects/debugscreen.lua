@@ -1,10 +1,8 @@
 local object = require("object")
 local core  = require("core")
 local physicsStats = require("physics.stats")
+local style = require("ui.style")
 
-local font = love.graphics.newImageFont(
-  "assets/font.png",
-  " abcdefghijklmnopqrstuvwxyz0123456789.,:;/\\")
 core.input.addAction("open_debug_menu", "kb", "f1")
 
 local DebugScreen = object()
@@ -25,8 +23,8 @@ function DebugScreen:m_onActionDown(action, _, isrepeat)
 end
 
 function DebugScreen:m_drawText(text, x, y)
-  local width = font:getWidth(text)
-  local height = font:getHeight()
+  local width = style.font:getWidth(text)
+  local height = style.font:getHeight()
 
   local padding = 4
 
@@ -44,7 +42,7 @@ function DebugScreen:gui()
   end
 
   local x, y = 5, 5
-  love.graphics.setFont(font)
+  love.graphics.setFont(style.font)
 
   local stats = love.graphics.getStats()
   y = self:m_drawText("fps: " .. love.timer.getFPS(), x, y)

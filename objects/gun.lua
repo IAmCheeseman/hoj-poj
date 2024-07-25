@@ -23,7 +23,7 @@ function Gun:init(anchor, offsetx, offsety)
   self.cooldownLeft = 0
 
   self.angle = 0
-  self.sprite = Sprite("assets/player/gun.png")
+  self.sprite = Sprite("assets/items/gun.png")
   self.sprite:alignedOffset("left", "center")
 end
 

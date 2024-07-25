@@ -8,6 +8,10 @@ local gui = require("gui")
 local core = require("core")
 local object = require("object")
 local StateMachine = require("state_machine")
+local Inventory = require("inventory")
+local kg = require("ui.kirigami")
+local InventoryUI = require("ui.inventory")
+local uiSetup = require("ui.setup")
 
 local Player = object()
 
@@ -49,6 +53,14 @@ function Player:init()
   self.speed = 75
   self.accel = 10
   self.frict = 15
+
+  self.inventory = Inventory(8)
+  print(self.inventory:addItem("food", 17))
+  print(self.inventory:addItem("medkit", 33))
+
+  self.inventoryUi = InventoryUI(self.inventory)
+  self.inventoryUi:makeRoot()
+  uiSetup.connectEvents(core.mainViewport, self.inventoryUi)
 
   self.health = Health(self, 20, self.sprite)
   self.health.died:connect(core.world, self.onDied, self)
@@ -180,6 +192,9 @@ end
 
 function Player:gui()
   gui.drawBar(2, 5, 40, 5, self.health:getPercentage(), {0, 0, 0}, {1, 0, 0})
+
+  local screen = kg.Region(0, 0, core.guiViewport:getSize())
+  self.inventoryUi:render(screen:get())
 end
 
 TiledMap.s_addSpawner("Player", function(world, data)

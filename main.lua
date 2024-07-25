@@ -1,9 +1,3 @@
-setmetatable(_G, {
-  __newindex = function (_, k, _)
-    error("Attempted to create global variable '" .. k .. "'")
-  end
-})
-
 local game = require("game")
 
 local helptext = [[
