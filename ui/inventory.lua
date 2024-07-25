@@ -17,11 +17,10 @@ function Inventory:init(inventory)
     self:addChild(slot)
   end
 
-  self.activeSlot1 = Slot(inventory, 8)
-  self.activeSlot2 = Slot(inventory, 8)
-
-  self:addChild(self.activeSlot1)
-  self:addChild(self.activeSlot2)
+  -- self.activeSlot1 = Slot(inventory, 9)
+  -- self.activeSlot2 = Slot(inventory, 10)
+  -- self:addChild(self.activeSlot1)
+  -- self:addChild(self.activeSlot2)
 end
 
 function Inventory:onRender(x, y, w, h)
@@ -41,11 +40,11 @@ function Inventory:onRender(x, y, w, h)
     local sloty = (math.floor(i / invw) * 16)
     sloty = 16 - sloty + bg.y
 
-    slot:render(slotx + 7, sloty + 7, 16, 16)
+    slot:render(slotx + 5, sloty + 4, 16, 16)
   end
 
-  self.activeSlot2:render(bg.x + 79, bg.y + 23, 16, 16)
-  self.activeSlot1:render(bg.x + 79, bg.y + 7, 16, 16)
+  -- self.activeSlot2:render(bg.x + 79, bg.y + 23, 16, 16)
+  -- self.activeSlot1:render(bg.x + 79, bg.y + 7, 16, 16)
 end
 
 return Inventory

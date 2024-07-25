@@ -55,8 +55,14 @@ function Player:init()
   self.frict = 15
 
   self.inventory = Inventory(8)
-  print(self.inventory:addItem("food", 17))
-  print(self.inventory:addItem("medkit", 33))
+  self.inventory:addItem("gun", 1)
+  self.inventory:addItem("wrench", 1)
+  self.inventory:addItem("food", 6)
+  self.inventory:addItem("medkit", 3)
+  self.inventory:addItem("slug", 5)
+  self.inventory:addItem("bullet", 27)
+  self.inventory:addItem("gunpowder", 5)
+  self.inventory:addItem("ice", 3)
 
   self.inventoryUi = InventoryUI(self.inventory)
   self.inventoryUi:makeRoot()
