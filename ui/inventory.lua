@@ -1,7 +1,11 @@
+local core = require("core")
 local lui = require("ui.lui")
 local kg = require("ui.kirigami")
-local Slot = require("ui.slot")
+local Slot = require("slot")
+local UiSlot = require("ui.slot")
 local Sprite = require("sprite")
+local items = require("item_init")
+local style = require("ui.style")
 
 local Inventory = lui.Element()
 
@@ -12,7 +16,7 @@ function Inventory:init(inventory)
 
   self.slots = {}
   for i=1, inventory.maxSlots do
-    local slot = Slot(inventory, i)
+    local slot = UiSlot(inventory, i)
     table.insert(self.slots, slot)
     self:addChild(slot)
   end
@@ -41,6 +45,23 @@ function Inventory:onRender(x, y, w, h)
     sloty = 16 - sloty + bg.y
 
     slot:render(slotx + 5, sloty + 4, 16, 16)
+  end
+
+  if self.mouseSlot then
+    local mx, my = core.guiViewport:mousePos()
+    local itemId = self.mouseSlot.itemId
+    local stackSize = self.mouseSlot.stackSize
+    local sprite = items[itemId].sprite
+    sprite:draw(mx, my)
+
+    if stackSize > 1 then
+      local t = tostring(stackSize)
+      love.graphics.setFont(style.font)
+      love.graphics.print(
+        t,
+        mx + 16 - style.font:getWidth(t) + 1,
+        my + 16 - style.font:getHeight()/1.5)
+    end
   end
 
   -- self.activeSlot2:render(bg.x + 79, bg.y + 23, 16, 16)

@@ -15,6 +15,15 @@ function Slot:init(inventory, slotIndex)
   self.slotIndex = slotIndex
 end
 
+function Slot:onMousePress(_, _, button)
+  if button == 1 then
+    local parent = self:getParent()
+    local slot = self.inventory.slots[self.slotIndex]
+    slot, parent.mouseSlot = parent.mouseSlot, slot
+    self.inventory.slots[self.slotIndex] = slot
+  end
+end
+
 function Slot:onRender(x, y, w, h)
   local isHovered = self:contains(core.guiViewport:mousePos())
 

@@ -66,7 +66,7 @@ function Player:init()
 
   self.inventoryUi = InventoryUI(self.inventory)
   self.inventoryUi:makeRoot()
-  uiSetup.connectEvents(core.mainViewport, self.inventoryUi)
+  uiSetup.connectEvents(core.guiViewport, self.inventoryUi)
 
   self.health = Health(self, 20, self.sprite)
   self.health.died:connect(core.world, self.onDied, self)
