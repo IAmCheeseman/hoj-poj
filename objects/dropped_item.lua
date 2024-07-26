@@ -6,8 +6,9 @@ local TiledMap = require("tiled.map")
 
 local DroppedItem = object()
 
-function DroppedItem:init(itemId)
+function DroppedItem:init(itemId, shine)
   self.itemId = itemId
+  self.shine = shine
 
   local item = items[itemId]
   self.sprite = item.sprite:copy()
@@ -90,28 +91,31 @@ end
 function DroppedItem:draw()
   local time = core.getRuntime()
   local x, y = self.x, self.y + math.sin(time * 3) * 2
-  love.graphics.setBlendMode("add")
-	for i=1, 8 do
-		local a = .4
-		local dist = 8
-		local pointOffset = 0.15
-		if i % 2 == 0 then
-			a = .65
-			dist = 12
-			pointOffset = 0.2
+
+  if self.shine then
+    love.graphics.setBlendMode("add")
+    for i=1, 8 do
+      local a = .4
+      local dist = 8
+      local pointOffset = 0.15
+      if i % 2 == 0 then
+        a = .65
+        dist = 12
+        pointOffset = 0.2
+      end
+
+      local vertices = {x, y}
+      local tau = math.pi * 2
+      local p = i / 8
+      local angle = time + tau * p
+      table.insert(vertices, x + math.cos(angle + pointOffset) * dist)
+      table.insert(vertices, y + math.sin(angle + pointOffset) * dist)
+      table.insert(vertices, x + math.cos(angle - pointOffset) * dist)
+      table.insert(vertices, y + math.sin(angle - pointOffset) * dist)
+
+      love.graphics.setColor(0.75, 0.5, 0, a)
+      love.graphics.polygon("fill", vertices)
     end
-
-		local vertices = {x, y}
-    local tau = math.pi * 2
-    local p = i / 8
-    local angle = time + tau * p
-    table.insert(vertices, x + math.cos(angle + pointOffset) * dist)
-    table.insert(vertices, y + math.sin(angle + pointOffset) * dist)
-    table.insert(vertices, x + math.cos(angle - pointOffset) * dist)
-    table.insert(vertices, y + math.sin(angle - pointOffset) * dist)
-
-    love.graphics.setColor(0.75, 0.5, 0, a)
-    love.graphics.polygon("fill", vertices)
   end
 
   love.graphics.setBlendMode("alpha")
@@ -120,7 +124,7 @@ function DroppedItem:draw()
 end
 
 TiledMap.s_addSpawner("FOOD", function(world, data)
-  local food = DroppedItem("food")
+  local food = DroppedItem("food", true)
   food.x = data.x
   food.y = data.y
   world:add(food)

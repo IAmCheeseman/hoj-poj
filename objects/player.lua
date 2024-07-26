@@ -170,7 +170,7 @@ function Player:defaultUpdate()
     local ms = self.inventoryUi.mouseSlot
 
     for _=1, ms.stackSize do
-      local dropped = DroppedItem(ms.itemId)
+      local dropped = DroppedItem(ms.itemId, false)
       dropped.x = self.x
       dropped.y = self.y
       dropped.velx = dirx * 100
