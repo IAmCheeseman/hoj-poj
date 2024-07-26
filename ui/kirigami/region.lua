@@ -174,6 +174,12 @@ function Region:columns(columns)
   return self:grid(1, columns)
 end
 
+function Region:fillWith(other)
+  return self:grid(
+    math.floor(self.w / other.w),
+    math.floor(self.h / other.h))
+end
+
 
 function Region:ninePatch(other)
   local endx = self.x + self.w

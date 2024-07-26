@@ -195,7 +195,9 @@ end
 function Player:gui()
   gui.drawBar(2, 5, 40, 5, self.health:getPercentage(), {0, 0, 0}, {1, 0, 0})
 
-  local screen = kg.Region(0, 0, core.guiViewport:getSize())
+  local slotSize = 16
+  local width, height = core.guiViewport:getSize()
+  local screen = kg.Region(0, height - slotSize - 2, width, slotSize)
   self.inventoryUi:render(screen:get())
 end
 

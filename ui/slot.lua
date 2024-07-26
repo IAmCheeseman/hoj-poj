@@ -60,10 +60,20 @@ end
 function SlotUI:onRender(x, y, w, h)
   local isHovered = self:contains(core.guiViewport:mousePos())
 
-  local slotImg = isHovered and slotHovered or slotNormal
+  local slotx, sloty, slotw, sloth = x, y, w, h
+  if isHovered then
+    slotw = w * 1.2
+    sloth = h * 1.2
+    local diffw = slotw - w
+    local diffh = sloth - h
+    slotx = x - diffw / 2
+    sloty = y - diffh / 2
+  end
 
-  -- love.graphics.draw(slotImg, x, y)
-  slotImg:draw(x, y)
+  love.graphics.setColor(0, 0, 0, 0.5)
+  love.graphics.rectangle("fill", slotx, sloty, slotw, sloth)
+  love.graphics.setColor(0, 0, 0, 1)
+  love.graphics.rectangle("line", slotx, sloty, slotw, sloth)
 
   love.graphics.setColor(1, 1, 1)
   local slot = self.inventory.slots[self.slotIndex]
