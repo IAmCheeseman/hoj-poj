@@ -72,6 +72,14 @@ function Inventory:onRender(x, y, w, h)
 
     local mx, my = core.guiViewport:mousePos()
     local startx, starty = mx, my - totalHeight
+
+    local tooltipr = kg.Region(startx, starty, totalWidth, totalHeight)
+    local screenr = kg.Region(0, 0, core.guiViewport:getSize())
+    tooltipr = tooltipr:clampInside(screenr)
+
+    startx = tooltipr.x
+    starty = tooltipr.y
+
     love.graphics.setColor(0, 0, 0, 0.75)
     love.graphics.rectangle(
       "fill",
