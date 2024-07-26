@@ -3,6 +3,7 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 love.graphics.setLineStyle("rough")
 
 local core = require("core")
+local input = require("input")
 local shadow = require("shadow")
 local DebugScreen = require("objects.debugscreen")
 local TiledMap = require("tiled.map")
@@ -10,12 +11,12 @@ local autoload = require("autoload")
 
 autoload("objects/")
 
-core.input.addAction("walk_up",    "kb", "w")
-core.input.addAction("walk_left",  "kb", "a")
-core.input.addAction("walk_down",  "kb", "s")
-core.input.addAction("walk_right", "kb", "d")
-core.input.addAction("use_item", "mouse", 1)
-core.input.addAction("toggle_collisions", "kb", "f2")
+input.addAction("walk_up",    "kb", "w")
+input.addAction("walk_left",  "kb", "a")
+input.addAction("walk_down",  "kb", "s")
+input.addAction("walk_right", "kb", "d")
+input.addAction("use_item", "mouse", 1)
+input.addAction("toggle_collisions", "kb", "f2")
 
 local curriedShadowDraw = function(drawable, x, y, _, sx, sy)
   shadow.queueDrawGeneric(love.graphics.draw, drawable, x, y, sx, sy, true)
@@ -34,8 +35,8 @@ local game = {}
 
 local drawCollisions = false
 
-core.input.inputTriggered:on(function(input)
-  if input:isActionPressed("toggle_collisions") then
+input.actionTriggered:on(function(action, _, isRepeat)
+  if action == "toggle_collisions" and not isRepeat then
     drawCollisions = not drawCollisions
   end
 end)

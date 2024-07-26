@@ -13,11 +13,11 @@ function DebugScreen:init()
 end
 
 function DebugScreen:added(world)
-  core.input.inputTriggered:connect(world, self.onInput, self)
+  core.input.actionTriggered:connect(world, self.m_onActionDown, self)
 end
 
-function DebugScreen:onInput(input)
-  if input:isActionPressed("open_debug_menu") then
+function DebugScreen:m_onActionDown(action, _, isrepeat)
+  if action == "open_debug_menu" and not isrepeat then
     self.visible = not self.visible
   end
 end

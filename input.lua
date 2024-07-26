@@ -1,5 +1,4 @@
 local Event = require("event")
-local class = require("class")
 
 local input = {}
 
@@ -78,7 +77,8 @@ function input.inputToAction(type, id)
   return nil
 end
 
-input.inputTriggered = Event()
+input.actionTriggered = Event()
+input.actionReleased = Event()
 input.keyPressed = Event()
 input.keyReleased = Event()
 input.mousePressed = Event()
@@ -87,108 +87,31 @@ input.mouseMoved = Event()
 input.mouseWheelMoved = Event()
 input.textInput = Event()
 
-local Input = class()
-
-function Input:init(inputType)
-  self.inputType = inputType
-  self.eaten = false
-end
-
-function Input:isEaten()
-  return self.eaten
-end
-
-function Input:eat()
-  self.eaten = true
-end
-
-function Input:isType(inputType)
-  return self.inputType == inputType
-end
-
-function Input:isActionPressed(action)
-  return not self:isReleased() and self.action == action
-end
-
-function Input:isActionReleased(action)
-  return self:isReleased() and self.action == action
-end
-
-function Input:isReleased()
-  return self.released
-end
-
-function Input:isKeyDown(key)
-  return self.key == key
-end
-
-function Input:isKeyRepeated()
-  return self.repeated
-end
-
-function Input:isMouseDown(button)
-  return not self:isReleased() and self.mouse == button
-end
-
-function Input:isMouseReleased(button)
-  return self:isReleased() and self.mouse == button
-end
-
 function love.mousepressed(_, _, button, istouch, presses)
   local action = input.inputToAction("mouse", button)
-  local i = Input("mousepressed")
-  i.action = action
-  i.mouse = button
-  i.isTouch = istouch
-  i.presses = presses
-
-  input.inputTriggered:call(i)
+  input.actionTriggered:call(action, button)
   input.mousePressed:call(button, istouch, presses)
 end
 
 function love.mousereleased(_, _, button, istouch)
   local action = input.inputToAction("mouse", button)
-  local i = Input("mousereleased")
-  i.action = action
-  i.released = true
-  i.mouse = button
-  i.isTouch = istouch
-
-  input.inputTriggered:call(i)
+  input.actionReleased:call(action, button)
   input.mouseReleased:call(button, istouch)
 end
 
 function love.mousemoved(_, _, rx, ry, istouch)
-  local i = Input("mousemoved")
-  i.rx = rx
-  i.ry = ry
-  i.isTouch = istouch
-
-  input.inputTriggered:call(i)
   input.mouseMoved:call(rx, ry, istouch)
 end
 
 function love.keypressed(key, scancode, isrepeat)
   local action = input.inputToAction("kb", key)
-  local i = Input("keypressed")
-  i.action = action
-  i.key = key
-  i.scancode = scancode
-  i.repeated = isrepeat
-
-  input.inputTriggered:call(i)
+  input.actionTriggered:call(action, key, isrepeat)
   input.keyPressed:call(key, scancode, isrepeat)
 end
 
 function love.keyreleased(key, scancode)
   local action = input.inputToAction("kb", key)
-  local i = Input("keyreleased")
-  i.action = action
-  i.released = true
-  i.key = key
-  i.scancode = scancode
-
-  input.inputTriggered:call(i)
+  input.actionReleased:call(action, key)
   input.keyReleased:call(key, scancode)
 end
 
