@@ -163,6 +163,7 @@ function Player:defaultUpdate()
   -- Update gun angle
   local gunx, guny = self.gun.x, self.gun.y
   self.gun.angle = core.vec.angleToPoint(gunx, guny, mx, my)
+  self.gun.canShoot = not self.inventoryUi:isClickedOnBy(1)
 end
 
 function Player:attackEnter()

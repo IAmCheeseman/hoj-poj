@@ -65,7 +65,7 @@ function Gun:draw()
 end
 
 function Gun:fire()
-  if self.cooldownLeft > 0 then
+  if self.cooldownLeft > 0 or not self.canShoot then
     return
   end
 
