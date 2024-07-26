@@ -1,6 +1,7 @@
 local Sprite = require("sprite")
 local VecAnimPicker = require("animpicker")
 local TiledMap = require("tiled.map")
+local DroppedItem = require("objects.dropped_item")
 local Gun = require("objects.gun")
 local Health = require("health")
 local shadow = require("shadow")
@@ -163,7 +164,30 @@ function Player:defaultUpdate()
   -- Update gun angle
   local gunx, guny = self.gun.x, self.gun.y
   self.gun.angle = core.vec.angleToPoint(gunx, guny, mx, my)
-  self.gun.canShoot = not self.inventoryUi:isClickedOnBy(1)
+  local canShoot = not self.inventoryUi:hasMouse()
+
+  if core.input.isActionDown("drop_item")
+  and not self.inventoryUi:mouseInBounds()
+  and self.inventoryUi.mouseSlot then
+    local ms = self.inventoryUi.mouseSlot
+
+    for _=1, ms.stackSize do
+      local dropped = DroppedItem(ms.itemId)
+      dropped.x = self.x
+      dropped.y = self.y
+      dropped.velx = dirx * 100
+      dropped.vely = diry * 100
+      core.world:add(dropped)
+    end
+
+    self.inventoryUi.mouseSlot = nil
+
+    canShoot = false
+  end
+
+  if canShoot and core.input.isActionDown("use_item") then
+    self.gun:fire()
+  end
 end
 
 function Player:attackEnter()

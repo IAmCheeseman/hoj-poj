@@ -13,24 +13,64 @@ function DroppedItem:init(itemId)
   self.sprite = item.sprite:copy()
   self.sprite:alignedOffset("center", "center")
 
-  self.pickup = core.SensorBody(
-    self, core.physics.rect(0, 0, self.sprite.width, self.sprite.height), {
+  self.velx = 0
+  self.vely = 0
+
+  local shape = core.physics.rect(0, 0, self.sprite.width, self.sprite.height)
+  self.body = core.ResolverBody(self, shape, {
+    mask = {"env"},
+  })
+  core.physics.world:addBody(self.body)
+
+  self.pickup = core.SensorBody(self, shape, {
     mask = {"player"},
   })
   core.physics.world:addBody(self.pickup)
+
+  self.softColl = core.SensorBody(self, shape, {
+    layers = {"item"},
+    mask = {"item"},
+  })
+  core.physics.world:addBody(self.softColl)
+
+  self.pickupTimer = 1
 end
 
-function DroppedItem:update()
+function DroppedItem:update(dt)
   self.zIndex = self.y
 
-  for _, body in ipairs(self.pickup:getAllColliders()) do
-    local anchor = body.anchor
-    if anchor.inventory then
-      anchor.inventory:addItem(self.itemId)
-      core.world:remove(self)
-      return
+  self.pickupTimer = self.pickupTimer - dt
+
+  if self.pickupTimer <= 0 then
+    for _, body in ipairs(self.pickup:getAllColliders()) do
+      local anchor = body.anchor
+      if anchor.inventory then
+        anchor.inventory:addItem(self.itemId)
+        core.world:remove(self)
+        return
+      end
     end
   end
+
+  local pushx, pushy = 0, 0
+  for _, body in ipairs(self.softColl:getAllColliders()) do
+    local anchor = body.anchor
+    local dirx, diry = core.vec.direction(self.x, self.y, anchor.x, anchor.y)
+    pushx = pushx - dirx
+    pushy = pushy - diry
+  end
+  pushx, pushy = core.vec.normalize(pushx, pushy)
+  local pushStrength = 50
+  pushx = pushx * pushStrength
+  pushy = pushy * pushStrength
+
+  self.velx = self.velx + pushx * dt
+  self.vely = self.vely + pushy * dt
+
+  self.velx = core.math.dtLerp(self.velx, 0, 5)
+  self.vely = core.math.dtLerp(self.vely, 0, 5)
+
+  self.velx, self.vely = self.body:moveAndCollide(self.velx, self.vely)
 
   local time = core.getRuntime()
   local w = (math.sin(time * 3) + 1) / 2
@@ -77,3 +117,5 @@ TiledMap.s_addSpawner("FOOD", function(world, data)
   food.y = data.y
   world:add(food)
 end)
+
+return DroppedItem

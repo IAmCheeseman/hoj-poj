@@ -16,6 +16,7 @@ input.addAction("walk_left",  "kb", "a")
 input.addAction("walk_down",  "kb", "s")
 input.addAction("walk_right", "kb", "d")
 input.addAction("use_item", "mouse", 1)
+input.addAction("drop_item", "mouse", 1)
 input.addAction("toggle_collisions", "kb", "f2")
 
 local curriedShadowDraw = function(drawable, x, y, _, sx, sy)

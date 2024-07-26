@@ -10,8 +10,6 @@ local translations = require("translations")
 
 local Inventory = lui.Element()
 
-local inventoryBg = Sprite("assets/ui/inventory_bg.png")
-
 function Inventory:init(inventory)
   self.inventory = inventory
 
@@ -21,6 +19,18 @@ function Inventory:init(inventory)
     table.insert(self.slots, slot)
     self:addChild(slot)
   end
+end
+
+function Inventory:hasMouse()
+  local mx, my = core.guiViewport:mousePos()
+  local inBounds = self:contains(mx, my)
+  local holdingItem = self.mouseSlot ~= nil
+  return inBounds or holdingItem
+end
+
+function Inventory:mouseInBounds()
+  local mx, my = core.guiViewport:mousePos()
+  return self:contains(mx, my)
 end
 
 function Inventory:onRender(x, y, w, h)

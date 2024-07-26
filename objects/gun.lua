@@ -34,10 +34,6 @@ function Gun:update(dt)
   self.kickback = core.math.dtLerp(self.kickback, 0, 10)
 
   self.cooldownLeft = self.cooldownLeft - dt
-
-  if core.input.isActionDown("use_item") then
-    self:fire()
-  end
 end
 
 function Gun:draw()
