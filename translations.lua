@@ -57,8 +57,8 @@ function translations.translate(id, localeName)
 
   local tr = locale[id]
   if not tr then
-    if tr.fallback then
-      return translations.translate(id, tr.fallback)
+    if locale.fallback then
+      return translations.translate(id, locale.fallback)
     end
     return nil
   end
