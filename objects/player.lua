@@ -58,7 +58,7 @@ function Player:init()
   self.inventory:addItem("gun", 1)
   self.inventory:addItem("wrench", 1)
   self.inventory:addItem("food", 6)
-  self.inventory:addItem("medkit", 16)
+  self.inventory:addItem("medkit", 6)
 
   self.inventoryUi = InventoryUI(self.inventory)
   self.inventoryUi:makeRoot()

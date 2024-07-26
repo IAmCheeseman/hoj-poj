@@ -4,16 +4,18 @@ return {
   food = {
     sprite = Sprite("assets/items/food.png"),
     displayName = "items_food",
-    maxStack = 16,
+    description = "items_food_desc",
+    maxStack = 8,
   },
   medkit = {
     sprite = Sprite("assets/items/medkit.png"),
     displayName = "items_medkit",
-    maxStack = 8,
+    maxStack = 3,
   },
   gun = {
     sprite = Sprite("assets/items/gun.png"),
     displayName = "items_gun",
+    description = "items_gun_desc",
     maxStack = 1,
   },
   wrench = {
@@ -74,6 +76,7 @@ return {
   blinker_fluid = {
     sprite = Sprite("assets/items/blinker_fluid.png"),
     displayName = "items_blinker",
+    description = "items_blinker_desc",
     maxStack = 1,
   },
 }

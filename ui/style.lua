@@ -5,7 +5,7 @@ style.bgCol = {0, 0, 0, 0.5}
 style.textCol = {1, 1, 1}
 style.font = love.graphics.newImageFont(
   "assets/font.png",
-  " abcdefghijklmnopqrstuvwxyz0123456789.,:;/\\")
+  " abcdefghijklmnopqrstuvwxyz0123456789.!,:;'\"/\\-+")
 
 function style.rect(col, fillMode, x, y, w, h)
   love.graphics.setColor(col)

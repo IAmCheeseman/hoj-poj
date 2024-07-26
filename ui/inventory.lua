@@ -6,6 +6,7 @@ local UiSlot = require("ui.slot")
 local Sprite = require("sprite")
 local items = require("item_init")
 local style = require("ui.style")
+local translations = require("translations")
 
 local Inventory = lui.Element()
 
@@ -24,23 +25,6 @@ end
 
 function Inventory:onRender(x, y, w, h)
   local r = kg.Region(x, y, w, h)
-  -- local bg = kg.Region(0, 0, inventoryBg.width, inventoryBg.height):center(r)
-  --
-  -- love.graphics.setColor(0, 0, 0, 0.33)
-  -- inventoryBg:draw(bg.x + 1, bg.y + 3)
-  -- love.graphics.setColor(1, 1, 1)
-  -- inventoryBg:draw(bg.x, bg.y)
-  --
-  -- local invw = 4
-  -- for i, slot in ipairs(self.slots) do
-  --   i = i - 1
-  --   local slotx = (i % invw * 16)
-  --   slotx = 16 * 3 - slotx + bg.x
-  --   local sloty = (math.floor(i / invw) * 16)
-  --   sloty = 16 - sloty + bg.y
-  --
-  --   slot:render(slotx + 5, sloty + 4, 16, 16)
-  -- end
 
   local slotSize = 16
   local padding = 4
@@ -49,11 +33,60 @@ function Inventory:onRender(x, y, w, h)
   local slotSpace = kg.Region(0, r.y, totalw, slotSize)
   local slots = slotSpace:fillWith(kg.Region(0, 0, slotSize + padding, slotSize))
 
+  local hoveredSlot
+
   love.graphics.setColor(1, 1, 1)
   for i=#self.slots, 1, -1 do
     local slot = self.slots[i]
     local slotr = slots[i]:padPixels(padding / 2, 0)
     slot:render(slotr:get())
+
+    if slot:contains(core.guiViewport:mousePos()) then
+      hoveredSlot = self.inventory.slots[slot.slotIndex]
+    end
+  end
+
+  if hoveredSlot then
+    local linePadding = 2
+
+    local totalWidth = 0
+    local totalHeight = 0
+
+    local item = items[hoveredSlot.itemId]
+
+    local addSize = function(text)
+    totalHeight = totalHeight + style.font:getHeight() + linePadding
+    totalWidth = math.max(
+        totalWidth,
+        style.font:getWidth(translations.translate(text)))
+    end
+
+    local doText = function(fn)
+      fn(item.displayName)
+      if item.description then
+        fn(item.description)
+      end
+    end
+
+    doText(addSize)
+
+    local mx, my = core.guiViewport:mousePos()
+    local startx, starty = mx, my - totalHeight
+    love.graphics.setColor(0, 0, 0, 0.75)
+    love.graphics.rectangle(
+      "fill",
+      startx - 2, starty - 1,
+      totalWidth + 4, totalHeight)
+
+    local currenty = starty
+
+    local tooltip = function(text)
+      love.graphics.print(translations.translate(text), startx, currenty)
+      currenty = currenty + style.font:getHeight() + linePadding
+    end
+
+    love.graphics.setColor(1, 1, 1)
+    doText(tooltip)
   end
 
   if self.mouseSlot then
