@@ -16,7 +16,9 @@ function DroppedItem:init(itemId)
   self.velx = 0
   self.vely = 0
 
-  local shape = core.physics.rect(0, 0, self.sprite.width, self.sprite.height)
+  local shape = core.physics.rect(
+    -self.sprite.width / 2, -self.sprite.height / 2,
+    self.sprite.width, self.sprite.height)
   self.body = core.ResolverBody(self, shape, {
     mask = {"env"},
   })
@@ -34,6 +36,12 @@ function DroppedItem:init(itemId)
   core.physics.world:addBody(self.softColl)
 
   self.pickupTimer = 1
+end
+
+function DroppedItem:removed()
+  core.physics.world:removeBody(self.body)
+  core.physics.world:removeBody(self.pickup)
+  core.physics.world:removeBody(self.softColl)
 end
 
 function DroppedItem:update(dt)
