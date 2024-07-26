@@ -126,7 +126,9 @@ function DroppedItem:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(x, y)
 
-  love.graphics.print(self.stackSize, x, y)
+  if self.stackSize > 1 then
+    love.graphics.print(self.stackSize, x, y)
+  end
 end
 
 TiledMap.s_addSpawner("FOOD", function(world, data)
