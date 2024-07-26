@@ -18,6 +18,8 @@ local blendmodes = {
 local Sprite = class()
 
 function Sprite:init(path)
+  self.path = path
+
   self.offsetx = 0
   self.offsety = 0
 
@@ -112,6 +114,10 @@ function Sprite:init(path)
       duration = 0.1,
     })
   end
+end
+
+function Sprite:copy()
+  return Sprite(self.path)
 end
 
 function Sprite:alignedOffset(x, y)

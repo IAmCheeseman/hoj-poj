@@ -10,7 +10,7 @@ return {
   tilewidth = 8,
   tileheight = 8,
   nextlayerid = 8,
-  nextobjectid = 751,
+  nextobjectid = 762,
   properties = {},
   tilesets = {
     {
@@ -767,8 +767,8 @@ return {
       name = "objects",
       firstgid = 511,
       class = "",
-      tilewidth = 12,
-      tileheight = 15,
+      tilewidth = 16,
+      tileheight = 16,
       spacing = 0,
       margin = 0,
       columns = 0,
@@ -786,7 +786,7 @@ return {
       },
       properties = {},
       wangsets = {},
-      tilecount = 4,
+      tilecount = 5,
       tiles = {
         {
           id = 0,
@@ -811,6 +811,12 @@ return {
           image = "../josh_tiled_display.png",
           width = 10,
           height = 13
+        },
+        {
+          id = 4,
+          image = "../items/food.png",
+          width = 16,
+          height = 16
         }
       }
     }
@@ -1564,6 +1570,182 @@ return {
           visible = true,
           properties = {
             ["className"] = "Josh"
+          }
+        },
+        {
+          id = 751,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 229.818,
+          y = -31.4848,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 752,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 140,
+          y = 86.5455,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 753,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 130.879,
+          y = -61.0909,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 754,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 225.636,
+          y = 96.1818,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 755,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 163.091,
+          y = 76.5455,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 756,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 153.212,
+          y = -34.6364,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 757,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 140.545,
+          y = 35.4545,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 758,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 128.273,
+          y = -7.0303,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 759,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 188.667,
+          y = -47.2727,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 760,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 171.818,
+          y = 38.7273,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
+          }
+        },
+        {
+          id = 761,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 244.909,
+          y = 46.7273,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 515,
+          visible = true,
+          properties = {
+            ["className"] = "FOOD"
           }
         }
       }
