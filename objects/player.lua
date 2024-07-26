@@ -162,8 +162,6 @@ function Player:defaultUpdate()
   self.sprite:animate(animSpeed)
 
   -- Update gun angle
-  local gunx, guny = self.gun.x, self.gun.y
-  self.gun.angle = core.vec.angleToPoint(gunx, guny, mx, my)
   local canShoot = not self.inventoryUi:hasMouse()
 
   if core.input.isActionDown("drop_item")
@@ -185,6 +183,8 @@ function Player:defaultUpdate()
     canShoot = false
   end
 
+  local gunx, guny = self.gun.x, self.gun.y
+  self.gun.angle = core.vec.angleToPoint(gunx, guny, mx, my)
   if canShoot and core.input.isActionDown("use_item") then
     self.gun:fire()
   end

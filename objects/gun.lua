@@ -26,6 +26,8 @@ function Gun:init(anchor, offsetx, offsety)
   self.sprite = Sprite("assets/items/gun.png")
   self.sprite:alignedOffset("left", "center")
   self.sprite.offsetx = 4
+
+  self.canShoot = true
 end
 
 function Gun:update(dt)
