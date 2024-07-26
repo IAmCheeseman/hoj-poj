@@ -60,6 +60,7 @@ function Player:init()
   self.inventory:addItem("wrench", 1)
   self.inventory:addItem("food", 6)
   self.inventory:addItem("medkit", 6)
+  self.inventory:addItem("bullet", 40)
 
   self.inventoryUi = InventoryUI(self.inventory)
   self.inventoryUi:makeRoot()
@@ -169,14 +170,12 @@ function Player:defaultUpdate()
   and self.inventoryUi.mouseSlot then
     local ms = self.inventoryUi.mouseSlot
 
-    for _=1, ms.stackSize do
-      local dropped = DroppedItem(ms.itemId, false)
-      dropped.x = self.x
-      dropped.y = self.y
-      dropped.velx = dirx * 100
-      dropped.vely = diry * 100
-      core.world:add(dropped)
-    end
+    local dropped = DroppedItem(ms.itemId, ms.stackSize)
+    dropped.x = self.x
+    dropped.y = self.y
+    dropped.velx = dirx * 100
+    dropped.vely = diry * 100
+    core.world:add(dropped)
 
     self.inventoryUi.mouseSlot = nil
 

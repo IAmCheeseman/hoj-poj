@@ -545,6 +545,7 @@
   <object id="756" gid="515" x="153.212" y="-34.6364" width="16" height="16">
    <properties>
     <property name="className" value="FOOD"/>
+    <property name="stackSize" type="int" value="2"/>
    </properties>
   </object>
   <object id="757" gid="515" x="140.545" y="35.4545" width="16" height="16">
@@ -560,6 +561,7 @@
   <object id="759" gid="515" x="188.667" y="-47.2727" width="16" height="16">
    <properties>
     <property name="className" value="FOOD"/>
+    <property name="stackSize" type="int" value="8"/>
    </properties>
   </object>
   <object id="760" gid="515" x="171.818" y="38.7273" width="16" height="16">

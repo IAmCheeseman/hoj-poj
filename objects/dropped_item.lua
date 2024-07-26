@@ -6,8 +6,10 @@ local TiledMap = require("tiled.map")
 
 local DroppedItem = object()
 
-function DroppedItem:init(itemId, shine)
+function DroppedItem:init(itemId, stackSize, shine)
   self.itemId = itemId
+  self.stackSize = stackSize
+
   self.shine = shine
 
   local item = items[itemId]
@@ -54,9 +56,12 @@ function DroppedItem:update(dt)
     for _, body in ipairs(self.pickup:getAllColliders()) do
       local anchor = body.anchor
       if anchor.inventory then
-        anchor.inventory:addItem(self.itemId)
-        core.world:remove(self)
-        return
+        local added = anchor.inventory:addItem(self.itemId, self.stackSize)
+        self.stackSize = self.stackSize - added
+        if self.stackSize <= 0 then
+          core.world:remove(self)
+        end
+        break
       end
     end
   end
@@ -85,7 +90,6 @@ function DroppedItem:update(dt)
   local w = (math.sin(time * 3) + 1) / 2
   w = core.math.lerp(self.sprite.width / 4, self.sprite.width / 2, w)
   shadow.queueDraw(w, self.x, self.y + self.sprite.height / 2)
-
 end
 
 function DroppedItem:draw()
@@ -121,10 +125,12 @@ function DroppedItem:draw()
   love.graphics.setBlendMode("alpha")
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(x, y)
+
+  love.graphics.print(self.stackSize, x, y)
 end
 
 TiledMap.s_addSpawner("FOOD", function(world, data)
-  local food = DroppedItem("food", true)
+  local food = DroppedItem("food", data.properties.stackSize or 1, true)
   food.x = data.x
   food.y = data.y
   world:add(food)

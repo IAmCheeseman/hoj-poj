@@ -1665,7 +1665,8 @@ return {
           gid = 515,
           visible = true,
           properties = {
-            ["className"] = "FOOD"
+            ["className"] = "FOOD",
+            ["stackSize"] = 2
           }
         },
         {
@@ -1713,7 +1714,8 @@ return {
           gid = 515,
           visible = true,
           properties = {
-            ["className"] = "FOOD"
+            ["className"] = "FOOD",
+            ["stackSize"] = 8
           }
         },
         {
