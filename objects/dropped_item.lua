@@ -72,6 +72,12 @@ function DroppedItem:update(dt)
     local dirx, diry = core.vec.direction(self.x, self.y, anchor.x, anchor.y)
     pushx = pushx - dirx
     pushy = pushy - diry
+
+    if anchor.itemId == self.itemId and not self.grouped and not anchor.grouped then
+      anchor.stackSize = anchor.stackSize + self.stackSize
+      self.grouped = true
+      core.world:remove(self)
+    end
   end
   pushx, pushy = core.vec.normalize(pushx, pushy)
   local pushStrength = 50

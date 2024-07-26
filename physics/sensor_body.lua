@@ -32,7 +32,9 @@ function SensorBody:getAllColliders()
 
   for _, chunk in ipairs(neighborChunks) do
     for _, other in ipairs(chunk) do
-      if self:canCollideWith(other) and Body.s_sat(self, other).overlaps then
+      if other ~= self
+      and self:canCollideWith(other)
+      and Body.s_sat(self, other).overlaps then
         table.insert(neighbors, other)
       end
     end

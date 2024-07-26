@@ -103,11 +103,14 @@ function Sprite:init(path)
     self.width = image:getWidth()
     self.height = image:getHeight()
 
-    table.insert(self.layers, {
+    local layer = {
       visible = true,
       blend = "alpha",
       alpha = 1
-    })
+    }
+
+    table.insert(self.layers, layer)
+    self.layers.default = layer
 
     table.insert(self.frames, {
       image = atlasId,
@@ -143,6 +146,13 @@ function Sprite:setLayerVisible(name, visible)
     error("No layer named '" .. name .. "'.", 1)
   end
   self.layers[name].visible = visible
+end
+
+function Sprite:setLayerBlend(name, blend)
+  if not self.layers[name] then
+    error("No layer named '" .. name .. "'.", 1)
+  end
+  self.layers[name].blend = blend
 end
 
 function Sprite:setActiveTag(name, preserveFrame)
