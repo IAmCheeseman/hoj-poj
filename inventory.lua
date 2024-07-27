@@ -164,7 +164,7 @@ function Inventory:updateHeldItem()
   end
 end
 
-function Inventory:swapSlotsOrMerge(slot1Index, slot1, slot2)
+function Inventory:swapSlotsOrMerge(slot1, slot2)
   if slot1 and slot2
   and slot1.itemId == slot2.itemId then
     -- We can merge
@@ -180,7 +180,6 @@ function Inventory:swapSlotsOrMerge(slot1Index, slot1, slot2)
   else
     -- We can't merge; swap instead
     slot1, slot2 = slot2, slot1
-    self.slots[slot1Index] = slot1
   end
 
   self.inventoryUpdated:call(self)
@@ -204,8 +203,10 @@ function Inventory:moveSingleItemTo(from, to)
   end
 
   if from and from.stackSize <= 0 then
-    self.slots[self.slotIndex] = nil
+    from = nil
   end
+
+  return from, to
 end
 
 function Inventory:setSelectedSlot(selected)

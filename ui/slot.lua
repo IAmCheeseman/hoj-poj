@@ -16,11 +16,12 @@ function SlotUI:onMousePress(_, _, button)
   local parent = self:getParent()
   if button == 1 then
     local slot = self.inventory.slots[self.slotIndex]
-    slot, parent.mouseSlot =
-      self.inventory:swapSlotsOrMerge(self.slotIndex, slot, parent.mouseSlot)
+    self.inventory.slots[self.slotIndex], parent.mouseSlot =
+      self.inventory:swapSlotsOrMerge(slot, parent.mouseSlot)
   elseif button == 2 then
     local slot = self.inventory.slots[self.slotIndex]
-    self.inventory:moveSingleItemTo(slot, parent.mouseSlot)
+    self.inventory.slots[self.slotIndex], parent.mouseSlot =
+      self.inventory:moveSingleItemTo(slot, parent.mouseSlot)
   end
 end
 
