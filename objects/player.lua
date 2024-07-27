@@ -93,7 +93,7 @@ function Player:update(dt)
 
   core.mainViewport:setCamPos(math.floor(self.x), math.floor(self.y))
 
-  self.sprite:setLayerVisible("hands", not self.inventory.heldItem)
+  self.sprite:setLayerVisible("hands", not self.inventory:getHeldItem())
 
   self.zIndex = self.y
   shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
@@ -163,8 +163,13 @@ function Player:defaultUpdate()
     self.faceDirY = self.vely
   end
 
+  local dirx, diry
   local mx, my = core.mainViewport:mousePos()
-  local dirx, diry = core.vec.direction(self.x, self.y, mx, my)
+  if self.inventory:getHeldItem() then
+    dirx, diry = core.vec.direction(self.x, self.y, mx, my)
+  else
+    dirx, diry = core.vec.normalize(self.velx, self.vely)
+  end
 
   local tagDir, sx, _ = self.animPicker:pick(dirx, diry)
   local anim = "walk"
