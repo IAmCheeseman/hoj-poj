@@ -16,6 +16,7 @@ return {
     sprite = Sprite("assets/items/gun.png"),
     displayName = "items_gun",
     description = "items_gun_desc",
+    object = require("objects.gun"),
     maxStack = 1,
   },
   wrench = {

@@ -62,6 +62,10 @@ function Gun:draw()
   self.sprite:draw(x, y, angle, 1, scaley)
 end
 
+function Gun:use()
+  return self:fire()
+end
+
 function Gun:fire()
   if self.cooldownLeft > 0 or not self.canShoot then
     return

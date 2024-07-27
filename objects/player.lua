@@ -17,6 +17,9 @@ local uiSetup = require("ui.setup")
 local Player = object()
 
 function Player:init()
+  core.input.actionTriggered:connect(core.world, self.onActionTriggered, self)
+  core.input.mouseWheelMoved:connect(core.world, self.onMouseWheelScrolled, self)
+
   self.sprite = Sprite("assets/player/player.ase")
   self.sprite:alignedOffset("center", "bottom")
   self.sprite:setLayerVisible("hands", false)
@@ -37,14 +40,7 @@ function Player:init()
     update = self.defaultUpdate,
   }
 
-  self.attackState = {
-    enter = self.attackEnter,
-    update = self.attackUpdate,
-  }
-
   self.sm = StateMachine(self, self.defaultState)
-
-  self.attackTimer = 0
 
   self.scalex = 1
 
@@ -55,7 +51,7 @@ function Player:init()
   self.accel = 10
   self.frict = 15
 
-  self.inventory = Inventory(8)
+  self.inventory = Inventory(self, 8)
   self.inventory:addItem("gun", 1)
   self.inventory:addItem("wrench", 1)
   self.inventory:addItem("food", 6)
@@ -82,18 +78,11 @@ function Player:init()
   core.physics.world:addBody(self.hurtbox)
 end
 
-function Player:added(world)
-  self.gun = Gun(self, 0, -5)
-  world:add(self.gun)
-
-  self.gun.fired:connect(core.world, self.onGunFire, self)
-end
-
 function Player:removed(world)
   core.physics.world:removeBody(self.body)
   core.physics.world:removeBody(self.hurtbox)
 
-  core.world:remove(self.gun)
+  self.inventory:removeHeldItem()
 end
 
 function Player:onDied()
@@ -109,14 +98,40 @@ function Player:update(dt)
   shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
 end
 
-function Player:onGunFire(bullet)
-  self.velx = -math.cos(bullet.rot) * bullet.speed / 2
-  self.vely = -math.sin(bullet.rot) * bullet.speed / 2
+function Player:onItemUse(itemId, ...)
+  local args = {...}
 
-  self.attackState.dirx, self.attackState.diry =
+  if itemId == "gun" then
+    local bullet = args[1]
+
+    self.velx = -math.cos(bullet.rot) * bullet.speed / 2
+    self.vely = -math.sin(bullet.rot) * bullet.speed / 2
+
+    self.attackState.dirx, self.attackState.diry =
     core.vec.normalize(-self.velx, -self.vely)
 
-  self.sm:setState(self.attackState)
+    self.sm:setState(self.attackState)
+  end
+end
+
+function Player:onActionTriggered(action)
+  for i=1, self.inventory.maxSlots do
+    local a = "select_slot_" .. i
+    if action == a then
+      self.inventory:setSelectedSlot(i)
+    end
+  end
+end
+
+function Player:onMouseWheelScrolled(_, y)
+  local inc = y < 0 and 1 or -1
+  local newSel = self.inventory.selectedSlot + inc
+  if newSel > self.inventory.maxSlots then
+    newSel = 1
+  elseif newSel < 1 then
+    newSel = self.inventory.maxSlots
+  end
+  self.inventory:setSelectedSlot(newSel)
 end
 
 function Player:defaultUpdate()
@@ -163,7 +178,7 @@ function Player:defaultUpdate()
   self.sprite:animate(animSpeed)
 
   -- Update gun angle
-  self.canShoot = not self.inventoryUi:hasMouse()
+  self.canUseItem = not self.inventoryUi:hasMouse()
 
   if core.input.isActionDown("drop_item")
   and not self.inventoryUi:mouseInBounds()
@@ -179,44 +194,26 @@ function Player:defaultUpdate()
 
     self.inventoryUi.mouseSlot = nil
 
-    self.canShoot = false
+    self.canUseItem = false
     self.justDropped = true
   end
 
   if self.justDropped then
     if core.input.isActionDown("drop_item") then
-      self.canShoot = false
+      self.canUseItem = false
     else
       self.justDropped = false
     end
   end
 
-  local gunx, guny = self.gun.x, self.gun.y
-  self.gun.angle = core.vec.angleToPoint(gunx, guny, mx, my)
-  if self.canShoot and core.input.isActionDown("use_item") then
-    self.gun:fire()
-  end
-end
-
-function Player:attackEnter()
-  self.attackTimer = 0.5
-end
-
-function Player:attackUpdate(dt)
-  self.velx = core.math.dtLerp(self.velx, 0, self.frict)
-  self.vely = core.math.dtLerp(self.vely, 0, self.frict)
-
-  self.velx, self.vely = self.body:moveAndCollide(self.velx, self.vely)
-
-  local dirx, diry = self.attackState.dirx, self.attackState.diry
-  local tagDir, sx, _ = self.animPicker:pick(dirx, diry)
-
-  self.sprite:setActiveTag(tagDir .. "idle", true)
-  self.scalex = sx
-
-  self.attackTimer = self.attackTimer - dt
-  if self.attackTimer <= 0 then
-    self.sm:setState(self.defaultState)
+  local heldItem = self.inventory:getHeldItem()
+  if heldItem then
+    local itemx, itemy = heldItem.x, heldItem.y
+    heldItem.angle = core.vec.angleToPoint(itemx, itemy, mx, my)
+    heldItem.offsety = -5
+    if self.canUseItem and core.input.isActionDown("use_item") then
+      self.inventory:useItem()
+    end
   end
 end
 
