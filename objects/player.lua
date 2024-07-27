@@ -22,7 +22,6 @@ function Player:init()
 
   self.sprite = Sprite("assets/player/player.ase")
   self.sprite:alignedOffset("center", "bottom")
-  self.sprite:setLayerVisible("hands", false)
 
   self.velx = 0
   self.vely = 0
@@ -93,6 +92,8 @@ function Player:update(dt)
   self.sm:call("update", dt)
 
   core.mainViewport:setCamPos(math.floor(self.x), math.floor(self.y))
+
+  self.sprite:setLayerVisible("hands", not self.inventory.heldItem)
 
   self.zIndex = self.y
   shadow.queueDraw(self.sprite, self.x, self.y, self.scalex, 1)
