@@ -2,6 +2,7 @@ local core = require("core")
 local object = require("object")
 local items = require("item_init")
 local shadow = require("shadow")
+local style = require("ui.style")
 local TiledMap = require("tiled.map")
 
 local DroppedItem = object()
@@ -133,6 +134,7 @@ function DroppedItem:draw()
   self.sprite:draw(x, y)
 
   if self.stackSize > 1 then
+    love.graphics.setFont(style.font)
     love.graphics.print(self.stackSize, x, y)
   end
 end
