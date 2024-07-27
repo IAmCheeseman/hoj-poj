@@ -182,7 +182,6 @@ function Inventory:swapSlotsOrMerge(slot1, slot2)
     slot1, slot2 = slot2, slot1
   end
 
-  self.inventoryUpdated:call(self)
   return slot1, slot2
 end
 
@@ -192,14 +191,10 @@ function Inventory:moveSingleItemTo(from, to)
     -- Adding to mouse slot
     from.stackSize = from.stackSize - 1
     to.stackSize = to.stackSize + 1
-
-    self.inventoryUpdated:call(self)
   elseif from and not to then
     -- Add to empty mouse slot
     from.stackSize = from.stackSize - 1
     to = Slot(from.itemId, 1)
-
-    self.inventoryUpdated:call(self)
   end
 
   if from and from.stackSize <= 0 then

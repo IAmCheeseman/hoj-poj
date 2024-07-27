@@ -18,10 +18,13 @@ function SlotUI:onMousePress(_, _, button)
     local slot = self.inventory.slots[self.slotIndex]
     self.inventory.slots[self.slotIndex], parent.mouseSlot =
       self.inventory:swapSlotsOrMerge(slot, parent.mouseSlot)
+    self.inventory.inventoryUpdated:call(self.inventory)
   elseif button == 2 then
     local slot = self.inventory.slots[self.slotIndex]
     self.inventory.slots[self.slotIndex], parent.mouseSlot =
       self.inventory:moveSingleItemTo(slot, parent.mouseSlot)
+    -- TODO: Find a way to remove this call, same for the one above
+    self.inventory.inventoryUpdated:call(self.inventory)
   end
 end
 
