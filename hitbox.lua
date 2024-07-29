@@ -16,11 +16,11 @@ function Hitbox:init(anchor, damageFunc, sensor)
   self.hitEnv = Event()
   self.hitSomething = Event()
 
-  core.physics.world:addBody(sensor)
+  core.pWorld:addBody(sensor)
 end
 
 function Hitbox:removed()
-  core.physics.world:removeBody(self.sensor)
+  core.pWorld:removeBody(self.sensor)
 end
 
 function Hitbox:update()

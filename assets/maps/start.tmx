@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="8" tileheight="8" infinite="1" nextlayerid="8" nextobjectid="762">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="8" tileheight="8" infinite="1" nextlayerid="8" nextobjectid="767">
  <editorsettings>
   <export target="start.lua" format="lua"/>
  </editorsettings>
@@ -509,67 +509,25 @@
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="287" template="../player/player.tx" x="203.333" y="-9.33333"/>
+  <object id="287" template="../player/player.tx" x="469.333" y="2.66667"/>
   <object id="729" template="../env/dummy.tx" x="373" y="222.333"/>
-  <object id="737" template="../josh.tx" x="-32" y="160"/>
-  <object id="746" template="../josh.tx" x="526" y="202.667"/>
-  <object id="747" template="../josh.tx" x="454" y="202.667"/>
-  <object id="748" template="../josh.tx" x="374" y="250.667"/>
-  <object id="749" template="../josh.tx" x="80" y="304.667"/>
-  <object id="750" template="../josh.tx" x="-192" y="263.333"/>
-  <object id="751" gid="515" x="229.818" y="-31.4848" width="16" height="16">
+  <object id="746" template="../josh.tx" x="522" y="201.667"/>
+  <object id="763" gid="515" x="224" y="40" width="16" height="16">
    <properties>
     <property name="className" value="FOOD"/>
    </properties>
   </object>
-  <object id="752" gid="515" x="140" y="86.5455" width="16" height="16">
+  <object id="764" gid="515" x="256" y="40" width="16" height="16">
    <properties>
     <property name="className" value="FOOD"/>
    </properties>
   </object>
-  <object id="753" gid="515" x="130.879" y="-61.0909" width="16" height="16">
+  <object id="765" gid="515" x="232" y="56" width="16" height="16">
    <properties>
     <property name="className" value="FOOD"/>
    </properties>
   </object>
-  <object id="754" gid="515" x="225.636" y="96.1818" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-   </properties>
-  </object>
-  <object id="755" gid="515" x="163.091" y="76.5455" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-   </properties>
-  </object>
-  <object id="756" gid="515" x="153.212" y="-34.6364" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-    <property name="stackSize" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="757" gid="515" x="140.545" y="35.4545" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-   </properties>
-  </object>
-  <object id="758" gid="515" x="128.273" y="-7.0303" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-   </properties>
-  </object>
-  <object id="759" gid="515" x="188.667" y="-47.2727" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-    <property name="stackSize" type="int" value="8"/>
-   </properties>
-  </object>
-  <object id="760" gid="515" x="171.818" y="38.7273" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-   </properties>
-  </object>
-  <object id="761" gid="515" x="244.909" y="46.7273" width="16" height="16">
+  <object id="766" gid="515" x="240" y="32" width="16" height="16">
    <properties>
     <property name="className" value="FOOD"/>
    </properties>
@@ -1282,5 +1240,6 @@
   <object id="739" x="432" y="232" width="88" height="104"/>
   <object id="740" x="328" y="280" width="16" height="32"/>
   <object id="741" x="240" y="216" width="88" height="96"/>
+  <object id="762" x="558" y="134.5" width="72" height="64"/>
  </objectgroup>
 </map>

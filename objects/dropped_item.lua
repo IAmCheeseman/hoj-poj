@@ -26,26 +26,26 @@ function DroppedItem:init(itemId, stackSize, shine)
   self.body = core.ResolverBody(self, shape, {
     mask = {"env"},
   })
-  core.physics.world:addBody(self.body)
+  core.pWorld:addBody(self.body)
 
   self.pickup = core.SensorBody(self, shape, {
     mask = {"player"},
   })
-  core.physics.world:addBody(self.pickup)
+  core.pWorld:addBody(self.pickup)
 
   self.softColl = core.SensorBody(self, shape, {
     layers = {"item"},
     mask = {"item"},
   })
-  core.physics.world:addBody(self.softColl)
+  core.pWorld:addBody(self.softColl)
 
   self.pickupTimer = 1
 end
 
 function DroppedItem:removed()
-  core.physics.world:removeBody(self.body)
-  core.physics.world:removeBody(self.pickup)
-  core.physics.world:removeBody(self.softColl)
+  core.pWorld:removeBody(self.body)
+  core.pWorld:removeBody(self.pickup)
+  core.pWorld:removeBody(self.softColl)
 end
 
 function DroppedItem:update(dt)

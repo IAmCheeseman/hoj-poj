@@ -52,7 +52,7 @@ function DebugScreen:gui()
     .. ", f: " .. stats.fonts,
     x, y)
   y = self:m_drawText("objects: " .. core.world:getObjCount(), x, y)
-  y = self:m_drawText("physics bodies: " .. core.physics.world:getBodyCount(), x, y)
+  y = self:m_drawText("physics bodies: " .. core.pWorld:getBodyCount(), x, y)
   y = self:m_drawText(("cc: %d, r: %d, rc: %d"):format(
     physicsStats.collisionChecks, physicsStats.resolutions, physicsStats.raycasts),
     x, y)

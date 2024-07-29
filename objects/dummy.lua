@@ -26,11 +26,11 @@ function Dummy:init(x, y)
     layers = {"enemy"},
     groups = {"hurtbox"}
   })
-  core.physics.world:addBody(self.hurtbox)
+  core.pWorld:addBody(self.hurtbox)
 end
 
 function Dummy:removed()
-  core.physics.world:removeBody(self.hurtbox)
+  core.pWorld:removeBody(self.hurtbox)
 end
 
 function Dummy:onDamaged(_, _, _, kbx, _)

@@ -63,24 +63,24 @@ function Josh:init(x, y)
   self.body = core.ResolverBody(self, core.physics.rect(-5, -4, 10, 4), {
     mask = {"env"},
   })
-  core.physics.world:addBody(self.body)
+  core.pWorld:addBody(self.body)
 
   self.detection = core.SensorBody(self, core.physics.circle(16 * 7, 8), {
     mask = {"player"},
   })
-  core.physics.world:addBody(self.detection)
+  core.pWorld:addBody(self.detection)
 
   self.hurtbox = core.SensorBody(self, core.physics.rect(-5, -12, 10, 12), {
     layers = {"enemy"},
     groups = {"hurtbox"},
   })
-  core.physics.world:addBody(self.hurtbox)
+  core.pWorld:addBody(self.hurtbox)
 end
 
 function Josh:removed()
-  core.physics.world:removeBody(self.body)
-  core.physics.world:removeBody(self.detection)
-  core.physics.world:removeBody(self.hurtbox)
+  core.pWorld:removeBody(self.body)
+  core.pWorld:removeBody(self.detection)
+  core.pWorld:removeBody(self.hurtbox)
 end
 
 function Josh:onDamaged(attacker)
@@ -201,6 +201,7 @@ end
 function Josh:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
+  self.detection:drawNeighbors()
 end
 
 TiledMap.s_addSpawner("Josh", function(world, data)

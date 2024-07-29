@@ -3,8 +3,8 @@ local Body = require("physics.body")
 
 local SensorBody = class(Body)
 
-function SensorBody:init(anchor, w, h, options)
-  self:base("init", "sensor", anchor, w, h, options)
+function SensorBody:init(anchor, shape, options)
+  self:base("init", "sensor", anchor, shape, options)
 end
 
 function SensorBody:getFirstCollider()

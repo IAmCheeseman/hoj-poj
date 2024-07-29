@@ -2,12 +2,6 @@ local class = require("class")
 
 local Chunker = class()
 
-local function hashVector(x, y)
-  x = math.abs(x)
-  y = math.abs(y)
-  return math.ceil(x + y + ((x + 1) / 2)^2)
-end
-
 function Chunker:init(chunkSize, chunkCount)
   chunkCount = chunkCount or 32
 

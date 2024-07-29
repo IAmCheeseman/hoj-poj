@@ -6,10 +6,12 @@ local stats = require("physics.stats")
 
 local PhysicsWorld = class()
 
-function PhysicsWorld:init(gridSize, partitionCount)
+function PhysicsWorld:init(world, gridSize, partitionCount)
   gridSize = gridSize or (128 * 2)
   partitionCount = partitionCount or 64
 
+  self.world = world
+  self.anchors = {}
   self.chunker = Chunker(gridSize, partitionCount)
 end
 
@@ -19,7 +21,50 @@ end
 
 function PhysicsWorld:addBody(body)
   body:i_setWorld(self)
+
+  local anchor = body.anchor
+  if not self.anchors[anchor] then
+    self.anchors[anchor] = {}
+  end
+  table.insert(self.anchors[anchor], body)
+
   self.chunker:addBody(body)
+end
+
+function PhysicsWorld:removeBody(body)
+  self.chunker:removeBody(body)
+
+  local anchor = body.anchor
+  local bodies = self.anchors[anchor]
+  if not bodies then
+    return
+  end
+
+  local index = 0
+  for i, b in ipairs(bodies) do
+    if b == body then
+      index = i
+      break
+    end
+  end
+
+  if index ~= 0 then
+    table.remove(bodies, index)
+    if #bodies == 0 then
+      self.anchors[anchor] = nil
+    end
+  end
+end
+
+function PhysicsWorld:updateAnchorBodies(anchor)
+  local bodies = self.anchors[anchor]
+  if not bodies then
+    return
+  end
+
+  for _, body in ipairs(bodies) do
+    self.chunker:updateBody(body)
+  end
 end
 
 local function rcTestAxis(axisx, axisy, startx, starty, endx, endy, body)
@@ -106,10 +151,6 @@ function PhysicsWorld:raycast(startx, starty, endx, endy)
   return nil
 end
 
-function PhysicsWorld:removeBody(body)
-  self.chunker:removeBody(body)
-end
-
 function PhysicsWorld:getMaxBodySize()
   return self.chunker.size
 end
@@ -130,6 +171,7 @@ function PhysicsWorld:draw()
   for body, _ in pairs(self.chunker.bodyMeta) do
     love.graphics.setColor(body:getColor())
     love.graphics.polygon("line", body:getVerticesInWorld())
+    love.graphics.print(self.chunker.bodyMeta[body].chunk)
   end
   love.graphics.setColor(1, 1, 1)
 end

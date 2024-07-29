@@ -5,8 +5,8 @@ local Body = require("physics.body")
 
 local ResolverBody = class(Body)
 
-function ResolverBody:init(anchor, w, h, options)
-  self:base("init", "resolver", anchor, w, h, options)
+function ResolverBody:init(anchor, shape, options)
+  self:base("init", "resolver", anchor, shape, options)
 end
 
 function ResolverBody:resolve(other, velx, vely)
@@ -47,7 +47,7 @@ function ResolverBody:moveAndCollide(velx, vely)
   self.anchor.x = self.anchor.x + velx * dt
   self.anchor.y = self.anchor.y + vely * dt
 
-  self.world.chunker:updateBody(self)
+  self.world:updateAnchorBodies(self.anchor)
 
   return velx, vely
 end

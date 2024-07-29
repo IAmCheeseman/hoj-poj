@@ -52,6 +52,8 @@ function Player:init()
   self.inventory = Inventory(self, 8)
   self.inventory:addItem("gun", 1)
   self.inventory:addItem("wrench", 1)
+  self.inventory:addItem("food", 12)
+  self.inventory:addItem("medkit", 7)
 
   self.inventoryUi = InventoryUI(self.inventory)
   self.inventoryUi:makeRoot()
@@ -64,18 +66,18 @@ function Player:init()
   self.body = core.ResolverBody(self, core.physics.diamond(0, -4, 10, 8), {
     mask = {"env"},
   })
-  core.physics.world:addBody(self.body)
+  core.pWorld:addBody(self.body)
 
   self.hurtbox = core.SensorBody(self, core.physics.diamond(0, -3, 8, 6), {
     layers = {"player"},
     groups = {"hurtbox", "player"},
   })
-  core.physics.world:addBody(self.hurtbox)
+  core.pWorld:addBody(self.hurtbox)
 end
 
 function Player:removed(world)
-  core.physics.world:removeBody(self.body)
-  core.physics.world:removeBody(self.hurtbox)
+  core.pWorld:removeBody(self.body)
+  core.pWorld:removeBody(self.hurtbox)
 
   self.inventory:removeHeldItem()
 end

@@ -1,9 +1,6 @@
-local PhysicsWorld = require("physics.physics_world")
-
 local physics = {}
 
-physics.world = PhysicsWorld()
-
+physics.PhysicsWorld = require("physics.physics_world")
 physics.ResolverBody = require("physics.resolver_body")
 physics.SensorBody = require("physics.sensor_body")
 

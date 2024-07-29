@@ -50,7 +50,7 @@ local function createCollisions(data)
       local body = core.ResolverBody(anchor, shape, {
         layers = {"env"},
       })
-      core.physics.world:addBody(body)
+      core.pWorld:addBody(body)
     end
   end
 end

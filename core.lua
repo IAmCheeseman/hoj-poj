@@ -4,8 +4,7 @@ local Viewport = require("viewport")
 local World = require("world")
 local shadow = require("shadow")
 local Event = require("event")
-
-local log = require("log")
+local physics = require("physics")
 
 local core = {}
 
@@ -20,11 +19,12 @@ core.playerCategory = 2
 core.enemyCategory = 3
 
 core.world = World()
+core.pWorld = physics.PhysicsWorld(core.world)
 core.vec = require("vec")
 core.math = require("mathf")
 core.input = require("input")
-core.log = log
-core.physics = require("physics")
+core.log = require("log")
+core.physics = physics
 core.ResolverBody = core.physics.ResolverBody
 core.SensorBody = core.physics.SensorBody
 
