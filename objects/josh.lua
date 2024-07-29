@@ -201,7 +201,6 @@ end
 function Josh:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
-  self.detection:drawNeighbors()
 end
 
 TiledMap.s_addSpawner("Josh", function(world, data)
