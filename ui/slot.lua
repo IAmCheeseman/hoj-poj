@@ -41,11 +41,11 @@ function SlotUI:onRender(x, y, w, h)
     sloty = y - diffh / 2
   end
 
-  local bgCol = {0, 0, 0, 0.5}
+  local bgCol = {0, 0, 0, 0.75}
   local outlineCol = {0, 0, 0}
 
   if self.inventory.selectedSlot == self.slotIndex then
-    bgCol = {0, 1, 1, 0.5}
+    bgCol = {0, 1, 1, 0.75}
     outlineCol = {0, 1, 1}
   end
 
