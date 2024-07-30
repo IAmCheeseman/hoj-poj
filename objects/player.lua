@@ -12,6 +12,7 @@ local Inventory = require("inventory")
 local kg = require("ui.kirigami")
 local InventoryUI = require("ui.inventory")
 local uiSetup = require("ui.setup")
+local Slot    = require("slot")
 
 local Player = object()
 
@@ -189,7 +190,8 @@ function Player:defaultUpdate()
   and self.inventoryUi.mouseSlot then
     local ms = self.inventoryUi.mouseSlot
 
-    local dropped = DroppedItem(ms.itemId, ms.stackSize)
+    local slot = Slot(ms.itemId, ms.stackSize)
+    local dropped = DroppedItem(slot)
     dropped.x = self.x
     dropped.y = self.y
     dropped.velx = dirx * 100

@@ -4,16 +4,16 @@ local items = require("item_init")
 local shadow = require("shadow")
 local style = require("ui.style")
 local TiledMap = require("tiled.map")
+local Slot = require("slot")
 
 local DroppedItem = object()
 
-function DroppedItem:init(itemId, stackSize, shine)
-  self.itemId = itemId
-  self.stackSize = stackSize
+function DroppedItem:init(slot, shine)
+  self.slot = slot
 
   self.shine = shine
 
-  local item = items[itemId]
+  local item = items[slot.itemId]
   self.sprite = item.sprite:copy()
   self.sprite:alignedOffset("center", "center")
 
@@ -57,9 +57,9 @@ function DroppedItem:update(dt)
     for _, body in ipairs(self.pickup:getAllColliders()) do
       local anchor = body.anchor
       if anchor.inventory then
-        local added = anchor.inventory:addItem(self.itemId, self.stackSize)
-        self.stackSize = self.stackSize - added
-        if self.stackSize <= 0 then
+        local added = anchor.inventory:addItem(self.slot.itemId, self.slot.stackSize)
+        self.slot.stackSize = self.slot.stackSize - added
+        if self.slot.stackSize <= 0 then
           core.world:remove(self)
         end
         break
@@ -74,8 +74,9 @@ function DroppedItem:update(dt)
     pushx = pushx - dirx
     pushy = pushy - diry
 
-    if anchor.itemId == self.itemId and not self.grouped and not anchor.grouped then
-      anchor.stackSize = anchor.stackSize + self.stackSize
+    if anchor.slot.itemId == self.slot.itemId
+    and not self.grouped and not anchor.grouped then
+      anchor.slot.stackSize = anchor.slot.stackSize + self.slot.stackSize
       self.grouped = true
       core.world:remove(self)
     end
@@ -133,14 +134,15 @@ function DroppedItem:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(x, y)
 
-  if self.stackSize > 1 then
+  if self.slot.stackSize > 1 then
     love.graphics.setFont(style.font)
-    love.graphics.print(self.stackSize, x, y)
+    love.graphics.print(self.slot.stackSize, x, y)
   end
 end
 
 TiledMap.s_addSpawner("FOOD", function(world, data)
-  local food = DroppedItem("food", data.properties.stackSize or 1, true)
+  local slot = Slot("food", data.properties.stackSize or 1)
+  local food = DroppedItem(slot, true)
   food.x = data.x
   food.y = data.y
   world:add(food)
