@@ -10,9 +10,6 @@ function Slot:init(itemId, size)
   local item = items[itemId]
 
   self.lifetime = item.lifetime
-  if self.lifetime then
-    self.lifetime = self.lifetime - love.math.random() * 10
-  end
   self.durability = item.uses
 end
 
