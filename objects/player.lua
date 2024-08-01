@@ -195,8 +195,10 @@ function Player:defaultUpdate()
     local dropped = DroppedItem(slot)
     dropped.x = self.x
     dropped.y = self.y
-    dropped.velx = dirx * 100
-    dropped.vely = diry * 100
+
+    local dropVelX, dropVelY = core.vec.direction(self.x, self.y, mx, my)
+    dropped.velx = dropVelX * 100
+    dropped.vely = dropVelY * 100
     core.world:add(dropped)
 
     self.inventoryUi.mouseSlot = nil
