@@ -10,7 +10,7 @@ return {
     rotInto = "rot",
   },
   rot = {
-    sprite = Sprite("assets/items/poison.png"),
+    sprite = Sprite("assets/items/rot.png"),
     displayName = "rot",
     description = "old organic substances",
     maxStack = 16,
