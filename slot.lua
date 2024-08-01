@@ -37,7 +37,7 @@ function Slot:drawDurabilityBar(x, y, w, h)
   love.graphics.setColor(0, 0, 0)
   love.graphics.rectangle("fill", x, y, w, h)
   love.graphics.setColor(0.5, 1, 0.5)
-  love.graphics.rectangle("fill", x + 1, y + 1, w * p - 2, h - 2)
+  love.graphics.rectangle("fill", x + 1, y + 1, (w - 2) * p, h - 2)
 end
 
 function Slot:updateLifetime()
