@@ -150,6 +150,8 @@ function DroppedItem:draw()
     love.graphics.setFont(style.font)
     love.graphics.print(self.slot.stackSize, x, y)
   end
+
+  self.slot:drawDurabilityBar(x - 8, y - 8, 16, 3)
 end
 
 TiledMap.s_addSpawner("FOOD", function(world, data)

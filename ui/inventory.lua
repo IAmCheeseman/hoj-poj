@@ -113,7 +113,11 @@ function Inventory:onRender(x, y, w, h)
     local stackSize = self.mouseSlot.stackSize
     local sprite = items[itemId].sprite
     local spritew, spriteh = sprite.width, sprite.height
+    love.graphics.setColor(1, 1, 1)
     sprite:draw(mx, my - spriteh)
+
+    self.mouseSlot:drawDurabilityBar(mx, my - spriteh, 16, 3)
+    love.graphics.setColor(1, 1, 1)
 
     if stackSize > 1 then
       local t = tostring(stackSize)

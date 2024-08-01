@@ -23,6 +23,26 @@ function Slot.s_mergeLifetimes(lt1, lt2, s1, s2)
   return nl1, nl2
 end
 
+function Slot:drawDurabilityBar(x, y, w, h)
+  local item = items[self.itemId]
+  local p = 0
+
+  if self.lifetime then
+    p = self.lifetime / item.lifetime
+  elseif self.durability then
+    p = self.durability / item.uses
+  end
+
+  if p == 0 then
+    return
+  end
+
+  love.graphics.setColor(0, 0, 0)
+  love.graphics.rectangle("fill", x, y, w, h)
+  love.graphics.setColor(0.5, 1, 0.5)
+  love.graphics.rectangle("fill", x + 1, y + 1, w * p - 2, h - 2)
+end
+
 function Slot:updateLifetime()
   if not self.lifetime then
     return false
