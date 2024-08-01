@@ -6,7 +6,7 @@ return {
     displayName = "items_food",
     description = "items_food_desc",
     maxStack = 8,
-    lifetime = 20,
+    lifetime = 12 * 60,
     rotInto = "rot",
   },
   rot = {
