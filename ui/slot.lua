@@ -54,16 +54,28 @@ function SlotUI:onRender(x, y, w, h)
   love.graphics.setColor(outlineCol)
   love.graphics.rectangle("line", slotx, sloty, slotw, sloth)
 
-  love.graphics.setColor(1, 1, 1)
   local slot = self.inventory.slots[self.slotIndex]
 
   if slot then
     local item = items[slot.itemId]
+
+    local itemLifeP = 0
+    if slot.lifetime and item.lifetime then
+      itemLifeP = slot.lifetime / item.lifetime
+    elseif slot.durability and item.uses then
+      itemLifeP = slot.durability / item.uses
+    end
+
+    local ph = sloth * itemLifeP
+    love.graphics.setColor(0.5, 1, 0.5, 0.5)
+    love.graphics.rectangle("fill", slotx, sloty + sloth - ph, slotw, ph)
+
     local sprite = item.sprite
 
     local spriter = kg.Region(0, 0, sprite.width, sprite.height)
     local scale = spriter:getScaleToFit(w, h)
 
+    love.graphics.setColor(1, 1, 1)
     sprite:draw(x, y, 0, scale)
 
     if slot.stackSize > 1 then

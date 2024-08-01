@@ -60,7 +60,7 @@ function translations.translate(id, localeName)
     if locale.fallback then
       return translations.translate(id, locale.fallback)
     end
-    return nil
+    return id
   end
   return tr
 end

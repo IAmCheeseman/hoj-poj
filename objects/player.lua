@@ -62,7 +62,8 @@ function Player:init()
 
   self.health = Health(self, 20, self.sprite)
   self.health.died:connect(core.world, self.onDied, self)
-  self:register(self.health)
+
+  self:register(self.health, self.inventory)
 
   self.body = core.ResolverBody(self, core.physics.diamond(0, -4, 10, 8), {
     mask = {"env"},

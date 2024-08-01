@@ -6,6 +6,14 @@ return {
     displayName = "items_food",
     description = "items_food_desc",
     maxStack = 8,
+    lifetime = 20,
+    rotInto = "rot",
+  },
+  rot = {
+    sprite = Sprite("assets/items/poison.png"),
+    displayName = "rot",
+    description = "old organic substances",
+    maxStack = 16,
   },
   medkit = {
     sprite = Sprite("assets/items/medkit.png"),
@@ -18,11 +26,13 @@ return {
     description = "items_gun_desc",
     object = require("objects.gun"),
     maxStack = 1,
+    uses = 75,
   },
   wrench = {
     sprite = Sprite("assets/items/wrench.png"),
     displayName = "items_wrench",
     maxStack = 1,
+    uses = 50,
   },
   poison = {
     sprite = Sprite("assets/items/poison.png"),

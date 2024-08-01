@@ -49,6 +49,13 @@ function DroppedItem:removed()
 end
 
 function DroppedItem:update(dt)
+  local rotted = self.slot:updateLifetime()
+  if rotted then
+    local item = items[self.slot.itemId]
+    self.sprite = item.sprite:copy()
+    self.sprite:alignedOffset("center", "center")
+  end
+
   self.zIndex = self.y
 
   self.pickupTimer = self.pickupTimer - dt

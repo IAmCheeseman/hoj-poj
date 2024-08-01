@@ -106,6 +106,8 @@ function Inventory:onRender(x, y, w, h)
   end
 
   if self.mouseSlot then
+    self.mouseSlot:updateLifetime()
+
     local mx, my = core.guiViewport:mousePos()
     local itemId = self.mouseSlot.itemId
     local stackSize = self.mouseSlot.stackSize

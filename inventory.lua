@@ -28,6 +28,12 @@ function Inventory:init(anchor, slotCount)
   self:setSelectedSlot(1)
 end
 
+function Inventory:update()
+  for _, slot in ipairs(self.slots) do
+    slot:updateLifetime()
+  end
+end
+
 function Inventory:addItem(itemId, amount, index)
   amount = amount or 1
 
@@ -171,6 +177,12 @@ function Inventory:swapSlotsOrMerge(slot1, slot2)
     local maxStack = items[slot1.itemId].maxStack
     local add = math.min(maxStack - slot1.stackSize, slot2.stackSize)
 
+    if slot1.lifetime and slot2.lifetime then
+      slot1.lifetime, slot2.lifetime = Slot.s_mergeLifetimes(
+        slot1.lifetime, slot2.lifetime,
+        slot1.stackSize, add)
+    end
+
     slot1.stackSize = slot1.stackSize + add
     slot2.stackSize = slot2.stackSize - add
 
@@ -189,12 +201,21 @@ function Inventory:moveSingleItemTo(from, to)
   if from and to
   and from.itemId == to.itemId then
     -- Adding to mouse slot
+    if from.lifetime and to.lifetime then
+      to.lifetime, from.lifetime = Slot.s_mergeLifetimes(
+        to.lifetime, from.lifetime,
+        to.stackSize, 1)
+    end
+
     from.stackSize = from.stackSize - 1
     to.stackSize = to.stackSize + 1
   elseif from and not to then
     -- Add to empty mouse slot
     from.stackSize = from.stackSize - 1
     to = Slot(from.itemId, 1)
+
+    to.lifetime = from.lifetime
+    to.durability = from.durability
   end
 
   if from and from.stackSize <= 0 then
