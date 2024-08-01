@@ -84,6 +84,11 @@ function DroppedItem:update(dt)
     if anchor.slot.itemId == self.slot.itemId
     and not self.grouped and not anchor.grouped then
       anchor.slot.stackSize = anchor.slot.stackSize + self.slot.stackSize
+      if anchor.slot.lifetime and self.slot.lifetime then
+        anchor.slot.lifetime, self.slot.lifetime = Slot.s_mergeLifetimes(
+          anchor.slot.lifetime, self.slot.lifetime,
+          anchor.slot.stackSize, self.slot.stackSize)
+      end
       self.grouped = true
       core.world:remove(self)
     end
