@@ -20,7 +20,7 @@ local translations = {
     items_blinker_desc = "fixes all problems with your car and more!",
     tooltip_damage = "dmg",
     tooltip_durability = "dur",
-    tooltip_repair = "fix"
+    tooltip_repair = "fix",
   },
   en_GB = {
     fallback = "en_US",

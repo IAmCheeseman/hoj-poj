@@ -10,7 +10,7 @@ return {
   tilewidth = 8,
   tileheight = 8,
   nextlayerid = 8,
-  nextobjectid = 767,
+  nextobjectid = 768,
   properties = {},
   tilesets = {
     {
@@ -1493,38 +1493,6 @@ return {
           }
         },
         {
-          id = 763,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 224,
-          y = 40,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          gid = 515,
-          visible = true,
-          properties = {
-            ["className"] = "FOOD"
-          }
-        },
-        {
-          id = 764,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 256,
-          y = 40,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          gid = 515,
-          visible = true,
-          properties = {
-            ["className"] = "FOOD"
-          }
-        },
-        {
           id = 765,
           name = "",
           type = "",
@@ -1541,12 +1509,12 @@ return {
           }
         },
         {
-          id = 766,
+          id = 767,
           name = "",
           type = "",
           shape = "rectangle",
-          x = 240,
-          y = 32,
+          x = 214.75,
+          y = 16,
           width = 16,
           height = 16,
           rotation = 0,

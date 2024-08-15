@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="8" tileheight="8" infinite="1" nextlayerid="8" nextobjectid="767">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="8" tileheight="8" infinite="1" nextlayerid="8" nextobjectid="768">
  <editorsettings>
   <export target="start.lua" format="lua"/>
  </editorsettings>
@@ -512,22 +512,12 @@
   <object id="287" template="../player/player.tx" x="469.333" y="2.66667"/>
   <object id="729" template="../env/dummy.tx" x="373" y="222.333"/>
   <object id="746" template="../josh.tx" x="522" y="201.667"/>
-  <object id="763" gid="515" x="224" y="40" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-   </properties>
-  </object>
-  <object id="764" gid="515" x="256" y="40" width="16" height="16">
-   <properties>
-    <property name="className" value="FOOD"/>
-   </properties>
-  </object>
   <object id="765" gid="515" x="232" y="56" width="16" height="16">
    <properties>
     <property name="className" value="FOOD"/>
    </properties>
   </object>
-  <object id="766" gid="515" x="240" y="32" width="16" height="16">
+  <object id="767" gid="515" x="214.75" y="16" width="16" height="16">
    <properties>
     <property name="className" value="FOOD"/>
    </properties>

@@ -7,6 +7,12 @@ local keybinds = {}
 local keyToName = {}
 local mouseToName = {}
 
+local mouseButtonNames = {
+  [1] = "LMB",
+  [2] = "RMB",
+  [3] = "MMB",
+}
+
 function input.addKeybind(name, ...)
   local args = {...}
   if #args % 2 ~= 0 then
@@ -26,6 +32,19 @@ function input.addKeybind(name, ...)
   end
 
   keybinds[name] = bind
+end
+
+function input.getActionDisplay(name)
+  local action = actions[name]
+  if not action then
+    error("Action '" .. name .. "' does not exist.", 1)
+  end
+
+  if action.type == "kb" then
+    return action.id:upper()
+  elseif action.type == "mouse" then
+    return mouseButtonNames[action.id] or ("MB" .. action.id)
+  end
 end
 
 function input.isKeybindPressed(name)
@@ -58,7 +77,7 @@ end
 function input.isActionDown(name)
   local action = actions[name]
   if not action then
-    error("Action '" .. action .. "' does not exist.", 1)
+    error("Action '" .. tostring(name) .. "' does not exist.", 1)
   end
 
   if action.type == "kb" then

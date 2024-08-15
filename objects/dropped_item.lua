@@ -8,12 +8,12 @@ local Slot = require("slot")
 
 local DroppedItem = object()
 
-function DroppedItem:init(slot, shine)
-  self.slot = slot
+function DroppedItem:init(itemId, shine)
+  self.itemId = itemId
 
   self.shine = shine
 
-  local item = items[slot.itemId]
+  local item = items[itemId]
   self.sprite = item.sprite:copy()
   self.sprite:alignedOffset("center", "center")
 
@@ -40,6 +40,8 @@ function DroppedItem:init(slot, shine)
   core.pWorld:addBody(self.softColl)
 
   self.pickupTimer = 1
+
+  self.canPickUp = false
 end
 
 function DroppedItem:removed()
@@ -49,24 +51,18 @@ function DroppedItem:removed()
 end
 
 function DroppedItem:update(dt)
-  local rotted = self.slot:updateLifetime()
-  if rotted then
-    local item = items[self.slot.itemId]
-    self.sprite = item.sprite:copy()
-    self.sprite:alignedOffset("center", "center")
-  end
-
   self.zIndex = self.y
 
   self.pickupTimer = self.pickupTimer - dt
 
+  self.canPickUp = false
   if self.pickupTimer <= 0 then
     for _, body in ipairs(self.pickup:getAllColliders()) do
       local anchor = body.anchor
       if anchor.inventory then
-        local added = anchor.inventory:addItem(self.slot.itemId, self.slot.stackSize)
-        self.slot.stackSize = self.slot.stackSize - added
-        if self.slot.stackSize <= 0 then
+        self.canPickUp = true
+        if core.input.isActionDown("pickup_item") then
+          anchor.inventory:addItem(self.itemId)
           core.world:remove(self)
         end
         break
@@ -80,18 +76,6 @@ function DroppedItem:update(dt)
     local dirx, diry = core.vec.direction(self.x, self.y, anchor.x, anchor.y)
     pushx = pushx - dirx
     pushy = pushy - diry
-
-    if anchor.slot.itemId == self.slot.itemId
-    and not self.grouped and not anchor.grouped then
-      anchor.slot.stackSize = anchor.slot.stackSize + self.slot.stackSize
-      if anchor.slot.lifetime and self.slot.lifetime then
-        anchor.slot.lifetime, self.slot.lifetime = Slot.s_mergeLifetimes(
-          anchor.slot.lifetime, self.slot.lifetime,
-          anchor.slot.stackSize, self.slot.stackSize)
-      end
-      self.grouped = true
-      core.world:remove(self)
-    end
   end
   pushx, pushy = core.vec.normalize(pushx, pushy)
   local pushStrength = 50
@@ -146,17 +130,18 @@ function DroppedItem:draw()
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(x, y)
 
-  if self.slot.stackSize > 1 then
+  if self.canPickUp then
+    local text = core.input.getActionDisplay("pickup_item"):lower()
+    local w = style.font:getWidth(text)
     love.graphics.setFont(style.font)
-    love.graphics.print(self.slot.stackSize, x, y)
+    love.graphics.print(text, x - w / 2, y - self.sprite.height)
   end
 
-  self.slot:drawDurabilityBar(x - 8, y - 8, 16, 3)
+  -- self.slot:drawDurabilityBar(x - 8, y - 8, 16, 3)
 end
 
 TiledMap.s_addSpawner("FOOD", function(world, data)
-  local slot = Slot("food", data.properties.stackSize or 1)
-  local food = DroppedItem(slot, true)
+  local food = DroppedItem("gun", true)
   food.x = data.x
   food.y = data.y
   world:add(food)

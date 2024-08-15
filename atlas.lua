@@ -107,9 +107,9 @@ function SpriteAtlas:addSprite(texture, quad, id)
   return cacheId
 end
 
-function SpriteAtlas:draw(cacheid, x, y, r, sx, sy, ox, oy, kx, ky)
+function SpriteAtlas:draw(cacheid, quad, x, y, r, sx, sy, ox, oy, kx, ky)
   local cache = self.cache[cacheid]
-  love.graphics.draw(self.canvas, cache.quad, x, y, r, sx, sy, ox, oy, kx, ky)
+  love.graphics.draw(self.canvas, quad or cache.quad, x, y, r, sx, sy, ox, oy, kx, ky)
 end
 
 function SpriteAtlas:m_drawNode(node)

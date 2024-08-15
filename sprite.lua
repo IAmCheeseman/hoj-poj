@@ -204,7 +204,16 @@ function Sprite:animate(speedMod)
   end
 end
 
-function Sprite:draw(x, y, r, sx, sy, kx, ky)
+function Sprite:quad(x, y, w, h)
+  local frame = self.frames[self.currentFrame]
+  return atlas:newQuad(frame.image, x, y, w, h)
+end
+
+function Sprite:draw(...)
+  self:drawQuad(nil, ...)
+end
+
+function Sprite:drawQuad(quad, x, y, r, sx, sy, kx, ky)
   local t = self.drawAL:produce({
     sprite = self,
     x = x,
@@ -228,7 +237,7 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
     if layer.visible then
       love.graphics.setBlendMode(layer.blend)
       atlas:draw(
-        self.frames[start + offset].image,
+        self.frames[start + offset].image, quad,
         math.floor(t.x), math.floor(t.y),
         t.r, t.sx, t.sy, t.ox, t.oy, t.kx, t.ky)
       love.graphics.setBlendMode("alpha")
