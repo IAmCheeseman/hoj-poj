@@ -7,10 +7,12 @@ local Bullet = require("objects.bullet")
 
 local Gun = object()
 
-function Gun:init(anchor, offsetx, offsety)
+function Gun:init(anchor, data, offsetx, offsety)
   self.anchor = anchor
   self.offsetx = offsetx or 0
   self.offsety = offsety or 0
+
+  self.data = data
 
   self.fired = Event()
 
@@ -19,8 +21,7 @@ function Gun:init(anchor, offsetx, offsety)
 
   self.kickback = 0
 
-  self.cooldown = 0.3
-  self.cooldownLeft = 0
+  self.reload = 0
 
   self.angle = 0
   self.sprite = Sprite("assets/items/gun.png")
@@ -35,7 +36,7 @@ function Gun:update(dt)
 
   self.kickback = core.math.dtLerp(self.kickback, 0, 10)
 
-  self.cooldownLeft = self.cooldownLeft - dt
+  self.reload = self.reload - dt
 end
 
 function Gun:draw()
@@ -67,7 +68,7 @@ function Gun:use()
 end
 
 function Gun:fire()
-  if self.cooldownLeft > 0 or not self.canShoot then
+  if self.reload > 0 or not self.canShoot then
     return
   end
 
@@ -85,7 +86,7 @@ function Gun:fire()
   local bullet = Bullet(self.anchor, x, y, rot, speed)
   core.world:add(bullet)
 
-  self.cooldownLeft = self.cooldown
+  self.reload = self.data.reloadTime
 
   self.fired:call(bullet)
 end

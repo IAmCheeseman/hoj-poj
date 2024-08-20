@@ -8,6 +8,7 @@ local shadow = require("shadow")
 local DebugScreen = require("objects.debugscreen")
 local TiledMap = require("tiled.map")
 local autoload = require("autoload")
+local Inventory = require("inventory")
 
 autoload("objects/")
 
@@ -21,6 +22,11 @@ input.addAction("switch_weapon", "kb", "space")
 
 input.addAction("use_item", "mouse", 1)
 input.addAction("toggle_collisions", "kb", "f2")
+
+Inventory.s_addAmmo("bullet", 300, 30, 30)
+Inventory.s_addAmmo("shell", 100, 20, 20)
+Inventory.s_addAmmo("explosives", 50, 10, 15)
+Inventory.s_addAmmo("battery", 75, 15, 20)
 
 local curriedShadowDraw = function(drawable, x, y, _, sx, sy)
   shadow.queueDrawGeneric(love.graphics.draw, drawable, x, y, sx, sy, true)

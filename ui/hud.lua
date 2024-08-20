@@ -11,6 +11,14 @@ local Hud = lui.Element()
 local heart = Sprite("assets/ui/heart.png")
 local heartBg = Sprite("assets/ui/heart_bg.png")
 
+local ammos = {"bullet", "shell", "explosives", "battery"}
+local ammoSprites = {
+  bullet = Sprite("assets/ui/bullet.png"),
+  shell = Sprite("assets/ui/shell.png"),
+  explosives = Sprite("assets/ui/explosives.png"),
+  battery = Sprite("assets/ui/battery.png"),
+}
+
 function Hud:init(inventory, health)
   self.inventory = inventory
   self.health = health
@@ -48,7 +56,23 @@ function Hud:onRender(x, y, w, h)
     end
   end
 
-  do -- Ammo
+  do -- Ammo, weapon
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(style.font)
+    local inc = style.font:getHeight() * 1.1
+    local totalh = inc * #ammos
+
+    local dx, dy = 3, h - 15  - totalh
+
+    for _, name in ipairs(ammos) do
+      local count = self.inventory.ammo[name]
+      local sprite = ammoSprites[name]
+
+      sprite:draw(dx, dy + 1)
+      love.graphics.print(tostring(count), dx + sprite.width + 1, dy)
+
+      dy = dy + inc
+    end
   end
 end
 

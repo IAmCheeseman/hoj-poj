@@ -140,8 +140,14 @@ function DroppedItem:draw()
   -- self.slot:drawDurabilityBar(x - 8, y - 8, 16, 3)
 end
 
+local x = 0
+
 TiledMap.s_addSpawner("FOOD", function(world, data)
-  local food = DroppedItem("gun", true)
+  local id = "gun"
+  if x % 2 == 0 then
+    id = "pistol"
+  end
+  local food = DroppedItem(id, true)
   food.x = data.x
   food.y = data.y
   world:add(food)

@@ -49,6 +49,7 @@ function Player:init()
 
   self.inventory = Inventory(self)
   self.inventory:addItem("gun")
+  self.inventory:refreshCurrentWeapon(core.world)
 
   self.health = Health(self, 20, self.sprite)
   self.health.died:connect(core.world, self.onDied, self)

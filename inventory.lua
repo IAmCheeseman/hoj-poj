@@ -22,7 +22,7 @@ function Inventory:init(anchor)
   self.miscItem = nil
 
   self.ammo = {}
-  for k, v in ipairs(ammoTypes) do
+  for k, v in pairs(ammoTypes) do
     self.ammo[k] = v.starting
   end
 
