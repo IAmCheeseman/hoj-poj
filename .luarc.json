@@ -1,0 +1,9 @@
+{
+  "diagnostics.globals": [
+    "love"
+  ],
+  "diagnostics.disable": [
+    "lowercase-global"
+  ],
+  "runtime.version": "LuaJIT"
+}
