@@ -37,7 +37,7 @@ world.add(Background:create("assets/grass.png"))
 world.add(DroppedWeapon:create("swiss_rifle", -50, 50))
 
 for _=1, 20 do
-  local e = Enemy:create()
+  local e = Hammerhead:create()
   e.x = love.math.random(100, 200)
   e.y = love.math.random(100, 200)
   world.add(e)

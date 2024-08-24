@@ -17,21 +17,19 @@ end
 function PursueState:step()
   local obj = self.anchor
 
-  local tdirx, tdiry = vec.direction(
-    obj.x, obj.y, obj.target.x, obj.target.y)
-
   if self.timer <= 0 then
     local chance = 0
     local dir = 0
-    local r = 0
     local give_up = 0
+
+    local tdirx, tdiry = vec.direction(
+      obj.x, obj.y, obj.target.x, obj.target.y)
 
     repeat
       dir = mathx.frandom(0, mathx.tau)
       chance = (vec.dot(math.cos(dir), math.sin(dir), tdirx, tdiry) + 1) / 2
-      r = love.math.random()
       give_up = give_up + 1
-    until r < chance^2 or give_up == 3
+    until love.math.random() < chance^2 or give_up == 3
 
     self.dir = dir
     self.timer = love.math.random(15, 20)

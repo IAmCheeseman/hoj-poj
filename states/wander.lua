@@ -7,10 +7,12 @@ WanderState = state({
   vy = "number",
   speed = "number",
   accel = "number",
+  aggro_dist = "number",
 })
 
-function WanderState:new(main_target)
+function WanderState:new(main_target, tellTarget)
   self.main_target = main_target
+  self.tellTarget = tellTarget
   self.timer = 0
   self.dir = 0
 end
@@ -25,7 +27,7 @@ function WanderState:step()
 
   local dist = vec.distanceSq(obj.x, obj.y, target.x, target.y)
   if dist < obj.aggro_dist^2 then
-    obj:tellTarget(target)
+    self.tellTarget(obj, target)
   end
 
   -- Choose to wander more or stay in place

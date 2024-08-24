@@ -1,9 +1,9 @@
 local StateMachine = require("state_machine")
 local Health = require("health")
 
-Enemy = struct()
+Hammerhead = struct()
 
-function Enemy:new()
+function Hammerhead:new()
   self.tags = {"enemy", "alien", "damagable", "soft_coll"}
 
   self.sprite = Sprite.create("assets/hammerhead.ase")
@@ -19,7 +19,7 @@ function Enemy:new()
   self.vy = 0
 
   self.speed = 2
-  self.accel = 1/30
+  self.accel = 1/2
 
   self.aggro_dist = 16 * 6
 
@@ -28,7 +28,7 @@ function Enemy:new()
       -self.sprite.offsetx, -self.sprite.offsety,
       self.sprite.width, self.sprite.height))
 
-  self.s_wander = WanderState:create(self, "player")
+  self.s_wander = WanderState:create(self, "player", self.tellTarget)
   self.s_pursue = PursueState:create(self)
 
   self.sm = StateMachine.create(self, self.s_wander)
@@ -38,7 +38,7 @@ function Enemy:new()
   })
 end
 
-function Enemy:dead(attack)
+function Hammerhead:dead(attack)
   world.rem(self)
 
   self.sprite:setAnimation("dead")
@@ -53,13 +53,13 @@ function Enemy:dead(attack)
   addScore(100, self.x, self.y)
 end
 
-function Enemy:damage(attack)
+function Hammerhead:damage(attack)
   self.vx = self.vx + attack.kbx
 
   addBloodSplat("alien", self.x, self.y, 3)
 end
 
-function Enemy:step()
+function Hammerhead:step()
   self.sm:call("step")
 
   local pushx, pushy = softCollision(self)
@@ -76,7 +76,7 @@ function Enemy:step()
   self.z_index = self.y
 end
 
-function Enemy:tellTarget(target)
+function Hammerhead:tellTarget(target)
   if self.target then
     return
   end
@@ -92,7 +92,7 @@ function Enemy:tellTarget(target)
   end
 end
 
-function Enemy:draw()
+function Hammerhead:draw()
   love.graphics.setColor(1, 1, 1)
 
   local scale = self.vx < 0 and -1 or 1
