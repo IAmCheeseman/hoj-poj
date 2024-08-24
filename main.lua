@@ -19,6 +19,7 @@ log = require("log")
 local loadDirectory = require("load_directory")
 loadDirectory("objects")
 loadDirectory("functions")
+loadDirectory("states")
 
 local modding = require("modding")
 modding.loadMods()

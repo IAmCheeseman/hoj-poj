@@ -17,6 +17,7 @@ function Enemy:new()
 
   self.vx = 0
   self.vy = 0
+
   self.speed = 2
   self.accel = 1/30
 
@@ -27,17 +28,8 @@ function Enemy:new()
       -self.sprite.offsetx, -self.sprite.offsety,
       self.sprite.width, self.sprite.height))
 
-  self.s_wander = {
-    step = self.wanderStep,
-    timer = 0,
-    dir = 0,
-  }
-
-  self.s_pursue = {
-    step = self.pursueStep,
-    timer = 0,
-    dir = 0,
-  }
+  self.s_wander = WanderState:create(self, "player")
+  self.s_pursue = PursueState:create(self)
 
   self.sm = StateMachine.create(self, self.s_wander)
   self.health = Health.create(self, 10, {
@@ -63,7 +55,6 @@ end
 
 function Enemy:damage(attack)
   self.vx = self.vx + attack.kbx
-  self.vy = self.vy + attack.kby
 
   addBloodSplat("alien", self.x, self.y, 3)
 end
@@ -99,72 +90,6 @@ function Enemy:tellTarget(target)
       alien:tellTarget(target)
     end
   end
-end
-
-function Enemy:wanderStep()
-  local target = world.getSingleton("player")
-  if not target then
-    return
-  end
-
-  local dist = vec.distanceSq(self.x, self.y, target.x, target.y)
-  if dist < self.aggro_dist^2 then
-    self:tellTarget(target)
-  end
-
-  -- Wander around
-  if self.s_wander.timer <= 0 then
-    if love.math.random() < 0.5 then
-      self.s_wander.dir = mathx.frandom(0, mathx.tau)
-      self.s_wander.timer = love.math.random(15)
-    else
-      self.s_wander.dir = 0
-      self.s_wander.timer = love.math.random(15, 30)
-    end
-  end
-
-  self.s_wander.timer = self.s_wander.timer - 1
-
-  local dirx, diry = 0, 0
-  if self.s_wander.dir ~= 0 then
-    dirx, diry =
-      math.cos(self.s_wander.dir),
-      math.sin(self.s_wander.dir)
-  end
-
-  self.vx = mathx.lerp(self.vx, dirx * self.speed, self.accel)
-  self.vy = mathx.lerp(self.vy, diry * self.speed, self.accel)
-end
-
-function Enemy:pursueStep()
-  local tdirx, tdiry = vec.direction(
-    self.x, self.y, self.target.x, self.target.y)
-
-  if self.s_pursue.timer <= 0 then
-    local chance = 0
-    local dir = 0
-    local r = 0
-    local give_up = 0
-
-    repeat
-      dir = mathx.frandom(0, mathx.tau)
-      chance = (vec.dot(math.cos(dir), math.sin(dir), tdirx, tdiry) + 1) / 2
-      r = love.math.random()
-      give_up = give_up + 1
-    until r < chance^2 or give_up == 3
-
-    self.s_pursue.dir = dir
-    self.s_pursue.timer = love.math.random(15, 20)
-  end
-
-  self.s_pursue.timer = self.s_pursue.timer - 1
-
-  local dirx, diry =
-      math.cos(self.s_pursue.dir),
-      math.sin(self.s_pursue.dir)
-
-  self.vx = mathx.lerp(self.vx, dirx * self.speed, self.accel)
-  self.vy = mathx.lerp(self.vy, diry * self.speed, self.accel)
 end
 
 function Enemy:draw()

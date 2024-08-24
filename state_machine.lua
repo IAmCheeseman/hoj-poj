@@ -9,13 +9,13 @@ function StateMachine.create(anchor, default)
 end
 
 function StateMachine:setState(state)
-  local _ = try(self.current_state.exit, self.anchor)
+  local _ = try(self.current_state.exit, self.current_state)
   self.current_state = state
-  local _ = try(self.current_state.enter, self.anchor)
+  local _ = try(self.current_state.enter, self.current_state)
 end
 
 function StateMachine:call(fn_name, ...)
-  local _ = try(self.current_state[fn_name], self.anchor, ...)
+  local _ = try(self.current_state[fn_name], self.current_state, ...)
 end
 
 return StateMachine
