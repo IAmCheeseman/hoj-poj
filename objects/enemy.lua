@@ -58,7 +58,7 @@ function Enemy:dead(attack)
   self.body.anchor = corpse
   world.add(corpse)
 
-  addScore(100)
+  addScore(100, self.x, self.y)
 end
 
 function Enemy:damage(attack)
