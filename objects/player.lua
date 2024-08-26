@@ -42,9 +42,8 @@ function Player:new()
   self.vx = 0
   self.vy = 0
 
-  self.speed = 2
-  self.accel = 1/4
-  self.frict = 1/2
+  self.speed = 3
+  self.frict = 0.45
 
   self.cam_accel = 1/3
 
@@ -78,10 +77,7 @@ function Player:step()
   ix, iy = vec.normalized(ix, iy)
   local nvx, nvy = vec.normalized(self.vx, self.vy)
 
-  local accel_delta = self.accel
-  if vec.dot(ix, iy, nvx, nvy) < 0.5 then
-    accel_delta = self.frict
-  end
+  accel_delta = self.frict
 
   self.vx = mathx.lerp(self.vx, ix * self.speed, accel_delta)
   self.vy = mathx.lerp(self.vy, iy * self.speed, accel_delta)

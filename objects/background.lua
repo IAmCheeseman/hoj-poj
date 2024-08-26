@@ -10,6 +10,8 @@ function Background:new(path)
     0, 0,
     self.width * 3, self.height * 3,
     self.img:getDimensions())
+
+  self.z_index = -math.huge
 end
 
 function Background:draw()
@@ -17,7 +19,6 @@ function Background:draw()
   x = mathx.snap(x, self.width)
   y = mathx.snap(y, self.height)
 
-  self.z_index = y
-
+  love.graphics.setColor(1, 1, 1)
   love.graphics.draw(self.img, self.q, x, y)
 end
