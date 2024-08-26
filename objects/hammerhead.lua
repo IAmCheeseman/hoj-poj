@@ -69,9 +69,7 @@ function Hammerhead:step()
   self.x = self.x + self.vx
   self.y = self.y + self.vy
 
-  local coll = self.body:collideWithTags({"env"})
-  self.x = self.x + coll.resolvex
-  self.y = self.y + coll.resolvey
+  self.body:moveAndCollideWithTags({"env"})
 
   self.z_index = self.y
 end

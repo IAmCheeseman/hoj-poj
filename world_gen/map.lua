@@ -162,11 +162,41 @@ local function generateRooms()
   end
 end
 
+local function isSingle(x, y)
+  local u = data[x][y-1] ~= 0
+  local r = data[x+1][y] ~= 0
+  local d = data[x][y+1] ~= 0
+  local l = data[x-1][y] ~= 0
+
+  local ur = data[x+1][y-1] ~= 0
+  local ul = data[x-1][y-1] ~= 0
+  local dr = data[x+1][y+1] ~= 0
+  local dl = data[x-1][y+1] ~= 0
+
+  if ul and u and l then return false end
+  if ur and u and r then return false end
+  if dr and d and r then return false end
+  if dl and d and l then return false end
+
+  return true
+end
+
+local function removeSingles()
+  for x=2, #data-1 do
+    for y=2, #data[x]-1 do
+      if isSingle(x, y) then
+        data[x][y] = 0
+      end
+    end
+  end
+end
+
 function map.generate(parameters)
   params = parameters
 
   initData()
   generateRooms()
+  removeSingles()
 
   for k, v in pairs(data) do
     if not v then

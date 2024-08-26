@@ -135,7 +135,7 @@ function Sprite:update(speed)
     end
 
     self.timer = self.timer + speed
-    if self.timer > frame.duration then
+    if self.timer >= frame.duration then
       self.timer = 0
       self.frame = self.frame + 1
 

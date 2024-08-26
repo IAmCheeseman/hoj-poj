@@ -1,9 +1,13 @@
 Tilemap = struct()
 
-function Tilemap:new(map_data, image, tile_width, tile_height)
+function Tilemap:new(map_data, image, tile_width, tile_height, collisions)
+  self.tags = {"tilemap"}
+
   self.image = image
   self.batch = love.graphics.newSpriteBatch(image)
   self.data = map_data
+
+  self.collisions = collisions
 
   self.tile_width = tile_width
   self.tile_height = tile_height
@@ -57,6 +61,20 @@ function Tilemap:autotile(x, y)
   if quad_idx ~= 0 then
     self.batch:add(self.quads[quad_idx], x * self.tile_width, y * self.tile_height)
   end
+
+  return quad_idx
+end
+
+function Tilemap:isPointOnTile(x, y)
+  local mx = math.floor(x / self.tile_width)
+  local my = math.floor(y / self.tile_height - 0.5)
+
+  if mx + 1 > #self.data or mx - 1 < 1
+  or my + 1 > #self.data[mx] or my - 1 < 1 then
+    return true
+  end
+
+  return self.data[mx][my] ~= 0
 end
 
 function Tilemap:regenerateSpriteBatch()
@@ -66,7 +84,13 @@ function Tilemap:regenerateSpriteBatch()
     for y=2, #self.data[x]-1 do
       local cell = self.data[x][y]
       if cell ~= 0 then
-        self:autotile(x, y)
+        local idx = self:autotile(x, y)
+        local coll_shape = self.collisions[idx]
+        if coll_shape then
+          local coll = {x=x*self.tile_width, y=y*self.tile_height, tags={"env"}}
+          coll.body = Body.create(coll, coll_shape)
+          world.add(coll)
+        end
       end
     end
   end

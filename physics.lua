@@ -173,42 +173,25 @@ function Body:collideWithBody(body)
   return res
 end
 
-local function failedCollision()
-  return {
-    colliding = false,
-    resolvex = 0,
-    resolvey = 0,
-    axisx = 0,
-    axisy = 0,
-    overlap = 0,
-  }
-end
-
-function Body:collideWithTag(tag)
+function Body:moveAndCollideWithTag(tag)
   local tagged = world.getTagged(tag)
   if #tagged == 0 then
-    return failedCollision()
+    return
   end
 
   for _, obj in ipairs(tagged) do
     local res = self:collideWithBody(obj.body)
     if res.colliding then
-      return res
+      self.anchor.x = self.anchor.x + res.resolvex
+      self.anchor.y = self.anchor.y + res.resolvey
     end
   end
-
-  return failedCollision()
 end
 
-function Body:collideWithTags(tags)
+function Body:moveAndCollideWithTags(tags)
   for _, tag in ipairs(tags) do
-    local res = self:collideWithTag(tag)
-    if res.colliding then
-      return res
-    end
+    self:moveAndCollideWithTag(tag)
   end
-
-  return failedCollision()
 end
 
 function Body:getAllCollisions(tags)

@@ -75,7 +75,6 @@ function Player:step()
   if action.isDown("move_right") then ix = ix + 1 end
 
   ix, iy = vec.normalized(ix, iy)
-  local nvx, nvy = vec.normalized(self.vx, self.vy)
 
   accel_delta = self.frict
 
@@ -86,12 +85,20 @@ function Player:step()
   self.vx = self.vx + pushx * 0.3
   self.vy = self.vy + pushy * 0.3
 
+  -- local tilemap = world.getSingleton("tilemap")
+  -- if tilemap then
+  --   if tilemap:isPointOnTile(self.x + self.vx, self.y) then
+  --     self.vx = 0
+  --   end
+  --   if tilemap:isPointOnTile(self.x, self.y + self.vy) then
+  --     self.vy = 0
+  --   end
+  -- end
+
   self.x = self.x + self.vx
   self.y = self.y + self.vy
 
-  local coll = self.body:collideWithTags({"env"})
-  self.x = self.x + coll.resolvex
-  self.y = self.y + coll.resolvey
+  self.body:moveAndCollideWithTags({"env"})
 
   self.z_index = self.y
 
@@ -151,9 +158,7 @@ end
 
 local function pad0(str, zeros)
   local to_add = math.max(zeros - #str, 0)
-  for _=1, to_add do
-    str = "0" .. str
-  end
+  str = ("0"):rep(to_add) .. str
   return str
 end
 
