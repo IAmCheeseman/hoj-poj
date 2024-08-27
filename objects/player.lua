@@ -153,6 +153,10 @@ function Player:draw()
     anim = my < self.y and "uidle" or "didle"
   end
 
+  if self.health:iFramesActive() then
+    anim = "hurt"
+  end
+
   self.sprite:setAnimation(anim)
   self.sprite:update()
 
