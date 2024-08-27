@@ -1,5 +1,9 @@
+local weapons = require("weapons")
+
 local Health = {}
 Health.__index = Health
+
+local low_ammo_percentage = 0.2
 
 function Health.create(anchor, max, vtable)
   local h = setmetatable({}, Health)
@@ -27,6 +31,25 @@ function Health:iFramesActive()
 end
 
 function Health:dropCrate()
+  local chance = 1/6
+
+  local player = world.getSingleton("player")
+  if player then
+    local hand_ammo_type = weapons[player.hand].ammo
+    local offhand_ammo_type = weapons[player.offhand].ammo
+    local hand_ammo = ammo[hand_ammo_type]
+    local offhand_ammo = ammo[offhand_ammo_type]
+
+    if hand_ammo.amount / hand_ammo.max < low_ammo_percentage
+    or offhand_ammo.amount / offhand_ammo.max < low_ammo_percentage then
+      chance = 1/4
+    end
+  end
+
+  if love.math.random() > chance then
+    return
+  end
+
   local crate = AmmoCrate:create()
   crate.x = self.anchor.x
   crate.y = self.anchor.y
@@ -50,7 +73,7 @@ function Health:takeDamage(attack)
     self.dead = true
     try(self.vtable.dead, self.anchor, attack)
 
-    if self.drop_crates and love.math.random() < 1/6 then
+    if self.drop_crates then
       self:dropCrate()
     end
   end
