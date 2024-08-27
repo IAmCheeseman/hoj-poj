@@ -7,6 +7,7 @@ ammo_crate_sprite:offset("center", "center")
 
 function AmmoCrate:new()
   self.sprite = ammo_crate_sprite
+  self.lifetime = 6
 end
 
 local function selectAmmo(player)
@@ -24,8 +25,13 @@ local function selectAmmo(player)
   return ammo_type
 end
 
-function AmmoCrate:step()
+function AmmoCrate:step(dt)
   self.z_index = self.y
+
+  self.lifetime = self.lifetime - dt
+  if self.lifetime <= 0 then
+    world.rem(self)
+  end
 
   local player = world.getSingleton("player")
   if player then
@@ -45,4 +51,14 @@ function AmmoCrate:step()
       world.rem(self)
     end
   end
+end
+
+function AmmoCrate:draw()
+  local stepped = mathx.snap(self.lifetime, 0.1) * 10
+  if self.lifetime < 1 and stepped % 2 == 0 then
+    return
+  end
+
+  love.graphics.setColor(1, 1, 1)
+  self.sprite:draw(self.x, self.y)
 end
