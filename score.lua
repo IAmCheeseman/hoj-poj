@@ -1,13 +1,13 @@
 local combo = 1
 local combo_timer = 0
-local max_combo_time = 100
+local max_combo_time = 150
 
 local score = 0
 
 function addScore(amount, x, y)
   score = score + amount * combo
 
-  combo_timer = combo_timer + 30
+  combo_timer = combo_timer + 60
 
   if combo_timer >= max_combo_time then
     combo_timer = math.max(combo_timer % max_combo_time, max_combo_time / 2)
