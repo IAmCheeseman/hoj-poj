@@ -83,7 +83,7 @@ player.x = px * tilemap.tile_width
 player.y = py * tilemap.tile_height
 
 function love.update(dt)
-  total_time = total_time + 1
+  total_time = total_time + dt
 
   frame = frame - tick_rate
 

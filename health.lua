@@ -8,7 +8,7 @@ function Health.create(anchor, max, vtable)
   h.dead = false
   h.hp = max
   h.max_hp = max
-  h.iframes = 5
+  h.iframes = 0.2
   h.last_damage = -math.huge
   h.iframes_prevent_damage = false
   h.vtable = vtable
