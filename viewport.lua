@@ -21,6 +21,19 @@ function getWorldMousePosition()
   return mx, my
 end
 
+function getMousePosition()
+  local scale, x, y = vp.getDrawTranslation()
+  local mx, my = love.mouse.getPosition()
+
+  mx = mx - x
+  my = my - y
+
+  mx = math.floor(mx / scale)
+  my = math.floor(my / scale)
+
+  return mx, my
+end
+
 function vp.getDrawTranslation()
   local ww, wh = love.graphics.getDimensions()
 
