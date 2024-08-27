@@ -21,17 +21,16 @@ function Hammerhead:new()
   self.speed = 2
   self.accel = 1/2
 
-  self.aggro_dist = 16 * 6
-
   self.body = Body.create(
     self, shape.offsetRect(
       -self.sprite.offsetx, -self.sprite.offsety,
       self.sprite.width, self.sprite.height))
 
-  self.s_wander = WanderState:create(self, "player", self.tellTarget)
+  self.target = world.getSingleton("player")
+
   self.s_pursue = PursueState:create(self)
 
-  self.sm = StateMachine.create(self, self.s_wander)
+  self.sm = StateMachine.create(self, self.s_pursue)
   self.health = Health.create(self, 10, {
     dead = self.dead,
     damaged = self.damage
@@ -51,6 +50,7 @@ function Hammerhead:dead(attack)
   world.add(corpse)
 
   addScore(5, self.x, self.y)
+  addToKillTimer()
 end
 
 function Hammerhead:damage(attack)

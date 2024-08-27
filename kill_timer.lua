@@ -1,7 +1,7 @@
 local max_time = 30 * max_fps
 local timer = max_time
 
-local kill_worth = 0.2
+local kill_worth = 1 * max_fps
 
 function stepKillTimer()
   timer = timer - 1

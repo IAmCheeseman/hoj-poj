@@ -16,11 +16,11 @@ function Corpse:step()
   self.x = self.x + self.vx
   self.y = self.y + self.vy
 
-  local coll = self.body:collideWithTags({"env"})
-  self.x = self.x + coll.resolvex
-  self.y = self.y + coll.resolvey
+  local coll = self.body:moveAndCollideWithTags({"env"})
 
   self.z_index = self.y
 
-  self.vx, self.vy = vec.reflect(self.vx, self.vy, coll.axisx, coll.axisy)
+  if coll then
+    self.vx, self.vy = vec.reflect(self.vx, self.vy, coll.axisx, coll.axisy)
+  end
 end

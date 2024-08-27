@@ -30,13 +30,21 @@ function vp.getDrawTranslation()
   return scale, x, y
 end
 
+function vp.getCamBounds()
+  local x, y = vp.camx, vp.camy
+  local w, h = vp.screenw, vp.screenh
+  return x, y, w, h
+end
+
 function vp.isRectOnScreen(x, y, w, h)
   local camx, camy = -vp.camx, -vp.camy
 
-  return x < camx + vp.screenw
-    and camx < x + w
-    and y < camy + vp.screenh
-    and camy < y + h
+  -- 1|   2|   1|   2|
+  return
+        x + w > -camx
+    and y + h > -camy
+    and -camx + vp.screenw > x
+    and -camy + vp.screenh > y
 end
 
 function vp.isPointOnScreen(x, y)

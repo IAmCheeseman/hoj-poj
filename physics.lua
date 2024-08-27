@@ -179,19 +179,28 @@ function Body:moveAndCollideWithTag(tag)
     return
   end
 
+  local coll
+
   for _, obj in ipairs(tagged) do
     local res = self:collideWithBody(obj.body)
     if res.colliding then
       self.anchor.x = self.anchor.x + res.resolvex
       self.anchor.y = self.anchor.y + res.resolvey
+
+      coll = res
     end
   end
+
+  return coll
 end
 
 function Body:moveAndCollideWithTags(tags)
+  local coll
   for _, tag in ipairs(tags) do
-    self:moveAndCollideWithTag(tag)
+    coll = self:moveAndCollideWithTag(tag) or coll
   end
+
+  return coll
 end
 
 function Body:getAllCollisions(tags)

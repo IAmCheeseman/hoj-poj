@@ -6,10 +6,6 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 love.graphics.setLineStyle("rough")
 require("util")
 
-require("translations")
-require("score")
-require("timer")
-
 struct = require("struct")
 viewport = require("viewport")
 sound = require("sound")
@@ -26,6 +22,11 @@ local loadDirectory = require("load_directory")
 loadDirectory("objects")
 loadDirectory("functions")
 loadDirectory("states")
+
+require("translations")
+require("score")
+require("kill_timer")
+require("spawner")
 
 local modding = require("modding")
 modding.loadMods()
@@ -86,6 +87,7 @@ function love.update(dt)
     world.update()
 
     stepCombo()
+    stepSpawnTimer()
     stepKillTimer()
 
     modding.postStep()
