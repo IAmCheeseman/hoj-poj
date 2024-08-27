@@ -28,7 +28,7 @@ end
 
 local bullet_sprite = Sprite.create("assets/bullet.png")
   :offset("center", "center")
-local pellet_sprite = Sprite.create("assets/pellet.png")
+local pellet_sprite = Sprite.create("assets/pellet.ase")
   :offset("center", "center")
 
 local muzzle_flash = Sprite.create("assets/muzzle_flash.png")
@@ -86,8 +86,9 @@ return {
         damage = 7,
         bounce = 2,
         bounce_damage_mod = 1.2,
-        lifetime = max_fps * 1,
+        lifetime = max_fps * 0.5,
         slow_down = 0.2,
+        animate_with_lifetime = true,
         sprite = pellet_sprite,
       })
       world.add(MuzzleFlash:create(t.x, t.y, 2, muzzle_flash))

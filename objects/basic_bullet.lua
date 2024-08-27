@@ -15,6 +15,7 @@ function BasicBullet:new(opts)
   self.bounce_damage_mod = opts.bounce_damage_mod or 1
   self.slow_down = opts.slow_down
   self.ignore_tags = opts.ignore_tags
+  self.animate_with_lifetime = opts.animate_with_lifetime
 
   local size = math.min(opts.sprite.width, opts.sprite.height)
   self.body = Body.create(self, shape.offsetRect(
@@ -80,4 +81,18 @@ function BasicBullet:removed()
   effect.x = self.x
   effect.y = self.y
   world.add(effect)
+end
+
+function BasicBullet:draw()
+  if self.animate_with_lifetime then
+    local p = 1 - (self.lifetime / self.max_lifetime)
+    local frame = math.max(1, math.floor(p * #self.sprite.frames))
+    print(frame)
+    self.sprite.frame = frame
+  end
+
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.setBlendMode("add")
+  self.sprite:draw(self.x, self.y, self.rot)
+  love.graphics.setBlendMode("alpha")
 end

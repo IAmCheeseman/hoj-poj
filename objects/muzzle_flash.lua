@@ -14,3 +14,9 @@ function MuzzleFlash:step()
     world.rem(self)
   end
 end
+
+function MuzzleFlash:draw()
+  love.graphics.setBlendMode("add")
+  self.sprite:draw(self.x, self.y, self.rot)
+  love.graphics.setBlendMode("alpha")
+end
