@@ -2,6 +2,8 @@ local sound = {}
 
 local sounds = {}
 
+love.audio.setVolume(0.2)
+
 function sound.load(name, path, max_sources)
   max_sources = max_sources or 5
 
