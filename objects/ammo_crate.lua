@@ -25,6 +25,8 @@ local function selectAmmo(player)
 end
 
 function AmmoCrate:step()
+  self.z_index = self.y
+
   local player = world.getSingleton("player")
   if player then
     if vec.distanceSq(self.x, self.y, player.x, player.y) < 16^2 then
