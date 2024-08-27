@@ -87,7 +87,6 @@ function BasicBullet:draw()
   if self.animate_with_lifetime then
     local p = 1 - (self.lifetime / self.max_lifetime)
     local frame = math.max(1, math.floor(p * #self.sprite.frames))
-    print(frame)
     self.sprite.frame = frame
   end
 
