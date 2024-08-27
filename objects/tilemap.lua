@@ -91,10 +91,10 @@ function Tilemap:regenerateSpriteBatch()
         if coll_shape then
           local coll = {x=x*self.tile_width, y=y*self.tile_height, tags={"env"}}
           coll.body = Body.create(coll, coll_shape)
-          coll.z_index = math.huge
-          coll.draw = function()
-            coll.body:draw()
-          end
+          -- coll.z_index = math.huge
+          -- coll.draw = function()
+          --   coll.body:draw()
+          -- end
           world.add(coll)
         end
       end
