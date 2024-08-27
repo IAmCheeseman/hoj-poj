@@ -85,6 +85,7 @@ return {
         accuracy = 5,
         damage = 7,
         bounce = 2,
+        bounce_damage_mod = 1.2,
         lifetime = max_fps * 1,
         slow_down = 0.2,
         sprite = pellet_sprite,
