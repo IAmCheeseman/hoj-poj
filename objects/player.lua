@@ -50,7 +50,7 @@ function Player:new()
 
   self.cam_accel = 20
 
-  self.hand = "swiss_rifle"
+  self.hand = "pistol"
   self.offhand = "shotgun"
 
   self.health = Health.create(self, 20, {
@@ -109,7 +109,12 @@ function Player:step(dt)
 
   self.z_index = self.y
 
-  camera.setPos(self.x - viewport.screenw / 2, self.y - viewport.screenh / 2)
+  local mx, my = getWorldMousePosition()
+  mx = mx - self.x
+  my = my - self.y
+  local camx = self.x - viewport.screenw / 2 + mx * 0.15
+  local camy = self.y - viewport.screenh / 2 + my * 0.15
+  camera.setPos(camx, camy)
 
   if action.isJustDown("swap") then
     self:swapWeapons()
