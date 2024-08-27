@@ -32,6 +32,7 @@ end
 
 function Health:dropCrate()
   local chance = 1/6
+  local give_medkit = false
 
   local player = world.getSingleton("player")
   if player then
@@ -44,16 +45,31 @@ function Health:dropCrate()
     or offhand_ammo.amount / offhand_ammo.max < low_ammo_percentage then
       chance = 1/4
     end
+
+    if player.health.hp < player.health.max_hp and love.math.random() < 1/3 then
+      give_medkit = true
+    end
   end
 
   if love.math.random() > chance then
     return
   end
 
-  local crate = AmmoCrate:create()
-  crate.x = self.anchor.x
-  crate.y = self.anchor.y
-  world.add(crate)
+  if give_medkit then
+    local medkit = MedKit:create()
+    medkit.x = self.anchor.x
+    medkit.y = self.anchor.y
+    world.add(medkit)
+  else
+    local crate = AmmoCrate:create()
+    crate.x = self.anchor.x
+    crate.y = self.anchor.y
+    world.add(crate)
+  end
+end
+
+function Health:heal(amount)
+  self.hp = math.min(self.hp + amount, self.max_hp)
 end
 
 function Health:takeDamage(attack)
