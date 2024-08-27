@@ -74,6 +74,11 @@ function Player:dead()
   world.rem(self.weapon)
 end
 
+function Player:damage(attack)
+  self.vx = self.vx + attack.kbx * 10
+  self.vy = self.vy + attack.kby * 10
+end
+
 function Player:swapWeapons()
   local temp = self.hand
   self.hand = self.offhand
