@@ -18,8 +18,6 @@ function Corpse:step(dt)
 
   local coll = self.body:moveAndCollideWithTags({"env"})
 
-  self.z_index = self.y
-
   if coll then
     self.vx, self.vy = vec.reflect(self.vx, self.vy, coll.axisx, coll.axisy)
   end
