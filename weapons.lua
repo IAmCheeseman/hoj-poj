@@ -6,20 +6,23 @@ local function drawGun(sprite, gun)
   sprite:draw(gun.x, gun.y, gun.rot, 1, scaley)
 end
 
-local function singleFire(speed, x, y, angle, damage, sprite)
-  local b = BasicBullet:create(x, y, angle, speed, damage, sprite)
+local function singleFire(opts)
+  local b = BasicBullet:create(opts)
   world.add(b)
 end
 
-local function shotgunFire(
-    count, speed_min, speed_max, x, y, base_angle, spread, accuracy, damage, sprite)
-  for i=1, count do
-    local angle = base_angle + math.rad(spread * (i/count) - spread * 0.5)
-    angle = angle + math.rad(mathx.frandom(-accuracy, accuracy))
+local function shotgunFire(opts)
+  for i=1, opts.count do
+    local spread = math.rad(opts.spread * (i/opts.count) - opts.spread * 0.5)
+    local angle = opts.angle + spread
+    angle = angle + math.rad(mathx.frandom(-opts.accuracy, opts.accuracy))
 
-    local speed = mathx.frandom(speed_min, speed_max)
+    local speed = mathx.frandom(opts.speed_min, opts.speed_max)
 
-    singleFire(speed, x, y, angle, damage, sprite)
+    opts.speed = speed
+    opts.angle = angle
+
+    singleFire(opts)
   end
 end
 
@@ -46,12 +49,14 @@ return {
     barrel_length = 10,
     automatic = false,
     spawnBullets = function(t)
-      singleFire(
-        10,
-        t.x, t.y,
-        t.angle + math.rad(mathx.frandom(-5, 5)),
-        10,
-        bullet_sprite)
+      singleFire({
+        speed = 10,
+        x = t.x,
+        y = t.y,
+        angle = t.angle + math.rad(mathx.frandom(-5, 5)),
+        damage = 6,
+        sprite = bullet_sprite,
+      })
       world.add(MuzzleFlash:create(t.x, t.y, 2, muzzle_flash))
       camera.jump(1, t.angle + math.pi, 5)
     end,
@@ -67,7 +72,21 @@ return {
     barrel_length = 11,
     automatic = false,
     spawnBullets = function(t)
-      shotgunFire(7, 8, 12, t.x, t.y, t.angle, 45, 5, 7, pellet_sprite)
+      shotgunFire({
+        count = 7,
+        speed_min = 8,
+        speed_max = 12,
+        x = t.x,
+        y = t.y,
+        angle = t.angle,
+        spread = 45,
+        accuracy = 5,
+        damage = 7,
+        bounce = 2,
+        lifetime = max_fps * 1,
+        slow_down = 0.2,
+        sprite = pellet_sprite,
+      })
       world.add(MuzzleFlash:create(t.x, t.y, 2, muzzle_flash))
       camera.shake(1, 1, 3, 5, 8, true)
     end,
@@ -86,12 +105,14 @@ return {
     automatic = true,
     spawnBullets = function(t)
       local accuracy = math.min(t.burst^1.5, 30)
-      singleFire(
-        10,
-        t.x, t.y,
-        t.angle + math.rad(mathx.frandom(-accuracy, accuracy)),
-        11,
-        bullet_sprite)
+      singleFire({
+        speed = 10,
+        x = t.x,
+        y = t.y,
+        angle = t.angle + math.rad(mathx.frandom(-accuracy, accuracy)),
+        damage = 11,
+        sprite = bullet_sprite,
+      })
       world.add(MuzzleFlash:create(t.x, t.y, 2, muzzle_flash))
       camera.jump(1, t.angle + math.pi, 4)
     end,

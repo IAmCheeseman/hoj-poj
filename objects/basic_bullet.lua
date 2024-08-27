@@ -1,16 +1,20 @@
 BasicBullet = struct()
 
-function BasicBullet:new(x, y, angle, speed, damage, sprite, lifetime)
-  self.x = x
-  self.y = y
-  self.vx = math.cos(angle) * speed
-  self.vy = math.sin(angle) * speed
-  self.rot = angle
-  self.sprite = sprite
-  self.lifetime = lifetime or (max_fps * 5)
-  self.damage = damage
+function BasicBullet:new(opts)
+  self.x = opts.x
+  self.y = opts.y
+  self.vx = math.cos(opts.angle) * opts.speed
+  self.vy = math.sin(opts.angle) * opts.speed
+  self.speed = opts.speed
+  self.rot = opts.angle
+  self.sprite = opts.sprite
+  self.max_lifetime = opts.lifetime or (max_fps * 5)
+  self.lifetime = self.max_lifetime
+  self.damage = opts.damage
+  self.bounce = opts.bounce or 0
+  self.slow_down = opts.slow_down
 
-  local size = math.min(sprite.width, sprite.height)
+  local size = math.min(opts.sprite.width, opts.sprite.height)
   self.body = Body.create(self, shape.offsetRect(
     -size / 2, -size / 2, size, size))
 end
@@ -19,6 +23,12 @@ function BasicBullet:step()
   self.lifetime = self.lifetime - 1
   if self.lifetime < 0 then
     world.rem(self)
+  end
+
+  if self.slow_down then
+    local p = (self.lifetime / self.max_lifetime + 0.2) / 1.2
+    self.vx = math.cos(self.rot) * self.speed * p
+    self.vy = math.sin(self.rot) * self.speed * p
   end
 
   self.x = self.x + self.vx
@@ -37,7 +47,14 @@ function BasicBullet:step()
         world.rem(self)
       end
     else
-      world.rem(self)
+      if self.bounce > 0 then
+        self.vx, self.vy = vec.reflect(self.vx, self.vy, coll.axisx, coll.axisy)
+        self.rot = vec.angle(self.vx, self.vy)
+        self.lifetime = self.lifetime * 0.75
+        self.bounce = self.bounce - 1
+      else
+        world.rem(self)
+      end
     end
   end
 end
