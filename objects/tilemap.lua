@@ -7,6 +7,8 @@ function Tilemap:new(map_data, image, tile_width, tile_height, collisions)
   self.batch = love.graphics.newSpriteBatch(image)
   self.data = map_data
 
+  self.has_shadows = false
+
   self.collisions = collisions
 
   self.tile_width = tile_width
@@ -100,7 +102,17 @@ function Tilemap:regenerateSpriteBatch()
   end
 end
 
+function Tilemap:step()
+  if self.show_above then
+    self.z_index = viewport.camy + viewport.screenh
+  end
+end
+
 function Tilemap:draw()
+  if self.has_shadows then
+    love.graphics.setColor(0, 0, 0, 0.333)
+    love.graphics.draw(self.batch, self.x, self.y)
+  end
   love.graphics.setColor(1, 1, 1)
-  love.graphics.draw(self.batch)
+  love.graphics.draw(self.batch, self.x, self.y)
 end

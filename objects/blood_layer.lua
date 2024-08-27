@@ -44,7 +44,7 @@ function addBloodSplat(blood_type, x, y, count, spread)
 end
 
 function BloodLayer:draw()
-  self.z_index = viewport.camy
+  self.z_index = -1
 
   for _, blood in pairs(blood_types) do
     love.graphics.setColor(blood.color)

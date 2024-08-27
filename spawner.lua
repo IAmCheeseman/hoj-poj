@@ -29,7 +29,7 @@ function stepSpawnTimer()
     if player then
       local enemy = selection.obj:create()
 
-      local tilemap = world.getSingleton("tilemap")
+      local tilemap = world.getSingleton("tilemap_collision")
       if not tilemap then
         return
       end

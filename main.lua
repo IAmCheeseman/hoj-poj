@@ -53,7 +53,7 @@ local map_data, px, py, _ = map.generate({
 })
 
 local tilemap = Tilemap:create(
-  map_data, love.graphics.newImage("assets/tileset_base.png"), 16, 16, {
+  map_data, love.graphics.newImage("assets/dirt_tiles.png"), 16, 16, {
     [1]  = {0, 0,   8, 0,   0, 8},
     [2]  = {8, 0,   16, 0,  16, 8},
     [3]  = {0, 0,   16, 0,  16, 8,   0, 8},
@@ -69,7 +69,15 @@ local tilemap = Tilemap:create(
     [13] = {0, 0,   8, -1,  16, 8,   16, 16,  0, 16},
     [14] = {8, -1,  16, 0,  16, 16,  0, 16,   0, 8},
   })
+table.insert(tilemap.tags, "tilemap_collision")
+tilemap.has_shadows = true
 world.add(tilemap)
+
+local tilemap_cover = Tilemap:create(
+  map_data, love.graphics.newImage("assets/grass_tiles.png"), 16, 16, {})
+tilemap_cover.y = -8
+tilemap_cover.show_above = true
+world.add(tilemap_cover)
 
 player.x = px * tilemap.tile_width
 player.y = py * tilemap.tile_height
