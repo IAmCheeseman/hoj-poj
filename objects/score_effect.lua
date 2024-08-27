@@ -1,17 +1,17 @@
 local ui = require("ui")
 
-ScoreEffect = struct()
+TextEffect = struct()
 
-function ScoreEffect:new(score, x, y)
+function TextEffect:new(text, x, y)
   self.lifetime = 40
-  self.score = "+" .. tostring(score)
-  self.x = x - ui.hud_font:getWidth(self.score) / 2
+  self.text = text
+  self.x = x - ui.hud_font:getWidth(self.text) / 2
   self.y = y - ui.hud_font:getHeight()
 
   self.z_index = math.huge
 end
 
-function ScoreEffect:step()
+function TextEffect:step()
   self.lifetime = self.lifetime - 1
   self.y = self.y - 0.5
 
@@ -20,10 +20,10 @@ function ScoreEffect:step()
   end
 end
 
-function ScoreEffect:draw()
+function TextEffect:draw()
   love.graphics.setColor(1, 1, 0)
   if self.lifetime < 20 and self.lifetime % 4 <= 2 then
     love.graphics.setColor(1, 1, 1, 0)
   end
-  love.graphics.print(self.score, self.x, self.y)
+  love.graphics.print(self.text, self.x, self.y)
 end

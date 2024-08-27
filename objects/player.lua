@@ -14,13 +14,15 @@ action.define("fire", "mouse", 1)
 
 ammo = {
   bullets = {
+    name = "ammo_bullets",
     amount = 32,
-    kit_amount = 20,
+    crate_amount = 20,
     max = 256
   },
   shells = {
+    name = "ammo_shells",
     amount = 24,
-    kit_amount = 6,
+    crate_amount = 6,
     max = 64
   },
 }

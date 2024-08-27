@@ -14,8 +14,8 @@ function addScore(amount, x, y)
     combo = combo + 1
   end
 
-  local se = ScoreEffect:create(amount * combo, x, y)
-  world.add(se)
+  local te = TextEffect:create("+" .. tostring(amount * combo), x, y)
+  world.add(te)
 end
 
 function stepCombo()
