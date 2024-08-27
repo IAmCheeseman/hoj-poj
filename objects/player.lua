@@ -1,5 +1,6 @@
 local weapons = require("weapons")
 local ui = require("ui")
+local Health = require("health")
 
 Player = struct()
 
@@ -25,7 +26,7 @@ ammo = {
 }
 
 function Player:new()
-  self.tags = {"player", "soft_coll"}
+  self.tags = {"player", "damagable"}
 
   self.sprite = Sprite.create("assets/player.ase")
   self.sprite:offset("center", "bottom")
@@ -50,11 +51,24 @@ function Player:new()
   self.hand = "pistol"
   self.offhand = "shotgun"
 
+  self.health = Health.create(self, 20, {
+    dead = self.dead,
+    damaged = self.damage
+  })
+
+  self.health.iframes_prevent_damage = true
+
   self.weapon = Weapon:create(self, self.hand)
   world.add(self.weapon)
 end
 
 function Player:removed()
+  world.rem(self.weapon)
+end
+
+function Player:dead()
+  self.draw = function() end
+  self.step = function() end
   world.rem(self.weapon)
 end
 
@@ -80,20 +94,6 @@ function Player:step()
 
   self.vx = mathx.lerp(self.vx, ix * self.speed, accel_delta)
   self.vy = mathx.lerp(self.vy, iy * self.speed, accel_delta)
-
-  local pushx, pushy = softCollision(self)
-  self.vx = self.vx + pushx * 0.3
-  self.vy = self.vy + pushy * 0.3
-
-  -- local tilemap = world.getSingleton("tilemap")
-  -- if tilemap then
-  --   if tilemap:isPointOnTile(self.x + self.vx, self.y) then
-  --     self.vx = 0
-  --   end
-  --   if tilemap:isPointOnTile(self.x, self.y + self.vy) then
-  --     self.vy = 0
-  --   end
-  -- end
 
   self.x = self.x + self.vx
   self.y = self.y + self.vy
@@ -137,9 +137,7 @@ function Player:step()
   end
 
   if getKillTimer() <= 0 then
-    self.draw = function() end
-    self.step = function() end
-    world.rem(self.weapon)
+    self.health:kill()
   end
 end
 
@@ -196,9 +194,9 @@ function Player:gui()
     love.graphics.printf(
       {
         {1, 1, 1}, tr("hud_hp") .. " ",
-        {1, 0, 0}, pad0("20", 2),
+        {1, 0, 0}, pad0(tostring(self.health.hp), 2),
         {1, 1, 1}, "/",
-        {0.5, 0.5, 0.5}, "20",
+        {0.5, 0.5, 0.5}, tostring(self.health.max_hp),
       },
       0, texty,
       viewport.screenw, "center")
@@ -248,5 +246,16 @@ function Player:gui()
         {0.6, 0.4, 0}, other_ammo,
       },
       otherx, texty, other_width, "center")
+  end
+
+  if self.health.dead then
+    local centery = viewport.screenh / 2 - ui.hud_font:getHeight() / 2
+    love.graphics.printf(
+      {
+        {1, 1, 1}, "Youeth hath",
+        {1, 0, 0}, " perishedeth",
+        {1, 1, 1}, ".",
+      },
+      0, centery, viewport.screenw, "center")
   end
 end

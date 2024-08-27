@@ -71,6 +71,15 @@ function Hammerhead:step()
 
   self.body:moveAndCollideWithTags({"env"})
 
+  for _, coll in ipairs(self.body:getAllCollisions({"player"})) do
+    local kbx, kby = vec.direction(self.x, self.y, coll.obj.x, coll.obj.y)
+    coll.obj.health:takeDamage({
+      damage = 5,
+      kbx = kbx,
+      kby = kby,
+    })
+  end
+
   self.z_index = self.y
 end
 

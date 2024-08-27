@@ -16,6 +16,11 @@ function Health.create(anchor, max, vtable)
   return h
 end
 
+function Health:kill()
+  self.dead = true
+  try(self.vtable.dead, self.anchor, {damage=0, kbx=0, kby=0})
+end
+
 function Health:iFramesActive()
   return total_time - self.last_damage <= self.iframes
 end
