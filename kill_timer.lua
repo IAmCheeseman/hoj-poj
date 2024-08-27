@@ -8,7 +8,7 @@ function stepKillTimer()
 end
 
 function addToKillTimer()
-  timer = timer + kill_worth * getCombo()
+  timer = math.min(timer + kill_worth * getCombo(), max_time)
 end
 
 function getKillTimer()
