@@ -69,7 +69,7 @@ return {
     spawnBullets = function(t)
       shotgunFire(7, 8, 12, t.x, t.y, t.angle, 45, 5, 7, pellet_sprite)
       world.add(MuzzleFlash:create(t.x, t.y, 2, muzzle_flash))
-      camera.shake(1, 2, 5, 3, 6, true)
+      camera.shake(1, 1, 3, 5, 8, true)
     end,
     draw = drawGun,
   },
