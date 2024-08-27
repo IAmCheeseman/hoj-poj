@@ -31,11 +31,16 @@ local pellet_sprite = Sprite.create("assets/pellet.png")
 local muzzle_flash = Sprite.create("assets/muzzle_flash.png")
 muzzle_flash:offset("center", "center")
 
+sound.load("pistol", "assets/pistol.wav", 8)
+sound.load("shotgun", "assets/shotgun.wav")
+sound.load("rifle", "assets/rifle.wav", 10)
+
 return {
   pistol = {
     sprite = Sprite.create("assets/pistol.png"):offset("left", "center"),
     name = "weapon_pistol",
     ammo = "bullets",
+    shoot_sfx = "pistol",
     reload = 5,
     recoil = 2,
     barrel_length = 10,
@@ -56,6 +61,7 @@ return {
     sprite = Sprite.create("assets/shotgun.png"):offset(3, "center"),
     name = "weapon_shotgun",
     ammo = "shells",
+    shoot_sfx = "shotgun",
     reload = 20,
     recoil = 5,
     barrel_length = 11,
@@ -71,6 +77,7 @@ return {
     sprite = Sprite.create("assets/swiss_rifle.png"):offset(4, "center"),
     name = "weapon_swiss_rifle",
     ammo = "bullets",
+    shoot_sfx = "rifle",
     reload = 3,
     recoil = 1,
     max_burst = 10,

@@ -209,7 +209,7 @@ function Player:gui()
     love.graphics.printf(
       {
         {1, 1, 1}, tr("hud_time") .. " ",
-        {1, 0, 0}, pad0(tostring(getKillTimer()), 2),
+        {0, 1, 0.5}, pad0(tostring(getKillTimer()), 2),
       },
       0, texty - ui.hud_font:getHeight(),
       viewport.screenw, "center")

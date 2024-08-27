@@ -12,6 +12,7 @@ require("timer")
 
 struct = require("struct")
 viewport = require("viewport")
+sound = require("sound")
 world = require("world")
 action = require("action")
 vec = require("vec")

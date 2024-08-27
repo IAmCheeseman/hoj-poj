@@ -76,6 +76,9 @@ function Weapon:fire()
   local x, y =
     self.x + math.cos(self.rot) * weapon.barrel_length,
     self.y + math.sin(self.rot) * weapon.barrel_length
+
+  sound.play(weapon.shoot_sfx)
+
   weapon.spawnBullets({
     x = x,
     y = y,
