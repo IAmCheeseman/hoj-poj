@@ -1,37 +1,15 @@
-local csv = require("csv")
-
-local translations = {}
-
-do
-  local languages = {}
-  local f = csv.open("translations.csv")
-  if f then
-    local line_n = 1
-    for fields in f:lines() do
-      if line_n == 1 then
-        -- Find languages
-        for i, v in ipairs(fields) do
-          if i > 1 then
-            table.insert(languages, v)
-            translations[v] = {}
-          end
-        end
-      else
-        -- Find translations
-        local key
-        for i, v in ipairs(fields) do
-          if i == 1 then
-            key = v
-          else
-            local language = languages[i-1]
-            translations[language][key] = v
-          end
-        end
-      end
-      line_n = line_n + 1
-    end
-  end
-end
+local translations = {
+  en = {
+    weapon_pistol = "Pistol",
+    weapon_shotgun = "Shotgun",
+    weapon_swiss_rifle = "Swiss Rifle",
+    hud_score = "Score:",
+    hud_hp = "HP:",
+    hud_time = "Time:",
+    ammo_bullets = "Bullets",
+    ammo_shells = "Shells",
+  }
+}
 
 local locale = "en"
 
