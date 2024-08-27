@@ -39,7 +39,7 @@ function addBloodSplat(blood_type, x, y, count, spread)
 
     local splat = splats[love.math.random(1, #splats)]
     local blood = blood_types[blood_type]
-    blood.batch:add(splat, dx, dy, direction)
+    blood.batch:add(splat, dx, dy, direction, 1, 1, 8, 8)
   end
 end
 
