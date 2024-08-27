@@ -24,3 +24,8 @@ function Corpse:step()
     self.vx, self.vy = vec.reflect(self.vx, self.vy, coll.axisx, coll.axisy)
   end
 end
+
+function Corpse:draw()
+  love.graphics.setColor(0.5, 0.5, 0.5)
+  self.sprite:draw(self.x, self.y)
+end
