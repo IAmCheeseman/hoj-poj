@@ -1,9 +1,9 @@
-local weapons = require("weapons")
-
 MedKit = struct()
 
 local med_kit_sprite = Sprite.create("assets/medkit.png")
 med_kit_sprite:offset("center", "center")
+
+sound.load("medkit_pickup", "assets/medkit.wav", 2)
 
 function MedKit:new()
   self.sprite = med_kit_sprite
@@ -27,6 +27,8 @@ function MedKit:step(dt)
       world.add(te)
 
       world.rem(self)
+
+      sound.play("medkit_pickup")
     end
   end
 end

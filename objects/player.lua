@@ -12,6 +12,8 @@ action.define("pickup", "key", "e")
 action.define("swap", "key", "space")
 action.define("fire", "mouse", 1)
 
+sound.load("player_hit", "assets/hit.wav", 1)
+
 ammo = {
   bullets = {
     name = "ammo_bullets",
@@ -77,6 +79,8 @@ end
 function Player:damage(attack)
   self.vx = self.vx + attack.kbx * 10
   self.vy = self.vy + attack.kby * 10
+
+  sound.play("player_hit")
 end
 
 function Player:swapWeapons()

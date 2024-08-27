@@ -5,6 +5,8 @@ AmmoCrate = struct()
 local ammo_crate_sprite = Sprite.create("assets/ammo_crate.png")
 ammo_crate_sprite:offset("center", "center")
 
+sound.load("ammo_pickup", "assets/ammo_pickup.wav", 2)
+
 function AmmoCrate:new()
   self.sprite = ammo_crate_sprite
   self.lifetime = 6
@@ -49,6 +51,8 @@ function AmmoCrate:step(dt)
       world.add(te)
 
       world.rem(self)
+
+      sound.play("ammo_pickup")
     end
   end
 end
