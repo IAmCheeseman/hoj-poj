@@ -3,7 +3,7 @@ local ui = require("ui")
 TextEffect = struct()
 
 function TextEffect:new(text, x, y, color)
-  self.lifetime = 40
+  self.lifetime = 2
   self.text = text
   self.x = x - ui.hud_font:getWidth(self.text) / 2
   self.y = y - ui.hud_font:getHeight()
@@ -12,9 +12,9 @@ function TextEffect:new(text, x, y, color)
   self.z_index = math.huge
 end
 
-function TextEffect:step()
-  self.lifetime = self.lifetime - 1
-  self.y = self.y - 0.5
+function TextEffect:step(dt)
+  self.lifetime = self.lifetime - dt
+  self.y = self.y - 16 * dt
 
   if self.lifetime <= 0 then
     world.rem(self)
@@ -23,7 +23,8 @@ end
 
 function TextEffect:draw()
   love.graphics.setColor(self.color)
-  if self.lifetime < 20 and self.lifetime % 4 <= 2 then
+  local stepped = mathx.snap(self.lifetime, 0.05) * 20
+  if self.lifetime < 0.5 and stepped % 2 == 0 then
     return
   end
   love.graphics.print(self.text, self.x, self.y)

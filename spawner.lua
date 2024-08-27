@@ -1,5 +1,5 @@
 local difficulty = 1
-local base_time = 10
+local base_time = 0.5
 
 local spawn_timer = base_time
 
@@ -14,8 +14,8 @@ local function getSpawnTime()
   return math.floor(base_time / (difficulty / 3))
 end
 
-function stepSpawnTimer()
-  spawn_timer = spawn_timer - 1
+function stepSpawnTimer(dt)
+  spawn_timer = spawn_timer - dt
 
   if spawn_timer <= 0 then
     spawn_timer = getSpawnTime()

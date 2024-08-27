@@ -44,14 +44,14 @@ return {
     name = "weapon_pistol",
     ammo = "bullets",
     shoot_sfx = "pistol",
-    reload = 5,
-    recoil = 2,
+    reload = 0.15,
+    recoil = 0,
     barrel_length = 10,
     automatic = false,
     spawnBullets = function(t)
       singleFire({
         ignore_tags = {"player"},
-        speed = 10,
+        speed = 400,
         x = t.x,
         y = t.y,
         angle = t.angle + math.rad(mathx.frandom(-5, 5)),
@@ -59,7 +59,7 @@ return {
         sprite = bullet_sprite,
       })
       world.add(MuzzleFlash:create(t.x, t.y, 2, muzzle_flash))
-      camera.jump(1, t.angle + math.pi, 5)
+      camera.jump(1, t.angle + math.pi, 3)
     end,
     draw = drawGun,
   },
@@ -68,16 +68,16 @@ return {
     name = "weapon_shotgun",
     ammo = "shells",
     shoot_sfx = "shotgun",
-    reload = 20,
-    recoil = 5,
+    reload = 0.6,
+    recoil = 0,
     barrel_length = 11,
     automatic = false,
     spawnBullets = function(t)
       shotgunFire({
         ignore_tags = {"player"},
         count = 7,
-        speed_min = 8,
-        speed_max = 12,
+        speed_min = 350,
+        speed_max = 450,
         x = t.x,
         y = t.y,
         angle = t.angle,
@@ -86,13 +86,13 @@ return {
         damage = 7,
         bounce = 2,
         bounce_damage_mod = 1.2,
-        lifetime = max_fps * 0.5,
+        lifetime = 0.5,
         slow_down = 0.2,
         animate_with_lifetime = true,
         sprite = pellet_sprite,
       })
       world.add(MuzzleFlash:create(t.x, t.y, 2, muzzle_flash))
-      camera.shake(1, 1, 3, 5, 8, true)
+      camera.shake(1, 0.05, 3, 8, 8, true)
     end,
     draw = drawGun,
   },
@@ -101,20 +101,19 @@ return {
     name = "weapon_swiss_rifle",
     ammo = "bullets",
     shoot_sfx = "rifle",
-    reload = 3,
-    recoil = 1,
-    max_burst = 10,
-    burst_cooldown = 0.6,
+    reload = 0.3,
+    recoil = 0,
+    burst = 3,
+    burst_cooldown = 0.05,
     barrel_length = 10,
     automatic = true,
     spawnBullets = function(t)
-      local accuracy = math.min(t.burst^1.5, 30)
       singleFire({
         ignore_tags = {"player"},
-        speed = 10,
+        speed = 400,
         x = t.x,
         y = t.y,
-        angle = t.angle + math.rad(mathx.frandom(-accuracy, accuracy)),
+        angle = t.angle + math.rad(mathx.frandom(-5, 5)),
         damage = 11,
         sprite = bullet_sprite,
       })

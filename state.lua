@@ -5,7 +5,6 @@ local function create(s, anchor, ...)
 
   for k, v in pairs(s.required_vars) do
     if not is(anchor[k], v) then
-      print(k, v, anchor[k], type(anchor[k]))
       error(
         ("State anchor does not match state interface. ('%s' must be %s)")
           :format(k, v))

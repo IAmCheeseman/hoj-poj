@@ -15,7 +15,7 @@ function PursueState:new()
   self.diry = 0
 end
 
-function PursueState:step()
+function PursueState:step(dt)
   local obj = self.anchor
 
   if self.timer <= 0 then
@@ -31,11 +31,11 @@ function PursueState:step()
 
     self.dirx = dirx
     self.diry = diry
-    self.timer = love.math.random(15, 20)
+    self.timer = mathx.frandom(0.5, 0.7)
   end
 
-  self.timer = obj.s_pursue.timer - 1
+  self.timer = obj.s_pursue.timer - dt
 
-  obj.vx = mathx.lerp(obj.vx, self.dirx * obj.speed, obj.accel)
-  obj.vy = mathx.lerp(obj.vy, self.diry * obj.speed, obj.accel)
+  obj.vx = mathx.dtLerp(obj.vx, self.dirx * obj.speed, obj.accel, dt)
+  obj.vy = mathx.dtLerp(obj.vy, self.diry * obj.speed, obj.accel, dt)
 end

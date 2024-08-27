@@ -1,10 +1,10 @@
-local max_time = 30 * max_fps
+local max_time = 30
 local timer = max_time
 
-local kill_worth = 1 * max_fps
+local kill_worth = 1
 
-function stepKillTimer()
-  timer = timer - 1
+function stepKillTimer(dt)
+  timer = timer - dt
 end
 
 function addToKillTimer()
@@ -12,5 +12,5 @@ function addToKillTimer()
 end
 
 function getKillTimer()
-  return math.max(math.floor(timer / max_fps), 0)
+  return math.max(math.floor(timer), 0)
 end

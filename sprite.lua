@@ -42,7 +42,7 @@ function Sprite.create(path)
 
           table.insert(s.frames, {
             img = love.graphics.newImage(canvas:newImageData()),
-            duration = (frame.frame_duration / 1000) * max_fps,
+            duration = frame.frame_duration / 1000,
           })
 
           img:release()
@@ -121,7 +121,7 @@ function Sprite:setAnimation(name)
   self.current_anim = name
 end
 
-function Sprite:update(speed)
+function Sprite:update(dt, speed)
   speed = speed or 1
 
   if self.is_playing then
@@ -134,7 +134,7 @@ function Sprite:update(speed)
       to = self.anims[self.current_anim].to
     end
 
-    self.timer = self.timer + speed
+    self.timer = self.timer + dt * speed
     if self.timer >= frame.duration then
       self.timer = 0
       self.frame = self.frame + 1

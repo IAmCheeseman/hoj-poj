@@ -22,8 +22,8 @@ function BasicBullet:new(opts)
     -size / 2, -size / 2, size, size))
 end
 
-function BasicBullet:step()
-  self.lifetime = self.lifetime - 1
+function BasicBullet:step(dt)
+  self.lifetime = self.lifetime - dt
   if self.lifetime < 0 then
     world.rem(self)
   end
@@ -34,8 +34,8 @@ function BasicBullet:step()
     self.vy = math.sin(self.rot) * self.speed * p
   end
 
-  self.x = self.x + self.vx
-  self.y = self.y + self.vy
+  self.x = self.x + self.vx * dt
+  self.y = self.y + self.vy * dt
 
   self.z_index = self.y - 8
 

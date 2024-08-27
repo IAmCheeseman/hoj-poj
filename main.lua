@@ -83,28 +83,25 @@ player.x = px * tilemap.tile_width
 player.y = py * tilemap.tile_height
 
 function love.update(dt)
-  frame = frame + dt
-  if frame >= tick_rate then
-    total_time = total_time + 1
+  total_time = total_time + 1
 
-    frame = frame - tick_rate
+  frame = frame - tick_rate
 
-    action.step()
-    modding.step()
+  action.step()
+  modding.step()
 
-    world.update()
+  world.update(dt)
 
-    stepCombo()
-    stepSpawnTimer()
-    stepKillTimer()
+  stepCombo(dt)
+  stepSpawnTimer(dt)
+  stepKillTimer(dt)
 
-    modding.postStep()
-    camera.step()
+  modding.postStep()
+  camera.step(dt)
 
-    world.flush()
+  world.flush()
 
-    update_graphics = true
-  end
+  update_graphics = true
 end
 
 function love.draw()

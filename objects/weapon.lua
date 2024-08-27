@@ -10,17 +10,19 @@ function Weapon:new(anchor, type)
 
   self.type = type
 
-  self.reload = 10
+  self.reload = 0
   self.released_fire = true
 
   self.burst = 0
+  self.burst_timer = 0
 end
 
 function Weapon:reset()
   self.burst = 0
+  self.burst_timer = 0
 end
 
-function Weapon:step()
+function Weapon:step(dt)
   self.x = self.anchor.x + self.target_offset_x
   self.y = self.anchor.y + self.target_offset_y
 
@@ -28,7 +30,7 @@ function Weapon:step()
   local dirx, diry = vec.direction(self.x, self.y, mx, my)
   self.rot = vec.angle(dirx, diry)
 
-  self.reload = self.reload - 1
+  self.reload = self.reload - dt
 
   local weapon = weapons[self.type]
 
@@ -40,20 +42,32 @@ function Weapon:step()
   end
 
   if action.isDown("fire")  then
-    if can_refire then
+    if can_refire and self.reload <= 0 then
       self:fire()
-      self.burst = math.min(self.burst + 1, weapon.max_burst or 0)
+
+      if weapon.burst then
+        self.burst = weapon.burst - 1 -- Minus 1 because we already shot one
+        self.burst_timer = weapon.burst_cooldown
+      end
     end
     self.released_fire = false
   else
     self.released_fire = true
-    self.burst = math.max(self.burst - (weapon.burst_cooldown or 1), 0)
   end
 
   if my < self.anchor.y then
     self.z_index = self.anchor.z_index - 2
   else
     self.z_index = self.anchor.z_index + 2
+  end
+
+
+  self.burst_timer = self.burst_timer - dt
+  if self.burst_timer <= 0 and self.burst > 0 then
+    self.burst_timer = weapon.burst_cooldown
+    self.burst = self.burst - 1
+
+    self:fire()
   end
 end
 
@@ -63,15 +77,11 @@ function Weapon:fire()
 
   local ammo_type = ammo[weapon.ammo]
 
-  local reloaded = self.reload <= 0
   local has_ammo = ammo_type.amount - consumption >= 0
-  local can_shoot = reloaded and has_ammo
 
-  if not can_shoot then
-    if not has_ammo then
-      local te = TextEffect:create("Empty!", self.x, self.y, {1, 0, 0})
-      world.add(te)
-    end
+  if not has_ammo then
+    local te = TextEffect:create("Empty!", self.x, self.y, {1, 0, 0})
+    world.add(te)
     return
   end
 

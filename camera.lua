@@ -55,11 +55,11 @@ function camera.jump(p, angle, strength)
   ssy = math.sin(angle) * strength
 end
 
-function camera.step()
-  ssx = mathx.lerp(ssx, 0, 0.4)
-  ssy = mathx.lerp(ssy, 0, 0.4)
+function camera.step(dt)
+  ssx = mathx.dtLerp(ssx, 0, 10, dt)
+  ssy = mathx.dtLerp(ssy, 0, 10, dt)
 
-  timer = timer - 1
+  timer = timer - dt
   if timer <= 0 and pri ~= 0 then
     local angle = mathx.frandom(0, mathx.tau)
     local strength = mathx.frandom(strength_min, strength_max)

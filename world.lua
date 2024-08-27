@@ -202,9 +202,9 @@ function world.flush()
   flushRem()
 end
 
-function world.update()
+function world.update(dt)
   for _, obj in ipairs(objs) do
-    local _ = try(obj.step, obj)
+    local _ = try(obj.step, obj, dt)
   end
 end
 

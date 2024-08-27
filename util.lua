@@ -29,6 +29,10 @@ function mathx.lerp(x, y, d)
   return (y - x) * d + x
 end
 
+function mathx.dtLerp(x, y, d, dt)
+  return (x - y) * 0.5^(dt * d) + y
+end
+
 function mathx.frandom(min, max)
   local r = love.math.random()
   return r * (max - min) + min

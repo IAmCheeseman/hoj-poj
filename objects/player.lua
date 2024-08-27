@@ -45,12 +45,12 @@ function Player:new()
   self.vx = 0
   self.vy = 0
 
-  self.speed = 3
-  self.frict = 0.45
+  self.speed = 16 * 6
+  self.frict = 6
 
-  self.cam_accel = 1/3
+  self.cam_accel = 20
 
-  self.hand = "pistol"
+  self.hand = "swiss_rifle"
   self.offhand = "shotgun"
 
   self.health = Health.create(self, 20, {
@@ -88,7 +88,7 @@ function Player:swapWeapons()
   self.weapon:reset()
 end
 
-function Player:step()
+function Player:step(dt)
   local ix, iy = 0, 0
   if action.isDown("move_up")    then iy = iy - 1 end
   if action.isDown("move_left")  then ix = ix - 1 end
@@ -99,21 +99,17 @@ function Player:step()
 
   accel_delta = self.frict
 
-  self.vx = mathx.lerp(self.vx, ix * self.speed, accel_delta)
-  self.vy = mathx.lerp(self.vy, iy * self.speed, accel_delta)
+  self.vx = mathx.dtLerp(self.vx, ix * self.speed, accel_delta, dt)
+  self.vy = mathx.dtLerp(self.vy, iy * self.speed, accel_delta, dt)
 
-  self.x = self.x + self.vx
-  self.y = self.y + self.vy
+  self.x = self.x + self.vx * dt
+  self.y = self.y + self.vy * dt
 
   self.body:moveAndCollideWithTags({"env"})
 
   self.z_index = self.y
 
-  camera.setPos(
-    mathx.lerp(
-      viewport.camx, self.x - viewport.screenw / 2, self.cam_accel),
-    mathx.lerp(
-      viewport.camy, self.y - viewport.screenh / 2, self.cam_accel))
+  camera.setPos(self.x - viewport.screenw / 2, self.y - viewport.screenh / 2)
 
   if action.isJustDown("swap") then
     self:swapWeapons()
@@ -146,6 +142,8 @@ function Player:step()
   if getKillTimer() <= 0 then
     self.health:kill()
   end
+
+  self.sprite:update(dt)
 end
 
 function Player:draw()
@@ -156,7 +154,7 @@ function Player:draw()
   local scale = mx < self.x and -1 or 1
 
   local anim = my < self.y and "uwalk" or "dwalk"
-  if vec.lenSq(self.vx, self.vy) < 0.1^2 then
+  if vec.lenSq(self.vx, self.vy) < 5^2 then
     anim = my < self.y and "uidle" or "didle"
   end
 
@@ -165,7 +163,6 @@ function Player:draw()
   end
 
   self.sprite:setAnimation(anim)
-  self.sprite:update()
 
   self.shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, scale, 1)

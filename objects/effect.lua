@@ -6,8 +6,8 @@ function Effect:new(sprite_path, random_rot)
   self.playback_speed = mathx.frandom(0.9, 1.1)
 end
 
-function Effect:step()
-  self.sprite:update(self.playback_speed)
+function Effect:step(dt)
+  self.sprite:update(dt, self.playback_speed)
 
   if self.sprite.is_over then
     world.rem(self)

@@ -18,8 +18,8 @@ function Hammerhead:new()
   self.vx = 0
   self.vy = 0
 
-  self.speed = 2
-  self.accel = 1/2
+  self.speed = 64
+  self.accel = 20
 
   self.body = Body.create(
     self, shape.offsetRect(
@@ -41,7 +41,6 @@ function Hammerhead:dead(attack)
   world.rem(self)
 
   self.sprite:setAnimation("dead")
-  self.sprite:update()
   local corpse = Corpse:create(
     self.sprite, self.body,
     self.x, self.y,
@@ -59,15 +58,15 @@ function Hammerhead:damage(attack)
   addBloodSplat("alien", self.x, self.y, 3)
 end
 
-function Hammerhead:step()
-  self.sm:call("step")
+function Hammerhead:step(dt)
+  self.sm:call("step", dt)
 
   local pushx, pushy = softCollision(self)
   self.vx = self.vx + pushx * 0.3
   self.vy = self.vy + pushy * 0.3
 
-  self.x = self.x + self.vx
-  self.y = self.y + self.vy
+  self.x = self.x + self.vx * dt
+  self.y = self.y + self.vy * dt
 
   self.body:moveAndCollideWithTags({"env"})
 
@@ -81,6 +80,8 @@ function Hammerhead:step()
   end
 
   self.z_index = self.y
+
+  self.sprite:update(dt)
 end
 
 function Hammerhead:tellTarget(target)
@@ -114,7 +115,6 @@ function Hammerhead:draw()
   end
 
   self.sprite:setAnimation(anim)
-  self.sprite:update()
 
   self.shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, scale, 1)

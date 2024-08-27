@@ -9,12 +9,12 @@ function Corpse:new(sprite, body, x, y, vx, vy)
   self.z_index = -1
 end
 
-function Corpse:step()
-  self.vx = mathx.lerp(self.vx, 0, 0.1)
-  self.vy = mathx.lerp(self.vy, 0, 0.1)
+function Corpse:step(dt)
+  self.vx = mathx.dtLerp(self.vx, 0, 10, dt)
+  self.vy = mathx.dtLerp(self.vy, 0, 10, dt)
 
-  self.x = self.x + self.vx
-  self.y = self.y + self.vy
+  self.x = self.x + self.vx * dt
+  self.y = self.y + self.vy * dt
 
   local coll = self.body:moveAndCollideWithTags({"env"})
 
@@ -23,6 +23,8 @@ function Corpse:step()
   if coll then
     self.vx, self.vy = vec.reflect(self.vx, self.vy, coll.axisx, coll.axisy)
   end
+
+  self.sprite:update(dt)
 end
 
 function Corpse:draw()
