@@ -256,7 +256,7 @@ function Player:gui()
     local centery = viewport.screenh / 2 - ui.hud_font:getHeight() / 2
     love.graphics.printf(
       {
-        {1, 1, 1}, "Youeth hath",
+        {1, 1, 1}, "Thou hast",
         {1, 0, 0}, " perishedeth",
         {1, 1, 1}, ".",
       },
