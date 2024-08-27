@@ -13,6 +13,7 @@ function BasicBullet:new(opts)
   self.damage = opts.damage
   self.bounce = opts.bounce or 0
   self.slow_down = opts.slow_down
+  self.ignore_tags = opts.ignore_tags
 
   local size = math.min(opts.sprite.width, opts.sprite.height)
   self.body = Body.create(self, shape.offsetRect(
@@ -40,11 +41,22 @@ function BasicBullet:step()
 
   for _, coll in ipairs(colls) do
     if coll.tag == "damagable" then
-      local kbx, kby = vec.normalized(self.vx, self.vy)
-      local res = coll.obj.health:takeDamage({damage=self.damage, kbx=kbx, kby=kby})
+      local should_ignore = false
 
-      if res then
-        world.rem(self)
+      for _, tag in ipairs(self.ignore_tags) do
+        if world.isTagged(coll.obj, tag) then
+          should_ignore = true
+          break
+        end
+      end
+
+      if not should_ignore then
+        local kbx, kby = vec.normalized(self.vx, self.vy)
+        local res = coll.obj.health:takeDamage({damage=self.damage, kbx=kbx, kby=kby})
+
+        if res then
+          world.rem(self)
+        end
       end
     else
       if self.bounce > 0 then

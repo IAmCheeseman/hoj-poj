@@ -50,6 +50,7 @@ return {
     automatic = false,
     spawnBullets = function(t)
       singleFire({
+        ignore_tags = {"player"},
         speed = 10,
         x = t.x,
         y = t.y,
@@ -73,6 +74,7 @@ return {
     automatic = false,
     spawnBullets = function(t)
       shotgunFire({
+        ignore_tags = {"player"},
         count = 7,
         speed_min = 8,
         speed_max = 12,
@@ -106,6 +108,7 @@ return {
     spawnBullets = function(t)
       local accuracy = math.min(t.burst^1.5, 30)
       singleFire({
+        ignore_tags = {"player"},
         speed = 10,
         x = t.x,
         y = t.y,

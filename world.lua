@@ -254,16 +254,14 @@ function world.getTagged(tag)
   return tags[tag] or {}
 end
 
-function world.addChildTo(parent, child)
-  local parent_meta = obj_meta[parent]
-  local child_meta = obj_meta[parent]
+function world.isTagged(obj, tag)
+  local meta = obj_meta[obj] or error("Object is not added to the world")
+  return meta.tags[tag] ~= nil
+end
 
-  if not parent_meta then
-    error("Parent is not added to the world.")
-  end
-  if not child_meta then
-    error("Child is not added to the world.")
-  end
+function world.addChildTo(parent, child)
+  local parent_meta = obj_meta[parent] or error("Parent is not added to the world.")
+  local child_meta = obj_meta[parent] or error("Child is not added to the world.")
   if child_meta.parent then
     error("Child already has a parent.")
   end
