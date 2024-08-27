@@ -11,7 +11,7 @@ end
 
 local function selectAmmo(player)
   local opts = {player.hand, player.offhand}
-  local select = love.math.random(1, #opts)
+  local select = love.math.random() < 0.6 and 2 or 1
   local weapon = weapons[opts[select]]
   table.remove(opts, select)
   local ammo_type = weapon.ammo
