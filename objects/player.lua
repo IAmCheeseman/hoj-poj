@@ -135,6 +135,12 @@ function Player:step()
       self.weapon:reset()
     end
   end
+
+  if getKillTimer() <= 0 then
+    self.draw = function() end
+    self.step = function() end
+    world.rem(self.weapon)
+  end
 end
 
 function Player:draw()
@@ -195,6 +201,17 @@ function Player:gui()
         {0.5, 0.5, 0.5}, "20",
       },
       0, texty,
+      viewport.screenw, "center")
+  end
+
+  do -- Timer
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(
+      {
+        {1, 1, 1}, tr("hud_time") .. " ",
+        {1, 0, 0}, pad0(tostring(getKillTimer()), 2),
+      },
+      0, texty - ui.hud_font:getHeight(),
       viewport.screenw, "center")
   end
 

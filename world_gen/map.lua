@@ -7,6 +7,8 @@ local player_spawn_y = 0
 local params = {}
 local data = {}
 
+local lock_pos = {}
+
 local function initData()
   for x=1, params.map_width do
     table.insert(data, {})
@@ -17,18 +19,18 @@ local function initData()
 end
 
 local function roomCanFit(x, y)
-  return x + params.room_width < params.map_width - params.room_width
-    and y + params.room_height < params.map_height - params.room_height
-    and x > params.room_width
-    and y > params.room_height
+  return x + params.room_width < params.map_width - params.room_width * 1.5
+    and y + params.room_height < params.map_height - params.room_height * 1.5
+    and x > params.room_width / 2
+    and y > params.room_height / 2
 end
 
 local function findStartingRoomPos()
-  local x, y = 0, 0
-  while not roomCanFit(x, y) do
-    x = love.math.random(0, params.map_width)
-    y = love.math.random(0, params.map_height)
-  end
+  local x, y = math.floor(params.map_width / 2), math.floor(params.map_height / 2)
+  -- while not roomCanFit(x, y) do
+  --   x = love.math.random(0, params.map_width)
+  --   y = love.math.random(0, params.map_height)
+  -- end
 
   return x, y
 end
@@ -96,9 +98,9 @@ local function connectPoints(fx, fy, tx, ty)
     x = math.floor(x + dirx)
 
     data[x][y] = 0
-    data[x+1][y] = 0
-    data[x][y+1] = 0
-    data[x+1][y+1] = 0
+    -- data[x+1][y] = 0
+    -- data[x][y+1] = 0
+    -- data[x+1][y+1] = 0
 
     player_spawn_x = x
     player_spawn_y = y
@@ -108,9 +110,9 @@ local function connectPoints(fx, fy, tx, ty)
     y = math.floor(y + diry)
 
     data[x][y] = 0
-    data[x+1][y] = 0
-    data[x][y+1] = 0
-    data[x+1][y+1] = 0
+    -- data[x+1][y] = 0
+    -- data[x][y+1] = 0
+    -- data[x+1][y+1] = 0
 
     player_spawn_x = x
     player_spawn_y = y
@@ -159,6 +161,8 @@ local function generateRooms()
     local last = walker.path[#walker.path]
     local lock = SafehouseLock:create(last.x * 16 + 8, last.y * 16 + 8)
     world.add(lock)
+
+    table.insert(lock_pos, {x=last.x, y=last.y})
   end
 end
 
@@ -191,20 +195,37 @@ local function removeSingles()
   end
 end
 
+local function renderToImage()
+  local img_data = love.image.newImageData(params.map_width, params.map_height)
+  local filled = {0, 0, 0, 1}
+  local empty = {1, 1, 1, 1}
+
+  for x=1, #data do
+    for y=1, #data[x] do
+      local cell = data[x][y]
+      local color = cell == 0 and empty or filled
+      img_data:setPixel(x - 1, y - 1, unpack(color))
+    end
+  end
+
+  for _, lock in ipairs(lock_pos) do
+    img_data:setPixel(lock.x - 1, lock.y - 1, 1, 0, 0)
+  end
+
+  img_data:encode("png", "map.png")
+
+  return love.graphics.newImage(img_data)
+end
+
 function map.generate(parameters)
   params = parameters
 
   initData()
   generateRooms()
   removeSingles()
+  local img = renderToImage()
 
-  for k, v in pairs(data) do
-    if not v then
-      data[k] = nil
-    end
-  end
-
-  return data, player_spawn_x, player_spawn_y
+  return data, player_spawn_x, player_spawn_y, img
 end
 
 return map

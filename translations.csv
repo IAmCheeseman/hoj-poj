@@ -1,6 +1,7 @@
-keys,en,es
-weapon_pistol,pistol,español
-weapon_shotgun,shotgun,español
-weapon_swiss_rifle,swiss rifle,español
-hud_score,score:,español:
-hud_hp,hp:,español:
+keys,en,es,hr,fi,de
+weapon_pistol,Pistol,Español,,,
+weapon_shotgun,Shotgun,Español,,,
+weapon_swiss_rifle,swiss rifle,Español,,,
+hud_score,Score:,Español:,,,
+hud_hp,HP:,Español:,,,
+hud_time,Time:,,,,

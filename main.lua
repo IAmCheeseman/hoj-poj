@@ -1,9 +1,14 @@
+max_fps = 30
+tick_rate = 1/max_fps
+total_time = 0
+
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.graphics.setLineStyle("rough")
 require("util")
 
 require("translations")
 require("score")
+require("timer")
 
 struct = require("struct")
 viewport = require("viewport")
@@ -24,10 +29,6 @@ loadDirectory("states")
 local modding = require("modding")
 modding.loadMods()
 
-max_fps = 30
-tick_rate = 1/max_fps
-total_time = 0
-
 local update_graphics = false
 local frame = 0
 
@@ -40,13 +41,13 @@ world.add(Background:create("assets/grass.png"))
 world.add(DroppedWeapon:create("swiss_rifle", -50, 50))
 
 local map = require("world_gen.map")
-local map_data, px, py = map.generate({
+local map_data, px, py, minimap = map.generate({
   min_rooms = 4,
   max_rooms = 4,
-  map_width = 512,
-  map_height = 512,
-  room_width = 35,
-  room_height = 35,
+  map_width = 200,
+  map_height = 200,
+  room_width = 20,
+  room_height = 20,
 })
 
 local tilemap = Tilemap:create(
@@ -84,6 +85,7 @@ function love.update(dt)
     world.update()
 
     stepCombo()
+    stepKillTimer()
 
     modding.postStep()
     camera.step()
@@ -106,6 +108,7 @@ function love.draw()
     love.graphics.origin()
     love.graphics.print(love.timer.getFPS())
     love.graphics.print(("(%d, %d)"):format(player.x, player.y), 0, 8)
+
     love.graphics.pop()
 
     viewport.stop()

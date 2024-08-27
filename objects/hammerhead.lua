@@ -50,7 +50,7 @@ function Hammerhead:dead(attack)
   self.body.anchor = corpse
   world.add(corpse)
 
-  addScore(100, self.x, self.y)
+  addScore(5, self.x, self.y)
 end
 
 function Hammerhead:damage(attack)
