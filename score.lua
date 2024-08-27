@@ -14,7 +14,7 @@ function addScore(amount, x, y)
     combo = combo + 1
   end
 
-  local te = TextEffect:create("+" .. tostring(amount * combo), x, y)
+  local te = TextEffect:create("+" .. tostring(amount * combo), x, y, {1, 1, 0})
   world.add(te)
 end
 

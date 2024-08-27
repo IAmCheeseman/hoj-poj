@@ -2,11 +2,12 @@ local ui = require("ui")
 
 TextEffect = struct()
 
-function TextEffect:new(text, x, y)
+function TextEffect:new(text, x, y, color)
   self.lifetime = 40
   self.text = text
   self.x = x - ui.hud_font:getWidth(self.text) / 2
   self.y = y - ui.hud_font:getHeight()
+  self.color = color
 
   self.z_index = math.huge
 end
@@ -21,9 +22,9 @@ function TextEffect:step()
 end
 
 function TextEffect:draw()
-  love.graphics.setColor(1, 1, 0)
+  love.graphics.setColor(self.color)
   if self.lifetime < 20 and self.lifetime % 4 <= 2 then
-    love.graphics.setColor(1, 1, 1, 0)
+    return
   end
   love.graphics.print(self.text, self.x, self.y)
 end

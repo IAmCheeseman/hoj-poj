@@ -39,7 +39,7 @@ function AmmoCrate:step()
       local te = TextEffect:create(
         "+" .. tostring(ammo[ammo_type].crate_amount) .. " "
         .. tr(ammo[ammo_type].name) .. "!",
-        self.x, self.y)
+        self.x, self.y, {1, 1, 0})
       world.add(te)
 
       world.rem(self)

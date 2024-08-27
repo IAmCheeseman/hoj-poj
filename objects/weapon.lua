@@ -68,6 +68,10 @@ function Weapon:fire()
   local can_shoot = reloaded and has_ammo
 
   if not can_shoot then
+    if not has_ammo then
+      local te = TextEffect:create("Empty!", self.x, self.y, {1, 0, 0})
+      world.add(te)
+    end
     return
   end
 
