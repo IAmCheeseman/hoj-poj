@@ -19,7 +19,7 @@ function addScore(amount, x, y)
 end
 
 function stepCombo()
-  combo_timer = math.max(combo_timer - 1, 0)
+  combo_timer = math.max(combo_timer - (1 + (combo / 3)), 0)
   if combo_timer <= 0 then
     combo = 1
   end
