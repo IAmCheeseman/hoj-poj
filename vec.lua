@@ -44,4 +44,10 @@ function vec.reflect(dirx, diry, nx, ny)
   return rx, ry
 end
 
+function vec.rotate(x, y, r)
+  local new_r = vec.angle(x, y) + r
+  local len = vec.len(x, y)
+  return math.cos(new_r) * len, math.sin(new_r) * len
+end
+
 return vec

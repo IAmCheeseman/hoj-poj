@@ -43,7 +43,7 @@ world.add(Background:create("assets/grass.png"))
 world.add(DroppedWeapon:create("swiss_rifle", -50, 50))
 
 local map = require("world_gen.map")
-local map_data, px, py, minimap = map.generate({
+local map_data, px, py, _ = map.generate({
   min_rooms = 4,
   max_rooms = 4,
   map_width = 200,

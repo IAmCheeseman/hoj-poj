@@ -11,36 +11,31 @@ PursueState = state({
 
 function PursueState:new()
   self.timer = 0
-  self.dir = 0
+  self.dirx = 0
+  self.diry = 0
 end
 
 function PursueState:step()
   local obj = self.anchor
 
   if self.timer <= 0 then
-    local chance = 0
-    local dir = 0
-    local give_up = 0
-
-    local tdirx, tdiry = vec.direction(
+    local dirx, diry = vec.direction(
       obj.x, obj.y, obj.target.x, obj.target.y)
 
-    repeat
-      dir = mathx.frandom(0, mathx.tau)
-      chance = (vec.dot(math.cos(dir), math.sin(dir), tdirx, tdiry) + 1) / 2
-      give_up = give_up + 1
-    until love.math.random() < chance^2 or give_up == 3
+    dirx, diry = vec.rotate(dirx, diry, mathx.frandom(-math.pi / 2, math.pi / 2))
 
-    self.dir = dir
+    if love.math.random() < 0.1 then
+      dirx = -dirx
+      diry = -diry
+    end
+
+    self.dirx = dirx
+    self.diry = diry
     self.timer = love.math.random(15, 20)
   end
 
   self.timer = obj.s_pursue.timer - 1
 
-  local dirx, diry =
-      math.cos(self.dir),
-      math.sin(self.dir)
-
-  obj.vx = mathx.lerp(obj.vx, dirx * obj.speed, obj.accel)
-  obj.vy = mathx.lerp(obj.vy, diry * obj.speed, obj.accel)
+  obj.vx = mathx.lerp(obj.vx, self.dirx * obj.speed, obj.accel)
+  obj.vy = mathx.lerp(obj.vy, self.diry * obj.speed, obj.accel)
 end
