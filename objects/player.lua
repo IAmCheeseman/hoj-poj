@@ -76,9 +76,9 @@ function Player:dead()
   world.rem(self.weapon)
 end
 
-function Player:damage(attack)
-  self.vx = self.vx + attack.kbx * 10
-  self.vy = self.vy + attack.kby * 10
+function Player:damage()
+  self.vx = 0
+  self.vy = 0
 
   sound.play("player_hit")
 end
