@@ -21,7 +21,7 @@ weapons.pistol = {
         sprite = common.bullet_sprite,
       })
       world.add(MuzzleFlash:create(t.x, t.y, 2, common.muzzle_flash))
-      camera.jump(1, t.angle + math.pi, 3)
+      camera.jump(1, t.angle + math.pi, 6)
     end,
     draw = common.drawGun,
 }
