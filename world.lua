@@ -3,16 +3,36 @@ local world = {}
 local next_id = 1
 
 local obj_meta = {}
-local objs = {}
+-- local objs = {}
 local tags = {}
 
+-- Addition and removal queues for tags.
 local tag_addq = {}
 local tag_remq = {}
 
+-- Add queue
 local addq = {}
-local remq = {}
+-- Add set, so we know what we're adding at the end of the frame
 local add_set = {}
+-- Same, but for removal
+local remq = {}
 local rem_set = {}
+
+-- Processing is not done in any particular order; it can be a set for 
+-- performance.
+local proc_set = {}
+-- You need to sometimes manually add/remove items to the proc set, but that can't be
+-- done while processing.
+local proc_set_addq = {}
+local proc_set_remq = {}
+-- Drawing has a specific order it must be done in; it has to be a list.
+local draw_list = {}
+local draw_list_addq = {}
+local draw_list_remq = {}
+-- Same with gui
+local gui_list = {}
+local gui_list_addq = {}
+local gui_list_remq = {}
 
 function world.add(obj)
   if add_set[obj] then
@@ -111,7 +131,7 @@ end
 
 local function flushAdd()
   for _, obj in ipairs(addq) do
-    table.insert(objs, obj)
+    -- table.insert(objs, obj)
 
     obj.x = obj.x or 0
     obj.y = obj.y or 0
@@ -123,7 +143,7 @@ local function flushAdd()
     end
 
     local meta = {
-      index = #objs,
+      -- index = #objs,
       id = next_id,
       tags = {},
       children = {},
@@ -131,6 +151,20 @@ local function flushAdd()
     obj_meta[obj] = meta
 
     next_id = next_id + 1
+
+    if obj.step then
+      proc_set[obj] = true
+    end
+
+    if obj.draw then
+      table.insert(draw_list, obj)
+      meta.draw_list_index = #draw_list
+    end
+
+    if obj.gui then
+      table.insert(gui_list, obj)
+      meta.gui_list_index = #gui_list
+    end
 
     if is(obj.tags, "table") then
       for _, tag in ipairs(obj.tags) do
@@ -160,16 +194,29 @@ local function updateParent(obj)
   end
 end
 
+local function removeFromDrawList(dl, m, idx_k)
+  local _, new = tablex.swapRem(dl, m[idx_k])
+
+  -- Keep indices correct
+  if new then
+    obj_meta[new][idx_k] = m[idx_k]
+  end
+end
+
 local function flushRem()
   for _, obj in ipairs(remq) do
     local _ = try(obj.removed, obj)
 
     local meta = obj_meta[obj]
-    local _, new = tablex.swapRem(objs, meta.index)
 
-    -- Keep indices correct
-    if new then
-      obj_meta[new].index = meta.index
+    proc_set[obj] = nil
+
+    if meta.draw_list_index then
+      removeFromDrawList(draw_list, meta, "draw_list_index")
+    end
+
+    if meta.gui_list_index then
+      removeFromDrawList(gui_list, meta, "gui_list_index")
     end
 
     -- Remove children
@@ -194,22 +241,70 @@ local function flushRem()
   rem_set = {}
 end
 
+local function flushProcSetAdd()
+  for _, obj in ipairs(proc_set_addq) do
+    proc_set[obj] = true
+  end
+  proc_set_addq = {}
+end
+
+local function flushProcSetRem()
+  for _, obj in ipairs(proc_set_addq) do
+    proc_set[obj] = nil
+  end
+  proc_set_remq = {}
+end
+
+local function flushDrawListAdd(q, dl, idx_k)
+  for _, obj in ipairs(q) do
+    local meta = obj_meta[obj]
+    table.insert(dl, obj)
+    meta[idx_k] = #dl
+  end
+end
+
+local function flushDrawListRem(q, dl)
+  for _, obj in ipairs(q) do
+    local meta = obj_meta[obj]
+    if meta.draw_list_index then
+      removeFromDrawList(dl, meta, "draw_list_index")
+    end
+  end
+end
+
 function world.flush()
   flushTagAdd()
   flushTagRem()
 
   flushAdd()
   flushRem()
+
+  flushProcSetAdd()
+  flushProcSetRem()
+
+  flushDrawListAdd(draw_list_addq, draw_list, "draw_list_index")
+  draw_list_addq = {}
+  flushDrawListRem(draw_list_remq, draw_list)
+  draw_list_remq = {}
+
+  flushDrawListAdd(gui_list_addq, gui_list, "draw_list_index")
+  gui_list_addq = {}
+  flushDrawListRem(gui_list_remq, gui_list)
+  gui_list_remq = {}
 end
 
 function world.update(dt)
-  for _, obj in ipairs(objs) do
-    local _ = try(obj.step, obj, dt)
+  for obj, _ in pairs(proc_set) do
+    if is(obj.step, "function") then
+      obj:step(dt)
+    else
+      world.remProc(obj)
+    end
   end
 end
 
 function world.draw()
-  table.sort(objs, function(a, b)
+  table.sort(draw_list, function(a, b)
     local az = a.z_index
     local bz = b.z_index
     if az == bz then
@@ -219,22 +314,42 @@ function world.draw()
     return az < bz
   end)
 
-  for i, obj in ipairs(objs) do
-    obj_meta[obj].index = i
+  for i, obj in ipairs(draw_list) do
+    obj_meta[obj].draw_list_index = i
 
-    if obj.draw then
-      obj:draw()
-    end
+    obj:draw()
   end
 
-  for _, obj in ipairs(objs) do
-    if obj.gui then
-      love.graphics.push()
-      love.graphics.origin()
-      obj:gui()
-      love.graphics.pop()
-    end
+  for _, obj in ipairs(gui_list) do
+    love.graphics.push()
+    love.graphics.origin()
+    obj:gui()
+    love.graphics.pop()
   end
+end
+
+function world.addProc(obj)
+  if not is(obj.step, "function") then
+    error("Object must have a step function to be processed.")
+  end
+
+  table.insert(proc_set_addq, obj)
+end
+
+function world.remProc(obj)
+  table.insert(proc_set_remq, obj)
+end
+
+function world.addDrawProc(obj)
+  if not is(obj.draw, "function") then
+    error("Object must have a draw function to be drawn.")
+  end
+
+  table.insert(draw_list_addq, obj)
+end
+
+function world.remDrawProc(obj)
+  table.insert(draw_list_remq, obj)
 end
 
 function world.getSingleton(tag)
