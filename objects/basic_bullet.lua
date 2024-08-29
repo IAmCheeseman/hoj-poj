@@ -25,6 +25,7 @@ end
 function BasicBullet:step(dt)
   self.lifetime = self.lifetime - dt
   if self.lifetime < 0 then
+    self:poof()
     world.rem(self)
   end
 
@@ -69,13 +70,14 @@ function BasicBullet:step(dt)
         self.damage = self.damage * self.bounce_damage_mod
         self.bounce = self.bounce - 1
       else
+        self:poof()
         world.rem(self)
       end
     end
   end
 end
 
-function BasicBullet:removed()
+function BasicBullet:poof()
   local effect = Effect:create("assets/dust.ase", true)
   effect.x = self.x
   effect.y = self.y
