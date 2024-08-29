@@ -1,5 +1,5 @@
 function try(fn, ...)
-  if fn then
+  if type(fn) == "function" then
     return true, fn(...)
   end
   return false

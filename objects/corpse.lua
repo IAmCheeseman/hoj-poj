@@ -1,7 +1,7 @@
 Corpse = struct()
 
 local total_corpses = 0
-local corpse_limit = 50
+local corpse_limit = 200
 local oldest = nil
 local newest = nil
 
@@ -55,4 +55,9 @@ function Corpse:step(dt)
 
   self.sprite:update(dt)
   self.sprite.is_playing = not self.sprite:isAtAnimationEnd()
+
+  if vec.lenSq(self.vx, self.vy) < 5^2 and not self.sprite.is_playing then
+    -- Stop processing this corpse if it no longer must be
+    self.step = false
+  end
 end
