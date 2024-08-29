@@ -66,7 +66,6 @@ function BasicBullet:step(dt)
         self.y = self.y + coll.resolvey
         self.vx, self.vy = vec.reflect(self.vx, self.vy, coll.axisx, coll.axisy)
         self.rot = vec.angle(self.vx, self.vy)
-        self.lifetime = self.lifetime * 0.75
         self.damage = self.damage * self.bounce_damage_mod
         self.bounce = self.bounce - 1
       else
