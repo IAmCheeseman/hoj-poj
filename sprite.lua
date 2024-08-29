@@ -121,6 +121,15 @@ function Sprite:setAnimation(name)
   self.current_anim = name
 end
 
+function Sprite:isAtAnimationEnd()
+  if not self.current_anim then
+    return true
+  end
+
+  local anim = self.anims[self.current_anim]
+  return self.frame == anim.to
+end
+
 function Sprite:update(dt, speed)
   speed = speed or 1
 

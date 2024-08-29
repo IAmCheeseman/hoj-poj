@@ -54,9 +54,5 @@ function Corpse:step(dt)
   end
 
   self.sprite:update(dt)
-end
-
-function Corpse:draw()
-  love.graphics.setColor(0.5, 0.5, 0.5)
-  self.sprite:draw(self.x, self.y)
+  self.sprite.is_playing = not self.sprite:isAtAnimationEnd()
 end
