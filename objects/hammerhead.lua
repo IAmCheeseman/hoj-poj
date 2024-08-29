@@ -48,7 +48,7 @@ function Hammerhead:dead(attack)
   self.body.anchor = corpse
   world.add(corpse)
 
-  addScore(5, self.x, self.y)
+  addScore(5, self.x, self.y - self.sprite.height)
   addToKillTimer()
 end
 
