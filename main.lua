@@ -21,6 +21,7 @@ log = require("log")
 local loadDirectory = require("load_directory")
 loadDirectory("objects")
 loadDirectory("functions")
+loadDirectory("weapons")
 loadDirectory("states")
 
 require("translations")
