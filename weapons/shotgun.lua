@@ -30,7 +30,7 @@ weapons.shotgun = {
       sprite = common.pellet_sprite,
     })
     world.add(MuzzleFlash:create(t.x, t.y, 2, common.muzzle_flash))
-    camera.shake(1, 0.05, 3, 8, 8, true)
+    camera.shake(1, 0.05, 5, 8, 8, true)
   end,
   draw = common.drawGun,
 }

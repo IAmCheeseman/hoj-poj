@@ -56,8 +56,8 @@ function camera.jump(p, angle, strength)
 end
 
 function camera.step(dt)
-  ssx = mathx.dtLerp(ssx, 0, 10, dt)
-  ssy = mathx.dtLerp(ssy, 0, 10, dt)
+  ssx = mathx.dtLerp(ssx, 0, 20, dt)
+  ssy = mathx.dtLerp(ssy, 0, 20, dt)
 
   timer = timer - dt
   if timer <= 0 and pri ~= 0 then
