@@ -1,9 +1,6 @@
 local function drawGun(sprite, gun)
-  local mx, _ = getWorldMousePosition()
-  local scaley = mx < gun.x and -1 or 1
-
   love.graphics.setColor(1, 1, 1)
-  sprite:draw(gun.x, gun.y, gun.rot, 1, scaley)
+  sprite:draw(gun.x, gun.y, gun.rot, 1, gun.scaley)
 end
 
 local function singleFire(opts)

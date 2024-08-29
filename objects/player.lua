@@ -113,12 +113,15 @@ function Player:step(dt)
 
   self.z_index = self.y
 
-  local mx, my = getWorldMousePosition()
-  mx = mx - self.x
-  my = my - self.y
-  local camx = self.x - viewport.screenw / 2 + mx * 0.15
-  local camy = self.y - viewport.screenh / 2 + my * 0.15
-  camera.setPos(camx, camy)
+  -- Update camera
+  do
+    local mx, my = getWorldMousePosition()
+    mx = mx - self.x
+    my = my - self.y
+    local camx = self.x - viewport.screenw / 2 + mx * 0.15
+    local camy = self.y - viewport.screenh / 2 + my * 0.15
+    camera.setPos(camx, camy)
+  end
 
   if action.isJustDown("swap") then
     self:swapWeapons()
@@ -152,29 +155,29 @@ function Player:step(dt)
     self.health:kill()
   end
 
-  self.sprite:update(dt)
+  -- Update graphics
+  do
+    local mx, my = getWorldMousePosition()
+    self.scalex = mx < self.x and -1 or 1
+
+    local anim = my < self.y and "uwalk" or "dwalk"
+    if vec.lenSq(self.vx, self.vy) < 5^2 then
+      anim = my < self.y and "uidle" or "didle"
+    end
+
+    if self.health:iFramesActive() then
+      anim = "hurt"
+    end
+
+    self.sprite:setAnimation(anim)
+    self.sprite:update(dt)
+  end
 end
 
 function Player:draw()
   love.graphics.setColor(1, 1, 1)
-
-  local mx, my = getWorldMousePosition()
-
-  local scale = mx < self.x and -1 or 1
-
-  local anim = my < self.y and "uwalk" or "dwalk"
-  if vec.lenSq(self.vx, self.vy) < 5^2 then
-    anim = my < self.y and "uidle" or "didle"
-  end
-
-  if self.health:iFramesActive() then
-    anim = "hurt"
-  end
-
-  self.sprite:setAnimation(anim)
-
   self.shadow:draw(self.x, self.y)
-  self.sprite:draw(self.x, self.y, 0, scale, 1)
+  self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
 end
 
 local function pad0(str, zeros)

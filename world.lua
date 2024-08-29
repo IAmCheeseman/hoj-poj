@@ -34,6 +34,8 @@ local gui_list = {}
 local gui_list_addq = {}
 local gui_list_remq = {}
 
+world.is_paused = false
+
 function world.add(obj)
   if add_set[obj] then
     return false
@@ -293,10 +295,16 @@ function world.flush()
   gui_list_remq = {}
 end
 
+local function canStep(obj)
+  return not world.is_paused or obj.step_while_paused
+end
+
 function world.update(dt)
   for obj, _ in pairs(proc_set) do
     if is(obj.step, "function") then
-      obj:step(dt)
+      if canStep(obj) then
+        obj:step(dt)
+      end
     else
       world.remProc(obj)
     end

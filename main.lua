@@ -39,6 +39,7 @@ player.sprite.a = 0
 world.add(player)
 
 world.add(Cursor:create())
+world.add(PauseScreen:create())
 world.add(BloodLayer:create())
 world.add(Background:create("assets/grass.png"))
 world.add(DroppedWeapon:create("swiss_rifle", -50, 50))

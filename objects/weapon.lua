@@ -69,6 +69,9 @@ function Weapon:step(dt)
 
     self:fire()
   end
+
+  -- Update graphics
+  self.scaley = mx < self.x and -1 or 1
 end
 
 function Weapon:fire()
