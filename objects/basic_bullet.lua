@@ -8,7 +8,7 @@ function BasicBullet:new(opts)
   self.speed = opts.speed
   self.rot = opts.angle
   self.sprite = opts.sprite
-  self.max_lifetime = opts.lifetime or (max_fps * 5)
+  self.max_lifetime = opts.lifetime or 999
   self.lifetime = self.max_lifetime
   self.damage = opts.damage
   self.bounce = opts.bounce or 0

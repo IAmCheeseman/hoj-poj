@@ -1,5 +1,3 @@
-max_fps = 30
-tick_rate = 1/max_fps
 total_time = 0
 
 love.graphics.setDefaultFilter("nearest", "nearest")
@@ -31,9 +29,6 @@ require("spawner")
 
 local modding = require("modding")
 modding.loadMods()
-
-local update_graphics = false
-local frame = 0
 
 local player = Player:create()
 player.sprite.a = 0
@@ -87,8 +82,6 @@ player.y = py * tilemap.tile_height
 
 function love.update(dt)
   total_time = total_time + dt
-
-  frame = frame - tick_rate
 
   action.step()
   modding.step()
