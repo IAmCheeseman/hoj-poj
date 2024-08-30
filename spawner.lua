@@ -7,6 +7,10 @@ local enemies = {
   {
     obj = Hammerhead,
     chance = 1,
+  },
+  {
+    obj = ShootyEnemy,
+    chance = 0.75,
   }
 }
 

@@ -9,10 +9,13 @@ PursueState = state({
   accel = "number",
 })
 
-function PursueState:new()
+function PursueState:new(on_direction_changed)
+  self.pursue_time_min = 0.5
+  self.pursue_time_max = 0.7
   self.timer = 0
   self.dirx = 0
   self.diry = 0
+  self.on_direction_changed = on_direction_changed
 end
 
 function PursueState:step(dt)
@@ -31,7 +34,9 @@ function PursueState:step(dt)
 
     self.dirx = dirx
     self.diry = diry
-    self.timer = mathx.frandom(0.5, 0.7)
+    self.timer = mathx.frandom(self.pursue_time_min, self.pursue_time_max)
+
+    try(self.on_direction_changed, self.anchor)
   end
 
   self.timer = obj.s_pursue.timer - dt

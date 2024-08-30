@@ -36,6 +36,10 @@ function vec.angle(x, y)
   return math.atan2(y, x)
 end
 
+function vec.angleBetween(x, y, xx, yy)
+  return math.atan2(yy - y, xx - x)
+end
+
 function vec.reflect(dirx, diry, nx, ny)
   local rx, ry = 0, 0
   local dot = vec.dot(dirx, diry, nx, ny)
