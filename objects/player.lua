@@ -48,7 +48,7 @@ function Player:new()
   self.vy = 0
 
   self.speed = 16 * 6
-  self.frict = 6
+  self.frict = 12
 
   self.cam_accel = 20
 
@@ -101,10 +101,8 @@ function Player:step(dt)
 
   ix, iy = vec.normalized(ix, iy)
 
-  accel_delta = self.frict
-
-  self.vx = mathx.dtLerp(self.vx, ix * self.speed, accel_delta, dt)
-  self.vy = mathx.dtLerp(self.vy, iy * self.speed, accel_delta, dt)
+  self.vx = mathx.dtLerp(self.vx, ix * self.speed, self.frict, dt)
+  self.vy = mathx.dtLerp(self.vy, iy * self.speed, self.frict, dt)
 
   self.x = self.x + self.vx * dt
   self.y = self.y + self.vy * dt
