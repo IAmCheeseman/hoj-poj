@@ -44,7 +44,7 @@ function Hammerhead:dead(attack)
   local corpse = Corpse:create(
     self.sprite, self.body,
     self.x, self.y,
-    attack.kbx * 2, attack.kby * 2)
+    attack.kbx * 100, attack.kby * 100)
   self.body.anchor = corpse
   world.add(corpse)
 
