@@ -1,11 +1,8 @@
 local state = require("state")
 
 IdleState = state({
-  x = "number",
-  y = "number",
   vx = "number",
   vy = "number",
-  speed = "number",
   accel = "number",
 })
 

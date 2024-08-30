@@ -7,6 +7,12 @@ ShootyEnemy = struct()
 function ShootyEnemy:new()
   self.tags = {"enemy", "soft_coll", "damagable"}
 
+  self.sprite = Sprite.create("assets/redneck_gunner.ase")
+  self.sprite:offset("center", "bottom")
+
+  self.shadow = Sprite.create("assets/player_shadow.png")
+  self.shadow:offset("center", "center")
+
   self.x = 0
   self.y = 0
 
@@ -16,7 +22,10 @@ function ShootyEnemy:new()
   self.speed = 32
   self.accel = 20
 
-  self.body = Body.create(self, shape.rect(16, 16))
+  self.body = Body.create(
+    self, shape.offsetRect(
+      -self.sprite.offsetx, -self.sprite.offsety,
+      self.sprite.width, self.sprite.height))
 
   self.target = world.getSingleton("player")
 
@@ -28,7 +37,7 @@ function ShootyEnemy:new()
   self.sm = StateMachine.create(self, self.s_pursue)
   self.health = Health.create(self, 13, {
     dead = self.dead,
-    -- damaged = self.damage
+    damaged = self.damage
   })
 end
 
@@ -52,11 +61,26 @@ function ShootyEnemy:onIdleTimerOver()
   })
 end
 
-function ShootyEnemy:dead()
+function ShootyEnemy:dead(attack)
   world.rem(self)
+
+  self.sprite:setAnimation("dead")
+  local corpse = Corpse:create(
+    self.sprite, self.body,
+    self.x, self.y,
+    attack.kbx * 100, attack.kby * 100)
+  self.body.anchor = corpse
+  world.add(corpse)
 
   addScore(5, self.x, self.y)
   addToKillTimer()
+end
+
+function ShootyEnemy:damage(attack)
+  self.vx = self.vx + attack.kbx
+  self.vy = self.vy + attack.kby
+
+  addBloodSplat("earthling", self.x, self.y, 3)
 end
 
 function ShootyEnemy:step(dt)
@@ -72,8 +96,25 @@ function ShootyEnemy:step(dt)
   self.body:moveAndCollideWithTags({"env"})
 
   self.z_index = self.y
+
+  self.sprite:update(dt)
 end
 
 function ShootyEnemy:draw()
-  love.graphics.rectangle("fill", self.x, self.y, 16, 16)
+  love.graphics.setColor(1, 1, 1)
+
+  local scale = self.vx < 0 and -1 or 1
+  local anim = self.vy < 0 and "uwalk" or "dwalk"
+  if vec.lenSq(self.vx, self.vy) < 5^2 then
+    anim = self.vy < 0 and "uidle" or "didle"
+  end
+
+  if self.health:iFramesActive() then
+    anim = self.vy < 0 and "uhurt" or "dhurt"
+    scale = -scale
+  end
+
+  self.sprite:setAnimation(anim)
+  self.shadow:draw(self.x, self.y)
+  self.sprite:draw(self.x, self.y, 0, scale, 1)
 end

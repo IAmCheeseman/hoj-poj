@@ -54,6 +54,7 @@ end
 
 function Hammerhead:damage(attack)
   self.vx = self.vx + attack.kbx
+  self.vy = self.vy + attack.kby
 
   addBloodSplat("alien", self.x, self.y, 3)
 end
