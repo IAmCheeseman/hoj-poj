@@ -1,8 +1,11 @@
 local loadAse = require("ase")
+local SpriteAtlas = require("sprite_atlas")
 
 local chunk_layer_data = 0x2004
 local chunk_img_data = 0x2005
 local chunk_tag_data = 0x2018
+
+local atlas = SpriteAtlas.create(1024, 1024)
 
 local Sprite = {}
 Sprite.__index = Sprite
@@ -27,6 +30,8 @@ function Sprite.create(path)
     s.width = file.header.width
     s.height = file.header.height
 
+    local frame_index = 1
+
     for _, frame in ipairs(file.header.frames) do
       for _, chunk in ipairs(frame.chunks) do
         if chunk.type == chunk_img_data then
@@ -40,8 +45,11 @@ function Sprite.create(path)
           love.graphics.draw(img, cel.x, cel.y)
           love.graphics.setCanvas()
 
+          local atlasId = atlas:addSprite(canvas, nil, path .. frame_index)
+          frame_index = frame_index + 1
+
           table.insert(s.frames, {
-            img = love.graphics.newImage(canvas:newImageData()),
+            img = atlasId,--love.graphics.newImage(canvas:newImageData()),
             duration = frame.frame_duration / 1000,
           })
 
@@ -76,8 +84,10 @@ function Sprite.create(path)
     love.graphics.setCanvas()
   else
     local img = love.graphics.newImage(path)
+    local atlasId = atlas:addSprite(img, nil, path)
+
     table.insert(s.frames, {
-      img = img,
+      img = atlasId,
       duration = 1,
     })
 
@@ -171,8 +181,8 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
     local layer = self.layers[i]
 
     if layer.visible then
-      love.graphics.draw(
-        self.frames[start + offset].img,
+      atlas:draw(
+        self.frames[start + offset].img, nil,
         math.floor(x), math.floor(y),
         r, sx, sy, self.offsetx, self.offsety, kx, ky)
     end
