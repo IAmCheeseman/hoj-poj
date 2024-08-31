@@ -124,3 +124,8 @@ function love.draw()
   love.graphics.setColor(1, 1, 1)
   viewport.draw()
 end
+
+function love.quit()
+  local data = Sprite.atlas.canvas:newImageData()
+  data:encode("png", "atlas.png")
+end

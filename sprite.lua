@@ -5,10 +5,11 @@ local chunk_layer_data = 0x2004
 local chunk_img_data = 0x2005
 local chunk_tag_data = 0x2018
 
-local atlas = SpriteAtlas.create(1024, 1024)
-
 local Sprite = {}
 Sprite.__index = Sprite
+
+local atlas = SpriteAtlas.create(1024, 1024)
+Sprite.atlas = atlas
 
 function Sprite.create(path)
   local s = setmetatable({}, Sprite)
