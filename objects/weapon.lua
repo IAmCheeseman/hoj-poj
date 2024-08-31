@@ -3,6 +3,8 @@ local weapons = require("weapons")
 Weapon = struct()
 
 function Weapon:new(anchor, type)
+  self.tags = {"weapon"}
+
   self.anchor = anchor
 
   self.target_offset_x = 0
@@ -49,8 +51,9 @@ function Weapon:step(dt)
         self.burst = weapon.burst - 1 -- Minus 1 because we already shot one
         self.burst_timer = weapon.burst_cooldown
       end
+
+      self.released_fire = false
     end
-    self.released_fire = false
   else
     self.released_fire = true
   end
@@ -115,4 +118,14 @@ end
 function Weapon:draw()
   local weapon = weapons[self.type]
   weapon.draw(weapon.sprite, self)
+end
+
+function Weapon:gui()
+  local weapon = weapons[self.type]
+  local p = math.max(self.reload / weapon.reload, 0)
+
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.rectangle("fill", 30, 1, 32, 5)
+  love.graphics.setColor(1, 1, 0)
+  love.graphics.rectangle("fill", 30, 1, 32 * p, 5)
 end
