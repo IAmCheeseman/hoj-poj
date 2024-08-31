@@ -126,7 +126,7 @@ local function flushTagRem()
   tag_remq = {}
 end
 
-local function defaultDraw(self)
+function world.defaultDraw(self)
   love.graphics.setColor(1, 1, 1)
   self.sprite:draw(self.x, self.y, self.rot or 0)
 end
@@ -141,7 +141,7 @@ local function flushAdd()
 
     -- If an object has a sprite but no draw, automatically draw sprite
     if obj.sprite and not obj.draw and not obj.no_draw then
-      obj.draw = defaultDraw
+      obj.draw = world.defaultDraw
     end
 
     local meta = {

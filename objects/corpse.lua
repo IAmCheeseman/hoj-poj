@@ -65,7 +65,12 @@ function Corpse:step(dt)
   self.sprite:update(dt)
   self.sprite.is_playing = not self.sprite:isAtAnimationEnd()
 
-  if vec.lenSq(self.vx, self.vy) < 5^2 and not self.sprite.is_playing and self.height == 0 then
+  if self.height == 0 then
+    self.draw = world.defaultDraw
+  end
+
+  if vec.lenSq(self.vx, self.vy) < 5^2 and not self.sprite.is_playing
+      and self.height == 0 then
     -- Stop processing this corpse if it no longer must be
     self.step = false
   end
