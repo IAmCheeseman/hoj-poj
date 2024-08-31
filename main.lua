@@ -108,12 +108,15 @@ function love.draw()
     love.graphics.clear(0.05, 0.55, 0.45)
     world.draw()
 
-    love.graphics.push()
-    love.graphics.origin()
-    love.graphics.print(love.timer.getFPS())
-    love.graphics.print(("(%d, %d)"):format(player.x, player.y), 0, 8)
-
-    love.graphics.pop()
+    do
+      local stats = love.graphics.getStats()
+      love.graphics.push()
+      love.graphics.origin()
+      love.graphics.print("FPS: " .. love.timer.getFPS())
+      love.graphics.print("Draw calls: " .. stats.drawcalls, 0, 8)
+      love.graphics.print(("(%d, %d)"):format(player.x, player.y), 0, 16)
+      love.graphics.pop()
+    end
 
     viewport.stop()
   end

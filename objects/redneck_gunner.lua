@@ -123,6 +123,8 @@ end
 function RedneckGunner:draw()
   love.graphics.setColor(1, 1, 1)
 
+  -- TODO: this code is basically the same between the player, hammerhead, and
+  -- this. Abstract it out.
   local anim = self.vy < 0 and "uwalk" or "dwalk"
   if vec.lenSq(self.vx, self.vy) < 5^2 then
     anim = self.vy < 0 and "uidle" or "didle"
