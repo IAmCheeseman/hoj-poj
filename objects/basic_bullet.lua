@@ -92,7 +92,7 @@ function BasicBullet:draw()
   end
 
   love.graphics.setColor(1, 1, 1)
-  love.graphics.setBlendMode("add")
+  -- love.graphics.setBlendMode("add")
   self.sprite:draw(self.x, self.y, self.rot)
-  love.graphics.setBlendMode("alpha")
+  -- love.graphics.setBlendMode("alpha")
 end
