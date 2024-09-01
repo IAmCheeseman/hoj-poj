@@ -251,7 +251,7 @@ local function flushProcSetAdd()
 end
 
 local function flushProcSetRem()
-  for _, obj in ipairs(proc_set_addq) do
+  for _, obj in ipairs(proc_set_remq) do
     proc_set[obj] = nil
   end
   proc_set_remq = {}
