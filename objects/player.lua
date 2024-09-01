@@ -61,13 +61,12 @@ function Player:new()
   })
 
   self.health.iframes_prevent_damage = true
-
-  self.weapon = Weapon:create(self, self.hand)
-  world.add(self.weapon)
 end
 
-function Player:removed()
-  world.rem(self.weapon)
+function Player:added()
+  self.weapon = Weapon:create(self, self.hand)
+  world.add(self.weapon)
+  world.addChildTo(self, self.weapon)
 end
 
 function Player:dead()
