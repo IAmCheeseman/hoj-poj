@@ -7,8 +7,6 @@ local player_spawn_y = 0
 local params = {}
 local data = {}
 
-local lock_pos = {}
-
 local function initData()
   for x=1, params.map_width do
     table.insert(data, {})
@@ -157,12 +155,6 @@ local function generateRooms()
         data[p.x][p.y] = 0
       end
     end
-
-    local last = walker.path[#walker.path]
-    local lock = SafehouseLock:create(last.x * 16 + 8, last.y * 16 + 8)
-    world.add(lock)
-
-    table.insert(lock_pos, {x=last.x, y=last.y})
   end
 end
 
@@ -206,10 +198,6 @@ local function renderToImage()
       local color = cell == 0 and empty or filled
       img_data:setPixel(x - 1, y - 1, unpack(color))
     end
-  end
-
-  for _, lock in ipairs(lock_pos) do
-    img_data:setPixel(lock.x - 1, lock.y - 1, 1, 0, 0)
   end
 
   img_data:encode("png", "map.png")
