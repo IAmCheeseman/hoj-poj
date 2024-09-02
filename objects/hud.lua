@@ -102,9 +102,9 @@ function Hud:gui()
     local centery = viewport.screenh / 2 - ui.hud_font:getHeight() / 2
     love.graphics.printf(
       {
-        {1, 1, 1}, "Thou hast",
-        {1, 0, 0}, " perishedeth",
-        {1, 1, 1}, ".",
+        {1, 1, 1}, "You ",
+        {1, 0, 0}, " died",
+        {1, 1, 1}, " :[",
       },
       0, centery, viewport.screenw, "center")
   end
