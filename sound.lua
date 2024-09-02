@@ -20,12 +20,16 @@ function sound.load(name, path, max_sources)
   }
 end
 
-function sound.play(name)
+function sound.play(name, randomize_pitch)
   local s = sounds[name] or error("Sound '" .. name .. "' does not exist.")
   local source = s.sources[s.current]
   s.current = s.current + 1
   if s.current > #s.sources then
     s.current = 1
+  end
+
+  if randomize_pitch then
+    source:setPitch(mathx.frandom(0.9, 1.1))
   end
 
   source:stop()
