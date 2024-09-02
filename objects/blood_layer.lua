@@ -1,7 +1,8 @@
 BloodLayer = struct()
 
-local splat_count = 3
+local splat_count = 9
 local splats_img = love.graphics.newImage("assets/blood_splats.png")
+local batch = love.graphics.newSpriteBatch(splats_img)
 local splats = {}
 
 do
@@ -18,15 +19,16 @@ end
 
 local blood_types = {}
 
-function addBloodType(name, color)
+function addBloodType(name, start_idx, end_idx)
   blood_types[name] = {
-    batch = love.graphics.newSpriteBatch(splats_img),
-    color = color,
+    start_idx = start_idx,
+    end_idx = end_idx,
   }
 end
 
-addBloodType("earthling", {0.7, 0.1, 0.2})
-addBloodType("alien", {0.1, 0.5, 0.7})
+addBloodType("earthling", 1, 3)
+addBloodType("alien", 4, 6)
+addBloodType("demon", 7, 9)
 
 function addBloodSplat(blood_type, x, y, count, spread)
   count = count or 1
@@ -37,17 +39,14 @@ function addBloodSplat(blood_type, x, y, count, spread)
     local dx = x + mathx.frandom(-spread, spread)
     local dy = y + mathx.frandom(-spread, spread)
 
-    local splat = splats[love.math.random(1, #splats)]
     local blood = blood_types[blood_type]
-    blood.batch:add(splat, dx, dy, direction, 1, 1, 8, 8)
+    local splat = splats[love.math.random(blood.start_idx, blood.end_idx)]
+    batch:add(splat, dx, dy, direction, 1, 1, 8, 8)
   end
 end
 
 function BloodLayer:draw()
   self.z_index = -1
 
-  for _, blood in pairs(blood_types) do
-    love.graphics.setColor(blood.color)
-    love.graphics.draw(blood.batch)
-  end
+  love.graphics.draw(batch)
 end
