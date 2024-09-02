@@ -2,6 +2,8 @@ local weapon_common = require("weapon_common")
 local StateMachine = require("state_machine")
 local Health = require("health")
 
+sound.load("redneck_gunner_shoot", "assets/redneck_gunner_shoot.wav")
+
 RedneckGunner = struct()
 
 function RedneckGunner:new()
@@ -68,6 +70,7 @@ function RedneckGunner:onIdleTimerOver()
     damage = 7,
     sprite = weapon_common.enemy_bullet_sprite,
   })
+  sound.play("redneck_gunner_shoot", true)
 end
 
 function RedneckGunner:dead(attack)
