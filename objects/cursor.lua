@@ -11,5 +11,7 @@ end
 
 function Cursor:gui()
   local mx, my = getMousePosition()
+
+  love.graphics.setColor(1, 1, 1)
   cursor_sprite:draw(mx, my)
 end
