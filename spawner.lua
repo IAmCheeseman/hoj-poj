@@ -11,6 +11,10 @@ local enemies = {
   {
     obj = RedneckGunner,
     chance = 0.75,
+  },
+  {
+    obj = WalrusFish,
+    chance = 1,
   }
 }
 
