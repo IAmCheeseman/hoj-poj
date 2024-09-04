@@ -99,6 +99,10 @@ function Hud:gui()
   end
 
   if player.health.dead then
+    love.graphics.setColor(0, 0, 0, 0.75)
+    love.graphics.rectangle("fill", 0, 0, viewport.screenw, viewport.screenh)
+
+    love.graphics.setColor(1, 1, 1)
     local centery = viewport.screenh / 2 - ui.hud_font:getHeight() / 2
     love.graphics.printf(
       {

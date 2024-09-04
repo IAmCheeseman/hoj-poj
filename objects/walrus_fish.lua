@@ -3,14 +3,14 @@ local Health = require("health")
 
 WalrusFish = struct()
 
+local walrus_fish_shadow = Sprite.create("assets/walrus_fish_shadow.png")
+walrus_fish_shadow:offset("center", "center")
+
 function WalrusFish:new()
   self.tags = {"enemy", "demon", "damagable", "soft_coll"}
 
   self.sprite = Sprite.create("assets/walrus_fish.ase")
   self.sprite:offset("center", "bottom")
-
-  self.shadow = Sprite.create("assets/player_shadow.png")
-  self.shadow:offset("center", "center")
 
   self.x = 0
   self.y = 0
@@ -71,14 +71,14 @@ function WalrusFish:step(dt)
 
   self.body:moveAndCollideWithTags({"env"})
 
-  for _, coll in ipairs(self.body:getAllCollisions({"player"})) do
-    local kbx, kby = vec.direction(self.x, self.y, coll.obj.x, coll.obj.y)
-    coll.obj.health:takeDamage({
-      damage = 5,
-      kbx = kbx,
-      kby = kby,
-    })
-  end
+  -- for _, coll in ipairs(self.body:getAllCollisions({"player"})) do
+  --   local kbx, kby = vec.direction(self.x, self.y, coll.obj.x, coll.obj.y)
+  --   coll.obj.health:takeDamage({
+  --     damage = 5,
+  --     kbx = kbx,
+  --     kby = kby,
+  --   })
+  -- end
 
   self.z_index = self.y
 
@@ -118,6 +118,6 @@ function WalrusFish:draw()
 
   self.sprite:setAnimation(anim)
 
-  self.shadow:draw(self.x, self.y)
+  walrus_fish_shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, scale, 1)
 end
