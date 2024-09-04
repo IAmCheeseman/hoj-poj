@@ -105,12 +105,11 @@ function WalrusFish:draw()
   love.graphics.setColor(1, 1, 1)
 
   local scale = self.vx < 0 and -1 or 1
-  local anim = "didle"
 
-  -- local anim = self.vy < 0 and "uwalk" or "dwalk"
-  -- if vec.lenSq(self.vx, self.vy) < 0.1^2 then
-  --   anim = self.vy < 0 and "uidle" or "didle"
-  -- end
+  local anim = "dwalk"--self.vy < 0 and "uwalk" or "dwalk"
+  if vec.lenSq(self.vx, self.vy) < 0.1^2 then
+    anim = "didle"--self.vy < 0 and "uidle" or "didle"
+  end
 
   if self.health:iFramesActive() then
     anim = "dhurt"--self.vy < 0 and "uhurt" or "dhurt"
