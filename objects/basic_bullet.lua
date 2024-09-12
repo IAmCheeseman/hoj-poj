@@ -1,20 +1,27 @@
 BasicBullet = struct()
 
 function BasicBullet:new(opts)
-  self.x = opts.x
-  self.y = opts.y
-  self.vx = math.cos(opts.angle) * opts.speed
-  self.vy = math.sin(opts.angle) * opts.speed
-  self.speed = opts.speed
-  self.rot = opts.angle
-  self.sprite = opts.sprite
+  self.x = opts.x or error("Expected x property")
+  self.y = opts.y or error("Expected y proeprty")
+  if opts.dirx and opts.diry then
+    self.vx = opts.dirx
+    self.vy = opts.diry
+    self.speed = vec.len(opts.dirx, opts.diry)
+    self.rot = vec.angle(opts.dirx, opts.diry)
+  else
+    self.vx = math.cos(opts.angle) * opts.speed
+    self.vy = math.sin(opts.angle) * opts.speed
+    self.speed = opts.speed or error("Expected speed property")
+    self.rot = opts.angle or error("Expected angle property")
+  end
+  self.sprite = opts.sprite or error("Expected sprite property")
   self.max_lifetime = opts.lifetime or 999
   self.lifetime = self.max_lifetime
-  self.damage = opts.damage
+  self.damage = opts.damage or error("Expected damage property")
   self.bounce = opts.bounce or 0
   self.bounce_damage_mod = opts.bounce_damage_mod or 1
   self.slow_down = opts.slow_down
-  self.ignore_tags = opts.ignore_tags
+  self.ignore_tags = opts.ignore_tags or {}
   self.animate_with_lifetime = opts.animate_with_lifetime
 
   local size = math.min(opts.sprite.width, opts.sprite.height)

@@ -1,3 +1,4 @@
+local weapon_common = require("weapon_common")
 local StateMachine = require("state_machine")
 local Health = require("health")
 
@@ -28,7 +29,10 @@ function WalrusFish:new()
 
   self.target = world.getSingleton("player")
 
-  self.s_pursue = PursueState:create(self)
+  self.s_pursue = PursueState:create(self, self.onPursueDirChanged)
+  self.s_jump = JumpAttackState:create(self, self.onJumpEnd)
+  self.s_jump.jump_before = 64
+  self.s_tele_jump = TeleState:create(self, self.s_jump, 1)
 
   self.sm = StateMachine.create(self, self.s_pursue)
   self.health = Health.create(self, 40, {
@@ -59,6 +63,36 @@ function WalrusFish:damage(attack)
   addBloodSplat("demon", self.x, self.y, 3)
 end
 
+function WalrusFish:onPursueDirChanged()
+  if viewport.isPointOnScreen(self.x, self.y) and love.math.random() < 0.2 then
+    self.sm:setState(self.s_tele_jump)
+  end
+end
+
+function WalrusFish:onJumpEnd()
+  self.sm:setState(self.s_pursue)
+
+  local bullets = 8
+  local base_angle = vec.angle(self.vx, self.vy)
+  for i=1, bullets do
+    local p = (i / bullets * 2) - 1
+    local angle = base_angle + p * (math.pi / 2)
+    local dirx = math.cos(angle)
+    local diry = math.sin(angle)
+    world.add(BasicBullet:create({
+      x = self.x + dirx * 24,
+      y = self.y + diry * 24,
+      dirx = dirx * 100,
+      diry = diry * 100,
+      sprite = weapon_common.enemy_bullet_sprite,
+      max_lifetime = 2,
+      slow_down = true,
+      damage = 5,
+      ignore_tags = {"enemy"},
+    }))
+  end
+end
+
 function WalrusFish:step(dt)
   self.sm:call("step", dt)
 
@@ -71,14 +105,16 @@ function WalrusFish:step(dt)
 
   self.body:moveAndCollideWithTags({"env"})
 
-  -- for _, coll in ipairs(self.body:getAllCollisions({"player"})) do
-  --   local kbx, kby = vec.direction(self.x, self.y, coll.obj.x, coll.obj.y)
-  --   coll.obj.health:takeDamage({
-  --     damage = 5,
-  --     kbx = kbx,
-  --     kby = kby,
-  --   })
-  -- end
+  if self.sm.current_state == self.s_jump then
+    for _, coll in ipairs(self.body:getAllCollisions({"player"})) do
+      local kbx, kby = vec.direction(self.x, self.y, coll.obj.x, coll.obj.y)
+      coll.obj.health:takeDamage({
+        damage = 4,
+        kbx = kbx,
+        kby = kby,
+      })
+    end
+  end
 
   self.z_index = self.y
 
@@ -111,6 +147,10 @@ function WalrusFish:draw()
     anim = "didle"--self.vy < 0 and "uidle" or "didle"
   end
 
+  if self.sm.current_state == self.s_tele_jump then
+    anim = "dtele"
+  end
+
   if self.health:iFramesActive() then
     anim = "dhurt"--self.vy < 0 and "uhurt" or "dhurt"
   end
@@ -118,5 +158,5 @@ function WalrusFish:draw()
   self.sprite:setAnimation(anim)
 
   walrus_fish_shadow:draw(self.x, self.y)
-  self.sprite:draw(self.x, self.y, 0, scale, 1)
+  self.sprite:draw(self.x, self.y - self.s_jump.jump_height, 0, scale, 1)
 end

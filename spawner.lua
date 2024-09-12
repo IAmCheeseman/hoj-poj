@@ -14,7 +14,7 @@ local enemies = {
   },
   {
     obj = WalrusFish,
-    chance = 1,
+    chance = 0.2,
   }
 }
 
