@@ -22,6 +22,9 @@ function WalrusFish:new()
   self.speed = 16
   self.accel = 20
 
+  self.max_attack_timer = 4
+  self.attack_timer = 2
+
   self.body = Body.create(
     self, shape.offsetRect(
       -self.sprite.offsetx, -self.sprite.offsety,
@@ -64,8 +67,11 @@ function WalrusFish:damage(attack)
 end
 
 function WalrusFish:onPursueDirChanged()
-  if viewport.isPointOnScreen(self.x, self.y) and love.math.random() < 0.2 then
+  if viewport.isPointOnScreen(self.x, self.y)
+  and love.math.random() < 0.2
+  and self.attack_timer < 0 then
     self.sm:setState(self.s_tele_jump)
+    self.attack_timer = self.max_attack_timer
   end
 end
 
@@ -95,6 +101,8 @@ end
 
 function WalrusFish:step(dt)
   self.sm:call("step", dt)
+
+  self.attack_timer = self.attack_timer - dt
 
   local pushx, pushy = softCollision(self)
   self.vx = self.vx + pushx * 0.3
