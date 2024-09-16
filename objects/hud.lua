@@ -53,11 +53,14 @@ function Hud:gui()
   end
 
   do -- Timer
+    local minutes = math.floor(getKillTimer() / 60)
+    local seconds = getKillTimer() - minutes * 60
+
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(
       {
         {1, 1, 1}, tr("hud_time") .. " ",
-        {0, 1, 0.5}, pad0(tostring(getKillTimer()), 2),
+        {0, 1, 0.5}, pad0(tostring(minutes), 2) .. ":" .. pad0(tostring(seconds), 2),
       },
       0, texty - ui.hud_font:getHeight(),
       viewport.screenw, "center")

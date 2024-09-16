@@ -1,4 +1,4 @@
-local max_time = 30
+local max_time = 60 * 7
 local timer = max_time
 
 local kill_worth = 1
