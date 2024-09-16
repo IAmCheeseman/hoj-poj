@@ -43,9 +43,14 @@ function stepSpawnTimer(dt)
       end
 
       local x, y
+      local give_up = 0
       repeat
         x = viewport.camx + love.math.random(-50, viewport.screenw + 50)
         y = viewport.camy + love.math.random(-50, viewport.screenh + 50)
+        give_up = give_up + 1
+        if give_up > 10 then
+          return
+        end
       until not tilemap:isPointOnTile(x, y) and not viewport.isPointOnScreen(x, y)
 
       enemy.x = x
