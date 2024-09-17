@@ -1,4 +1,4 @@
-local font_str = " AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzÑñ0123456789.,:;!?/\\*[]+-"
+local font_str = " AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzÑñ0123456789.,:;!?/\\*[]+-'\""
 
 local function bar(x, y, w, h, p, bg, fg)
   love.graphics.setColor(bg)
