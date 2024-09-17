@@ -332,19 +332,19 @@ function world.draw()
     return az < bz
   end)
 
+  viewport.apply()
   for i, obj in ipairs(draw_list) do
     obj_meta[obj].draw_list_index = i
-
     obj:draw()
   end
+  viewport.stop()
 
+  viewport.applyGui()
   for i, obj in ipairs(gui_list) do
     obj_meta[obj].gui_list_index = i
-    love.graphics.push()
-    love.graphics.origin()
     obj:gui()
-    love.graphics.pop()
   end
+  viewport.stopGui()
 end
 
 function world.addProc(obj)

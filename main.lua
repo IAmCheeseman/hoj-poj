@@ -102,8 +102,7 @@ function love.draw()
   if update_graphics then
     update_graphics = false
 
-    viewport.apply()
-    love.graphics.clear(0.05, 0.55, 0.45)
+    love.graphics.clear(0, 0, 0)
     world.draw()
 
     do
@@ -115,8 +114,6 @@ function love.draw()
       love.graphics.print(("(%d, %d)"):format(player.x, player.y), 0, 16)
       love.graphics.pop()
     end
-
-    viewport.stop()
   end
 
   love.graphics.setColor(1, 1, 1)

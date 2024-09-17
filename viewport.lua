@@ -5,7 +5,8 @@ local vp = {
   screenh = 180,
 }
 
-local canvas = love.graphics.newCanvas(vp.screenw, vp.screenh)
+local canvas = love.graphics.newCanvas(vp.screenw + 1, vp.screenh + 1)
+local guic = love.graphics.newCanvas(vp.screenw, vp.screenh)
 
 function getWorldMousePosition()
   local scale, x, y = vp.getDrawTranslation()
@@ -75,9 +76,24 @@ function vp.stop()
   love.graphics.setCanvas()
 end
 
+function vp.applyGui()
+  love.graphics.setCanvas(guic)
+  love.graphics.clear(0, 0, 0, 0)
+end
+
+function vp.stopGui()
+  love.graphics.setCanvas()
+end
+
 function vp.draw()
   local scale, x, y = vp.getDrawTranslation()
-  love.graphics.draw(canvas, x, y, 0, scale)
+  local _, fx = math.modf(viewport.camx)
+  local _, fy = math.modf(viewport.camy)
+  local q = love.graphics.newQuad(
+    fx, fy, viewport.screenw, viewport.screenh,
+    viewport.screenw + 1, viewport.screenh + 1)
+  love.graphics.draw(canvas, q, x, y, 0, scale)
+  love.graphics.draw(guic, x, y, 0, scale)
 end
 
 return vp
