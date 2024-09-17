@@ -322,13 +322,24 @@ function world.draw()
     return az < bz
   end)
 
+  table.sort(gui_list, function(a, b)
+    local az = a.z_index
+    local bz = b.z_index
+    if az == bz then
+      az = obj_meta[a].id
+      bz = obj_meta[b].id
+    end
+    return az < bz
+  end)
+
   for i, obj in ipairs(draw_list) do
     obj_meta[obj].draw_list_index = i
 
     obj:draw()
   end
 
-  for _, obj in ipairs(gui_list) do
+  for i, obj in ipairs(gui_list) do
+    obj_meta[obj].gui_list_index = i
     love.graphics.push()
     love.graphics.origin()
     obj:gui()
