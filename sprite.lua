@@ -8,7 +8,7 @@ local chunk_tag_data = 0x2018
 local Sprite = {}
 Sprite.__index = Sprite
 
-local atlas = SpriteAtlas.create(1024, 1024)
+local atlas = SpriteAtlas.create(512, 515)
 Sprite.atlas = atlas
 
 function Sprite.create(path)
@@ -180,6 +180,7 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
   repeat
     local offset = i
     local layer = self.layers[i]
+    print(i, layer.visible)
 
     if layer.visible then
       atlas:draw(
@@ -190,6 +191,7 @@ function Sprite:draw(x, y, r, sx, sy, kx, ky)
 
     i = i + 1
   until i > layer_count
+  print("---")
 end
 
 return Sprite
