@@ -67,7 +67,7 @@ function Gunner:onIdleTimerOver()
     x = self.x + math.cos(angle) * 8,
     y = self.y + math.sin(angle) * 8 - self.pistol_height,
     angle = angle,
-    damage = 7,
+    damage = 1,
     sprite = weapon_common.enemy_bullet_sprite,
   })
   sound.play("gunner_shoot", true)

@@ -93,7 +93,7 @@ function WalrusFish:onJumpEnd()
       sprite = weapon_common.enemy_bullet_sprite,
       max_lifetime = 2,
       slow_down = true,
-      damage = 5,
+      damage = 1,
       ignore_tags = {"enemy"},
     }))
   end
@@ -117,7 +117,7 @@ function WalrusFish:step(dt)
     for _, coll in ipairs(self.body:getAllCollisions({"player"})) do
       local kbx, kby = vec.direction(self.x, self.y, coll.obj.x, coll.obj.y)
       coll.obj.health:takeDamage({
-        damage = 4,
+        damage = 2,
         kbx = kbx,
         kby = kby,
       })

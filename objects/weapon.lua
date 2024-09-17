@@ -119,13 +119,3 @@ function Weapon:draw()
   local weapon = weapons[self.type]
   weapon.draw(weapon.sprite, self)
 end
-
-function Weapon:gui()
-  local weapon = weapons[self.type]
-  local p = math.max(self.reload / weapon.reload, 0)
-
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.rectangle("fill", 30, 1, 32, 5)
-  love.graphics.setColor(1, 1, 0)
-  love.graphics.rectangle("fill", 30, 1, 32 * p, 5)
-end

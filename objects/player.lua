@@ -53,7 +53,7 @@ function Player:new()
   self.hand = "pistol"
   self.offhand = "shotgun"
 
-  self.health = Health.create(self, 20, {
+  self.health = Health.create(self, 5, {
     dead = self.dead,
     damaged = self.damage
   })
@@ -171,25 +171,9 @@ function Player:step(dt)
   end
 end
 
-local function bar(x, y, w, h, p, bg, fg)
-  love.graphics.setColor(bg)
-  love.graphics.rectangle("fill", x, y, w, h)
-
-  love.graphics.setColor(fg)
-  love.graphics.rectangle("fill", x, y, w * p, h)
-end
-
 function Player:draw()
   love.graphics.setColor(1, 1, 1)
   self.shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
-
-  local hpw = 16
-  local hph = 2
-  local hpp = self.health.hp / self.health.max_hp
-  bar(
-    self.x - hpw / 2, self.y + 3, hpw, hph,
-    hpp,
-    {0, 0, 0}, {1, 0, 0})
 end
 

@@ -3,6 +3,8 @@ local weapons = require("weapons")
 
 Hud = struct()
 
+local heart = Sprite.create("assets/heart.ase")
+
 local function pad0(str, zeros)
   local to_add = math.max(zeros - #str, 0)
   str = ("0"):rep(to_add) .. str
@@ -18,38 +20,21 @@ function Hud:gui()
   end
 
   love.graphics.setFont(ui.hud_font)
-  local texty = viewport.screenh - ui.hud_font:getHeight() * 1.25
+  local texty = 0--viewport.screenh - ui.hud_font:getHeight() * 1.25
 
-  do -- Score
-    local combo_time, max_combo_time = getComboTime()
-    local comboy = texty - 3
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle("fill", 1, comboy, 64, 2)
-    love.graphics.setColor(0, 1, 0)
-    love.graphics.rectangle("fill", 1, comboy, 64 * (combo_time / max_combo_time), 2)
-
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(
-      {
-        {1, 1, 1}, tr("hud_score") .. " ",
-        {1, 1, 0}, pad0(tostring(getScore()), 7),
-        {0, 1, 0}, " *" .. tostring(getCombo()),
-      },
-      1, texty,
-      viewport.screenw, "left")
-  end
 
   do -- HP
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(
-      {
-        {1, 1, 1}, tr("hud_hp") .. " ",
-        {1, 0, 0}, pad0(tostring(player.health.hp), 2),
-        {1, 1, 1}, "/",
-        {0.5, 0.5, 0.5}, tostring(player.health.max_hp),
-      },
-      0, texty,
-      viewport.screenw, "center")
+    for i=0, player.health.max_hp - 1 do
+      if player.health.hp > i then
+        heart.frame = 1
+      else
+        heart.frame = 2
+      end
+      heart:draw(2 + i * heart.width, 2)
+    end
+
+    texty = texty + math.floor(heart.height * 1.2)
   end
 
   do -- Timer
@@ -59,10 +44,9 @@ function Hud:gui()
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(
       {
-        {1, 1, 1}, tr("hud_time") .. " ",
         {0, 1, 0.5}, pad0(tostring(minutes), 2) .. ":" .. pad0(tostring(seconds), 2),
       },
-      0, texty - ui.hud_font:getHeight(),
+      0, 0,
       viewport.screenw, "center")
   end
 
@@ -83,22 +67,22 @@ function Hud:gui()
     local first_width = math.max(ui.hud_font:getWidth(first_text) + 2, limit)
     local other_width = math.max(ui.hud_font:getWidth(other_text) + 2, limit)
 
-    local firstx = viewport.screenw - other_width - first_width
-    local otherx = viewport.screenw - other_width
+    local firsty = texty
+    local othery = texty + 8
 
     love.graphics.printf(
       {
-        {1, 1, 1}, first_name .. " ",
-        {1, 1, 0}, first_ammo,
+        {1, 1, 0}, first_ammo .. " ",
+        {1, 1, 1}, first_name,
       },
-      firstx, texty, first_width, "center")
+      2, firsty, first_width, "center")
 
     love.graphics.printf(
       {
-        {0.5, 0.5, 0.5}, other_name .. " ",
-        {0.6, 0.4, 0}, other_ammo,
+        {0.6, 0.4, 0}, other_ammo .. " ",
+        {0.5, 0.5, 0.5}, other_name,
       },
-      otherx, texty, other_width, "center")
+      2, othery, other_width, "center")
   end
 
   if player.health.dead then

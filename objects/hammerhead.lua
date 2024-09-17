@@ -74,7 +74,7 @@ function Hammerhead:step(dt)
   for _, coll in ipairs(self.body:getAllCollisions({"player"})) do
     local kbx, kby = vec.direction(self.x, self.y, coll.obj.x, coll.obj.y)
     coll.obj.health:takeDamage({
-      damage = 5,
+      damage = 1,
       kbx = kbx,
       kby = kby,
     })

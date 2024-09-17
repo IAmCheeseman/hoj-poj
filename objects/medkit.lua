@@ -21,9 +21,9 @@ function MedKit:step(dt)
   local player = world.getSingleton("player")
   if player then
     if vec.distanceSq(self.x, self.y, player.x, player.y) < 16^2 then
-      player.health:heal(5)
+      player.health:heal(1)
 
-      local te = TextEffect:create("+5 HP!", self.x, self.y, {1, 0.2, 0.3})
+      local te = TextEffect:create("+1 HP!", self.x, self.y, {1, 0.2, 0.3})
       world.add(te)
 
       world.rem(self)
