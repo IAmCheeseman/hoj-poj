@@ -2,14 +2,14 @@ local weapon_common = require("weapon_common")
 local StateMachine = require("state_machine")
 local Health = require("health")
 
-sound.load("redneck_gunner_shoot", "assets/redneck_gunner_shoot.wav")
+sound.load("gunner_shoot", "assets/gunner_shoot.wav")
 
-RedneckGunner = struct()
+Gunner = struct()
 
-function RedneckGunner:new()
+function Gunner:new()
   self.tags = {"enemy", "soft_coll", "damagable"}
 
-  self.sprite = Sprite.create("assets/redneck_gunner.ase")
+  self.sprite = Sprite.create("assets/gunner.ase")
   self.sprite:offset("center", "bottom")
 
   self.pistol = Sprite.create("assets/pistol.png")
@@ -48,13 +48,13 @@ function RedneckGunner:new()
   })
 end
 
-function RedneckGunner:onPursueDirection()
+function Gunner:onPursueDirection()
   if viewport.isPointOnScreen(self.x, self.y) then
     self.sm:setState(self.s_idle)
   end
 end
 
-function RedneckGunner:onIdleTimerOver()
+function Gunner:onIdleTimerOver()
   self.sm:setState(self.s_pursue)
 
   local angle = vec.angleBetween(
@@ -70,10 +70,10 @@ function RedneckGunner:onIdleTimerOver()
     damage = 7,
     sprite = weapon_common.enemy_bullet_sprite,
   })
-  sound.play("redneck_gunner_shoot", true)
+  sound.play("gunner_shoot", true)
 end
 
-function RedneckGunner:dead(attack)
+function Gunner:dead(attack)
   world.rem(self)
 
   self.sprite:setAnimation("dead")
@@ -88,14 +88,14 @@ function RedneckGunner:dead(attack)
   addToKillTimer()
 end
 
-function RedneckGunner:damage(attack)
+function Gunner:damage(attack)
   self.vx = self.vx + attack.kbx
   self.vy = self.vy + attack.kby
 
   addBloodSplat("earthling", self.x, self.y, 3)
 end
 
-function RedneckGunner:step(dt)
+function Gunner:step(dt)
   self.sm:call("step", dt)
 
   if self.sm.current_state == self.s_idle then
@@ -123,7 +123,7 @@ function RedneckGunner:step(dt)
   self.sprite:update(dt)
 end
 
-function RedneckGunner:draw()
+function Gunner:draw()
   love.graphics.setColor(1, 1, 1)
 
   -- TODO: this code is basically the same between the player, hammerhead, and

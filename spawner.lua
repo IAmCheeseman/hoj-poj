@@ -9,7 +9,7 @@ local enemies = {
     chance = 1,
   },
   {
-    obj = RedneckGunner,
+    obj = Gunner,
     chance = 0.75,
   },
   {
