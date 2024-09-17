@@ -18,7 +18,7 @@ function Hammerhead:new()
   self.vx = 0
   self.vy = 0
 
-  self.speed = 64
+  self.speed = 52
   self.accel = 20
 
   self.body = Body.create(

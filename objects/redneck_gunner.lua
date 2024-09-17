@@ -26,7 +26,7 @@ function Gunner:new()
   self.vx = 0
   self.vy = 0
 
-  self.speed = 32
+  self.speed = 48
   self.accel = 20
 
   self.body = Body.create(
