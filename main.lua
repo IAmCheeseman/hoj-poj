@@ -84,9 +84,11 @@ function love.update(dt)
 
   world.update(dt)
 
-  stepCombo(dt)
-  stepSpawnTimer(dt)
-  stepKillTimer(dt)
+  if not world.is_paused then
+    stepCombo(dt)
+    stepSpawnTimer(dt)
+    stepKillTimer(dt)
+  end
 
   modding.postStep()
   camera.step(dt)
