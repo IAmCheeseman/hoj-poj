@@ -147,13 +147,13 @@ function WalrusFish:draw()
 
   local scale = self.vx < 0 and -1 or 1
 
-  local anim = "dwalk"--self.vy < 0 and "uwalk" or "dwalk"
+  local anim = self.vy < 0 and "uwalk" or "dwalk"
   if vec.lenSq(self.vx, self.vy) < 0.1^2 then
-    anim = "didle"--self.vy < 0 and "uidle" or "didle"
+    anim = self.vy < 0 and "uidle" or "didle"
   end
 
   if self.sm.current_state == self.s_tele_jump then
-    anim = "dtele"
+    anim = self.vy < 0 and "utele" or "dtele"
   end
 
   if self.health:iFramesActive() then
