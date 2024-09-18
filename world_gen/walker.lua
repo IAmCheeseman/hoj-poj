@@ -14,10 +14,9 @@ function Walker.create(aabbx, aabby, aabbw, aabbh)
   w.dirx = 0
   w.diry = 0
   w.turn_chance = 0.15
-  w.step_distance = 3
   w.step_size_min = 1
-  w.step_size_max = 3
-  w.max_steps_per_dir = 10
+  w.step_size_max = 1
+  w.max_steps_per_dir = 5
   w.aabbx = aabbx
   w.aabby = aabby
   w.aabbw = aabbw

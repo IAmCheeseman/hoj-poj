@@ -28,6 +28,7 @@ loadDirectory("weapons")
 loadDirectory("states")
 loadDirectory("rooms")
 
+local map = require("world_gen.map")
 local modding = require("modding")
 modding.loadMods()
 
@@ -84,6 +85,10 @@ function love.draw()
 
   love.graphics.setColor(1, 1, 1)
   viewport.draw()
+
+  if map_img then
+    love.graphics.draw(map_img, 0, 0, 0, 4)
+  end
 end
 
 function love.quit()
