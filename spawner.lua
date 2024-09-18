@@ -55,7 +55,7 @@ function spawnEnemies()
     return
   end
 
-  local enemyc = 15 + difficulty * 2
+  local enemyc = 15 + (difficulty - 1) * 2
   for _=1, enemyc do
     local x, y
     repeat
