@@ -75,11 +75,11 @@ end
 function WalrusFish:onJumpEnd()
   self.sm:setState(self.s_pursue)
 
-  local bullets = 8
+  local bullets = 3
   local base_angle = vec.angle(self.vx, self.vy)
   for i=1, bullets do
     local p = (i / bullets * 2) - 1
-    local angle = base_angle + p * (math.pi / 2)
+    local angle = base_angle + p * (math.pi / 8)
     local dirx = math.cos(angle)
     local diry = math.sin(angle)
     world.add(BasicBullet:create({
