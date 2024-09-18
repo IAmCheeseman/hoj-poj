@@ -33,6 +33,7 @@ local modding = require("modding")
 modding.loadMods()
 
 action.define("reset", "key", "r")
+action.define("next", "key", "n")
 
 world.add(Cursor:create())
 world.add(PauseScreen:create())
@@ -54,6 +55,10 @@ function love.update(dt)
 
     if action.isJustDown("reset") then
       Forest:switch({new_run=true})
+    end
+
+    if action.isJustDown("next") then
+      Forest:switch({new_run=false})
     end
   end
 

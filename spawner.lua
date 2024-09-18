@@ -1,8 +1,16 @@
 local map = require("world_gen.map")
 
-local difficulty = 1
+local difficulty = 0
 
 local enemies = {}
+
+function nextDifficulty()
+  difficulty = difficulty + 1
+end
+
+function resetDifficulty()
+  difficulty = 0
+end
 
 function addEnemyToSpawner(obj, chance, level)
   table.insert(enemies, {

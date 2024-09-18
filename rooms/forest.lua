@@ -7,6 +7,9 @@ function Forest:init(args)
   if args.new_run then
     resetAmmo()
     resetKillTimer()
+    resetDifficulty()
+  else
+    nextDifficulty()
   end
 
   local player = Player:create()
