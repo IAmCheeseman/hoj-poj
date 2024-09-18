@@ -115,5 +115,4 @@ function Hammerhead:draw()
 
   self.shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, scale, 1)
-  self.body:draw()
 end

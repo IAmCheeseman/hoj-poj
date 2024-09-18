@@ -138,5 +138,4 @@ function Gunner:draw()
   self.shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, self.sprite_scale, 1)
   self.pistol:draw(self.x, self.y - self.pistol_height, self.pistol_rot)
-  self.body:draw()
 end
