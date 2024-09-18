@@ -45,6 +45,10 @@ function addBloodSplat(blood_type, x, y, count, spread)
   end
 end
 
+function BloodLayer:init()
+  batch:clear()
+end
+
 function BloodLayer:draw()
   self.z_index = -1
 

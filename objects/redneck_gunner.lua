@@ -85,7 +85,6 @@ function Gunner:dead(attack)
   world.add(corpse)
 
   addScore(5, self.x, self.y)
-  addToKillTimer()
 end
 
 function Gunner:damage(attack)

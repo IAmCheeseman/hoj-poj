@@ -3,7 +3,14 @@ local map = require("world_gen.map")
 
 Forest = Room.create()
 
-function Forest:init()
+function Forest:init(args)
+  if args.new_run then
+    resetAmmo()
+    resetKillTimer()
+  end
+
+  local player = Player:create()
+  world.add(player)
   world.add(BloodLayer:create())
   world.add(Background:create("assets/grass.png"))
   world.add(DroppedWeapon:create("swiss_rifle", -50, 50))
@@ -40,9 +47,6 @@ function Forest:init()
   tilemap_cover.show_above = true
   world.add(tilemap_cover)
 
-  local player = world.getSingleton("player")
-  if player then
-    player.x = px * tilemap.tile_width
-    player.y = py * tilemap.tile_height
-  end
+  player.x = px * tilemap.tile_width
+  player.y = py * tilemap.tile_height
 end

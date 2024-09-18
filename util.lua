@@ -21,6 +21,41 @@ function tablex.swapRem(t, i)
   return old, new
 end
 
+function tablex.print(t, i, ts)
+  i = i or 0
+  ts = ts or {}
+  if ts[t] then
+    io.write("{...}")
+    return
+  end
+  ts[t] = true
+
+  io.write("{\n")
+  for k, v in pairs(t) do
+    io.write(("\t"):rep(i + 1))
+    if type(k) == "string" then
+      io.write(k)
+    else
+      io.write("[" .. tostring(k) .. "]")
+    end
+
+    if type(v) == "table" then
+      ts[v] = true
+      io.write(" = ")
+      tablex.print(v, i + 1, ts)
+      io.write(", \n")
+    elseif type(v) == "string" then
+      io.write(" = \"" .. v .. "\",\n")
+    else
+      io.write(" = " .. tostring(v) .. ",\n")
+    end
+  end
+  io.write("}")
+  if i == 0 then
+    io.write("\n")
+  end
+end
+
 mathx = {}
 
 mathx.tau = math.pi * 2

@@ -27,20 +27,19 @@ require("translations")
 require("score")
 require("kill_timer")
 require("spawner")
+require("ammo")
 
 local modding = require("modding")
 modding.loadMods()
 
 action.define("reset", "key", "r")
 
-local player = Player:create()
-world.add(player)
 world.add(Cursor:create())
 world.add(PauseScreen:create())
 world.flush()
 world.flush() -- FIXME: have to flush twice so tags are added correctly
 
-Forest:switch()
+Forest:switch({new_run=true})
 
 function love.update(dt)
   total_time = total_time + dt
@@ -56,7 +55,7 @@ function love.update(dt)
     stepKillTimer(dt)
 
     if action.isJustDown("reset") then
-      Forest:switch()
+      Forest:switch({new_run=true})
     end
   end
 
@@ -81,7 +80,6 @@ function love.draw()
       love.graphics.origin()
       love.graphics.print("FPS: " .. love.timer.getFPS())
       love.graphics.print("Draw calls: " .. stats.drawcalls, 0, 8)
-      love.graphics.print(("(%d, %d)"):format(player.x, player.y), 0, 16)
       love.graphics.pop()
     end
   end

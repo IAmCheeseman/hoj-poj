@@ -104,23 +104,25 @@ end
 local function flushTagRem()
   for _, tag in ipairs(tag_remq) do
     local meta = obj_meta[tag.obj]
-    local obj_tags = meta.tags
+    if meta then
+      local obj_tags = meta.tags
 
-    local tagt = tags[tag.name]
-    local _, new = tablex.swapRem(tagt, obj_tags[tag.name])
+      local tagt = tags[tag.name]
+      local _, new = tablex.swapRem(tagt, obj_tags[tag.name])
 
-    -- Keep indices correct
-    if new then
-      local new_meta = obj_meta[new]
-      new_meta.tags[tag.name] = obj_tags[tag.name]
+      -- Keep indices correct
+      if new then
+        local new_meta = obj_meta[new]
+        new_meta.tags[tag.name] = obj_tags[tag.name]
+      end
+
+      -- Don't keep useless memory around
+      if #tagt == 0 then
+        tags[tag.name] = nil
+      end
+
+      obj_tags[tag.name] = nil
     end
-
-    -- Don't keep useless memory around
-    if #tagt == 0 then
-      tags[tag.name] = nil
-    end
-
-    obj_tags[tag.name] = nil
   end
 
   tag_remq = {}
@@ -148,7 +150,6 @@ local function flushAdd()
       -- index = #objs,
       id = next_id,
       tags = {},
-      children = {},
     }
     obj_meta[obj] = meta
 
@@ -183,19 +184,6 @@ local function flushAdd()
   add_set = {}
 end
 
-local function updateParent(obj)
-  local meta = obj_meta[obj]
-  local parent = meta.parent
-  local parent_meta = obj_meta[parent]
-
-  local _, new = tablex.swapRem(parent_meta.children, meta.child_index)
-
-  -- Keep indices correct
-  if new then
-    obj_meta[new].child_index = meta.child_index
-  end
-end
-
 local function removeFromDrawList(dl, m, idx_k)
   local _, new = tablex.swapRem(dl, m[idx_k])
 
@@ -219,21 +207,6 @@ local function flushRem()
 
     if meta.gui_list_index then
       removeFromDrawList(gui_list, meta, "gui_list_index")
-    end
-
-    -- Remove children
-    for _, child in ipairs(meta.children) do
-      local child_meta = obj_meta[child]
-
-      -- We're getting rid of the parent; it no longer exists
-      child_meta.parent = nil
-      child_meta.child_index = nil
-
-      world.rem(child)
-    end
-
-    if meta.parent then
-      updateParent(obj)
     end
 
     obj_meta[obj] = nil
@@ -299,10 +272,13 @@ local function canStep(obj)
   return not world.is_paused or obj.step_while_paused
 end
 
-function world.clear()
+function world.clear(t)
+  t = t or {}
   for obj, _ in pairs(obj_meta) do
     if not obj.persistent then
       world.rem(obj)
+    else
+      try(obj.worldCleared, obj, t)
     end
   end
 end
@@ -399,27 +375,6 @@ end
 function world.isTagged(obj, tag)
   local meta = obj_meta[obj] or error("Object is not added to the world")
   return meta.tags[tag] ~= nil
-end
-
-function world.addChildTo(parent, child)
-  local parent_meta = obj_meta[parent] or error("Parent is not added to the world.")
-  local child_meta = obj_meta[parent] or error("Child is not added to the world.")
-  if child_meta.parent then
-    error("Child already has a parent.")
-  end
-
-  table.insert(parent_meta.children, child)
-  child_meta.parent = parent
-  child_meta.child_index = #parent_meta.children
-end
-
-function world.getParent(child)
-  local meta = obj_meta[child]
-  if not meta then
-    error("Object is not added to the world.")
-  end
-
-  return meta.parent
 end
 
 return world

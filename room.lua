@@ -6,9 +6,9 @@ function Room.create()
   return r
 end
 
-function Room:switch()
-  world.clear()
-  try(self.init, self)
+function Room:switch(args)
+  world.clear(args)
+  try(self.init, self, args)
 end
 
 return Room

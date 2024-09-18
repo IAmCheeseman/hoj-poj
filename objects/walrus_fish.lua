@@ -56,7 +56,6 @@ function WalrusFish:dead(attack)
   world.add(corpse)
 
   addScore(6, self.x, self.y - self.sprite.height)
-  addToKillTimer()
 end
 
 function WalrusFish:damage(attack)

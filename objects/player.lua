@@ -12,24 +12,7 @@ action.define("fire", "mouse", 1)
 
 sound.load("player_hit", "assets/hit.wav", 1)
 
-ammo = {
-  bullets = {
-    name = "ammo_bullets",
-    amount = 32,
-    crate_amount = 20,
-    max = 256
-  },
-  shells = {
-    name = "ammo_shells",
-    amount = 24,
-    crate_amount = 6,
-    max = 64
-  },
-}
-
 function Player:new()
-  self.persistent = true
-
   self.tags = {"player", "damagable"}
 
   self.sprite = Sprite.create("assets/player.ase")
@@ -65,19 +48,18 @@ end
 
 function Player:added()
   self.weapon = Weapon:create(self, self.hand)
-  self.weapon.persistent = true
 
   world.add(self.weapon)
-  world.addChildTo(self, self.weapon)
 
   local hud = Hud:create(self.health)
-  hud.persistent = true
   world.add(hud)
 end
 
 function Player:dead()
-  world.remProc(self)
-  world.remDrawProc(self)
+  world.rem(self)
+end
+
+function Player:removed()
   world.rem(self.weapon)
 end
 

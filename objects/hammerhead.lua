@@ -49,7 +49,6 @@ function Hammerhead:dead(attack)
   world.add(corpse)
 
   addScore(6, self.x, self.y - self.sprite.height)
-  addToKillTimer()
 end
 
 function Hammerhead:damage(attack)

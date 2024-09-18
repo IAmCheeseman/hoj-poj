@@ -21,6 +21,12 @@ function Health.create(anchor, max, vtable)
   return h
 end
 
+function Health:reset()
+  self.dead = false
+  self.hp = self.max_hp
+  self.last_damage = -math.huge
+end
+
 function Health:kill()
   self.dead = true
   try(self.vtable.dead, self.anchor, {damage=0, kbx=0, kby=0})
