@@ -16,17 +16,17 @@ Sprite = require("sprite")
 camera = require("camera")
 log = require("log")
 
+require("translations")
+require("kill_timer")
+require("spawner")
+require("ammo")
+
 local loadDirectory = require("load_directory")
 loadDirectory("objects")
 loadDirectory("functions")
 loadDirectory("weapons")
 loadDirectory("states")
 loadDirectory("rooms")
-
-require("translations")
-require("kill_timer")
-require("spawner")
-require("ammo")
 
 local modding = require("modding")
 modding.loadMods()

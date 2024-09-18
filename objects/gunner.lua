@@ -6,6 +6,8 @@ sound.load("gunner_shoot", "assets/gunner_shoot.wav")
 
 Gunner = struct()
 
+addEnemyToSpawner(Gunner, 0.75, 1)
+
 function Gunner:new()
   self.tags = {"enemy", "soft_coll", "damagable"}
 

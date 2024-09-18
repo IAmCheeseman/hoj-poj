@@ -3,20 +3,15 @@ local base_time = 0.5
 
 local spawn_timer = base_time
 
-local enemies = {
-  {
-    obj = Hammerhead,
-    chance = 1,
-  },
-  {
-    obj = Gunner,
-    chance = 0.75,
-  },
-  {
-    obj = WalrusFish,
-    chance = 0.2,
-  }
-}
+local enemies = {}
+
+function addEnemyToSpawner(obj, chance, level)
+  table.insert(enemies, {
+    obj = obj,
+    chance = chance,
+    level = level,
+  })
+end
 
 local function getSpawnTime()
   return math.floor(base_time / (difficulty / 3))

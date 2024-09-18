@@ -3,6 +3,8 @@ local Health = require("health")
 
 Hammerhead = struct()
 
+addEnemyToSpawner(Hammerhead, 1, 1)
+
 function Hammerhead:new()
   self.tags = {"enemy", "alien", "damagable", "soft_coll"}
 

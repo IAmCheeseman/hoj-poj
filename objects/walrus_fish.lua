@@ -4,6 +4,8 @@ local Health = require("health")
 
 WalrusFish = struct()
 
+addEnemyToSpawner(WalrusFish, 0.2, 1)
+
 local walrus_fish_shadow = Sprite.create("assets/walrus_fish_shadow.png")
 walrus_fish_shadow:offset("center", "center")
 
