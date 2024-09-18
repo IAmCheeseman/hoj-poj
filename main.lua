@@ -28,7 +28,6 @@ loadDirectory("weapons")
 loadDirectory("states")
 loadDirectory("rooms")
 
-local map = require("world_gen.map")
 local modding = require("modding")
 modding.loadMods()
 
@@ -56,7 +55,7 @@ function love.update(dt)
       Forest:switch({new_run=true})
     end
 
-    if action.isJustDown("next") then
+    if action.isJustDown("next") or #world.getTagged("enemy") == 0 then
       Forest:switch({new_run=false})
     end
   end

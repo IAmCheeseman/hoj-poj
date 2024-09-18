@@ -28,6 +28,15 @@ local function selectEnemy()
   return selection
 end
 
+local function spawnPointIsValid(x, y, tilemap)
+  return
+        not tilemap:isPointOnTile(x, y)
+    and not tilemap:isPointOnTile(x + tilemap.tile_width, y)
+    and not tilemap:isPointOnTile(x, y + tilemap.tile_height)
+    and not tilemap:isPointOnTile(x - tilemap.tile_width, y)
+    and not tilemap:isPointOnTile(x, y - tilemap.tile_height)
+end
+
 function spawnEnemies()
   local px = 0
   local py = 0
@@ -48,7 +57,7 @@ function spawnEnemies()
     repeat
       x = love.math.random(map.sx, map.ex) * tilemap.tile_width
       y = love.math.random(map.sy, map.ey) * tilemap.tile_height
-    until not tilemap:isPointOnTile(x, y) and vec.distanceSq(x, y, px, py) > (16 * 8)^2
+    until spawnPointIsValid(x, y, tilemap) and vec.distanceSq(x, y, px, py) > (16 * 5)^2
 
     local enemy = selectEnemy().obj:create()
     enemy.x = x

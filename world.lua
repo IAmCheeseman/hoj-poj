@@ -273,6 +273,16 @@ local function canStep(obj)
 end
 
 function world.clear(t)
+  addq = {}
+  remq = {}
+  rem_set = {}
+  proc_set_addq = {}
+  proc_set_remq = {}
+  draw_list_addq = {}
+  draw_list_remq = {}
+  gui_list_addq = {}
+  gui_list_remq = {}
+
   t = t or {}
   for obj, _ in pairs(obj_meta) do
     if not obj.persistent then
