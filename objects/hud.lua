@@ -12,21 +12,13 @@ local function pad0(str, zeros)
 end
 
 function Hud:gui()
-  local player = world.getSingleton("player") or self.player
-  self.player = player
-
-  if not player then
-    return
-  end
-
   love.graphics.setFont(ui.hud_font)
-  local texty = 0--viewport.screenh - ui.hud_font:getHeight() * 1.25
-
+  local texty = 0
 
   do -- HP
     love.graphics.setColor(1, 1, 1)
-    for i=0, player.health.max_hp - 1 do
-      if player.health.hp > i then
+    for i=0, player_data.health.max_hp - 1 do
+      if player_data.health.hp > i then
         heart.frame = 1
       else
         heart.frame = 2
@@ -53,8 +45,8 @@ function Hud:gui()
   do -- Weapons
     local limit = 48 / 2
 
-    local first = weapons[player.hand]
-    local other = weapons[player.offhand]
+    local first = weapons[player_data.hand]
+    local other = weapons[player_data.offhand]
 
     local first_name = tr(first.name)
     local other_name = tr(other.name)
@@ -85,7 +77,7 @@ function Hud:gui()
       2, othery, other_width, "center")
   end
 
-  if player.health.dead then
+  if player_data.health.dead then
     love.graphics.setColor(0, 0, 0, 0.75)
     love.graphics.rectangle("fill", 0, 0, viewport.screenw, viewport.screenh)
 

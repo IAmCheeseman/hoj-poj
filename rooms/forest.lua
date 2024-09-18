@@ -8,6 +8,7 @@ function Forest:init(args)
     resetAmmo()
     resetKillTimer()
     resetDifficulty()
+    resetPlayerData()
   else
     nextDifficulty()
   end
@@ -66,5 +67,5 @@ function Forest:init(args)
   world.flush()
   world.flush() -- FIXME
 
-  spawnEnemies(1)
+  spawnEnemies()
 end

@@ -12,8 +12,13 @@ action.define("fire", "mouse", 1)
 
 sound.load("player_hit", "assets/hit.wav", 1)
 
+player_data = {}
+
 function Player:new()
   self.tags = {"player", "damagable"}
+
+  player_data.health.anchor = self
+  self.health = player_data.health
 
   self.sprite = Sprite.create("assets/player.ase")
   self.sprite:offset("center", "bottom")
@@ -34,20 +39,10 @@ function Player:new()
   self.frict = 12
 
   self.cam_accel = 20
-
-  self.hand = "pistol"
-  self.offhand = "shotgun"
-
-  self.health = Health.create(self, 5, {
-    dead = self.dead,
-    damaged = self.damage
-  })
-
-  self.health.iframes_prevent_damage = true
 end
 
 function Player:added()
-  self.weapon = Weapon:create(self, self.hand)
+  self.weapon = Weapon:create(self, player_data.hand)
 
   world.add(self.weapon)
 
@@ -71,11 +66,11 @@ function Player:damage()
 end
 
 function Player:swapWeapons()
-  local temp = self.hand
-  self.hand = self.offhand
-  self.offhand = temp
+  local temp = player_data.hand
+  player_data.hand = player_data.offhand
+  player_data.offhand = temp
 
-  self.weapon.type = self.hand
+  self.weapon.type = player_data.hand
   self.weapon:reset()
 end
 
@@ -128,16 +123,16 @@ function Player:step(dt)
 
     if action.isJustDown("pickup") then
       local temp = closest.type
-      closest.type = self.hand
-      self.hand = temp
+      closest.type = player_data.hand
+      player_data.hand = temp
 
-      self.weapon.type = self.hand
+      self.weapon.type = player_data.hand
       self.weapon:reset()
     end
   end
 
   if getKillTimer() <= 0 then
-    self.health:kill()
+    player_data.health:kill()
   end
 
   -- Update graphics
@@ -150,7 +145,7 @@ function Player:step(dt)
       anim = my < self.y and "uidle" or "didle"
     end
 
-    if self.health:iFramesActive() then
+    if player_data.health:iFramesActive() then
       anim = "hurt"
     end
 
@@ -165,3 +160,15 @@ function Player:draw()
   self.sprite:draw(self.x, self.y, 0, self.scalex, 1)
 end
 
+function resetPlayerData()
+  player_data.hand = "pistol"
+  player_data.offhand = "shotgun"
+
+  player_data.health = Health.create(nil, 5, {
+    dead = Player.dead,
+    damaged = Player.damage,
+  })
+  player_data.health.iframes_prevent_damage = true
+end
+
+resetPlayerData()

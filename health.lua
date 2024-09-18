@@ -40,21 +40,19 @@ function Health:dropCrate()
   local chance = 1/6
   local give_medkit = false
 
-  local player = world.getSingleton("player")
-  if player then
-    local hand_ammo_type = weapons[player.hand].ammo
-    local offhand_ammo_type = weapons[player.offhand].ammo
-    local hand_ammo = ammo[hand_ammo_type]
-    local offhand_ammo = ammo[offhand_ammo_type]
+  local hand_ammo_type = weapons[player_data.hand].ammo
+  local offhand_ammo_type = weapons[player_data.offhand].ammo
+  local hand_ammo = ammo[hand_ammo_type]
+  local offhand_ammo = ammo[offhand_ammo_type]
 
-    if hand_ammo.amount / hand_ammo.max < low_ammo_percentage
+  if hand_ammo.amount / hand_ammo.max < low_ammo_percentage
     or offhand_ammo.amount / offhand_ammo.max < low_ammo_percentage then
-      chance = 1/4
-    end
+    chance = 1/4
+  end
 
-    if player.health.hp < player.health.max_hp and love.math.random() < 1/3 then
-      give_medkit = true
-    end
+  if player_data.health.hp < player_data.health.max_hp
+    and love.math.random() < 1/3 then
+    give_medkit = true
   end
 
   if love.math.random() > chance then

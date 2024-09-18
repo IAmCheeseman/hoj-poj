@@ -12,8 +12,8 @@ function AmmoCrate:new()
   self.lifetime = 6
 end
 
-local function selectAmmo(player)
-  local opts = {player.hand, player.offhand}
+local function selectAmmo()
+  local opts = {player_data.hand, player_data.offhand}
   local select = love.math.random() < 0.6 and 2 or 1
   local weapon = weapons[opts[select]]
   table.remove(opts, select)
@@ -38,7 +38,7 @@ function AmmoCrate:step(dt)
   local player = world.getSingleton("player")
   if player then
     if vec.distanceSq(self.x, self.y, player.x, player.y) < 16^2 then
-      local ammo_type = selectAmmo(player)
+      local ammo_type = selectAmmo()
 
       ammo[ammo_type].amount = math.min(
         ammo[ammo_type].amount + ammo[ammo_type].crate_amount,
