@@ -61,7 +61,7 @@ function spawnEnemies()
     repeat
       x = love.math.random(map.sx, map.ex) * tilemap.tile_width
       y = love.math.random(map.sy, map.ey) * tilemap.tile_height
-    until spawnPointIsValid(x, y, tilemap) and vec.distanceSq(x, y, px, py) > (16 * 5)^2
+    until spawnPointIsValid(x, y, tilemap) and vec.distanceSq(x, y, px, py) > (16 * 8)^2
 
     local enemy = selectEnemy().obj:create()
     enemy.x = x
