@@ -45,7 +45,7 @@ function addBloodSplat(blood_type, x, y, count, spread)
   end
 end
 
-function BloodLayer:init()
+function BloodLayer:new()
   batch:clear()
 end
 
