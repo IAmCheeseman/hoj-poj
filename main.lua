@@ -38,7 +38,6 @@ action.define("next", "key", "n")
 world.add(Cursor:create())
 world.add(PauseScreen:create())
 world.flush()
-world.flush() -- FIXME: have to flush twice so tags are added correctly
 
 Forest:switch({new_run=true})
 

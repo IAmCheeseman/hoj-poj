@@ -248,11 +248,11 @@ local function flushDrawListRem(q, dl)
 end
 
 function world.flush()
-  flushTagAdd()
+  flushAdd()
   flushTagRem()
 
-  flushAdd()
   flushRem()
+  flushTagAdd()
 
   flushProcSetAdd()
   flushProcSetRem()
