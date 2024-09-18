@@ -23,10 +23,7 @@ function Hammerhead:new()
   self.speed = 52
   self.accel = 20
 
-  self.body = Body.create(
-    self, shape.offsetRect(
-      -self.sprite.offsetx, -self.sprite.offsety,
-      self.sprite.width, self.sprite.height))
+  self.body = Body.create(self, shape.offsetRect(-6, -12, 12, 12))
 
   self.target = world.getSingleton("player")
 
@@ -118,4 +115,5 @@ function Hammerhead:draw()
 
   self.shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, scale, 1)
+  self.body:draw()
 end

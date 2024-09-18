@@ -20,7 +20,7 @@ local function selectEnemy()
   return selection
 end
 
-function spawnEnemies(level)
+function spawnEnemies()
   local px = 0
   local py = 0
   local player = world.getSingleton("player")
@@ -34,7 +34,7 @@ function spawnEnemies(level)
     return
   end
 
-  local enemyc = 15 + level * 3
+  local enemyc = 15 + difficulty * 2
   for _=1, enemyc do
     local x, y
     repeat

@@ -24,13 +24,11 @@ function WalrusFish:new()
   self.speed = 16
   self.accel = 20
 
-  self.max_attack_timer = 4
+  self.max_attack_timer = 2
   self.attack_timer = 2
 
   self.body = Body.create(
-    self, shape.offsetRect(
-      -self.sprite.offsetx, -self.sprite.offsety,
-      self.sprite.width, self.sprite.height))
+    self, shape.offsetRect(-9, -18, 18, 18))
 
   self.target = world.getSingleton("player")
 

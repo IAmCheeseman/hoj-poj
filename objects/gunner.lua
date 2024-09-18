@@ -31,10 +31,7 @@ function Gunner:new()
   self.speed = 48
   self.accel = 20
 
-  self.body = Body.create(
-    self, shape.offsetRect(
-      -self.sprite.offsetx, -self.sprite.offsety,
-      self.sprite.width, self.sprite.height))
+  self.body = Body.create(self, shape.offsetRect(-6, -12, 12, 12))
 
   self.target = world.getSingleton("player")
 
@@ -141,4 +138,5 @@ function Gunner:draw()
   self.shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, self.sprite_scale, 1)
   self.pistol:draw(self.x, self.y - self.pistol_height, self.pistol_rot)
+  self.body:draw()
 end
