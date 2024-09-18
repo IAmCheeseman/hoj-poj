@@ -54,8 +54,6 @@ function WalrusFish:dead(attack)
     attack.kbx * 50, attack.kby * 50)
   self.body.anchor = corpse
   world.add(corpse)
-
-  addScore(6, self.x, self.y - self.sprite.height)
 end
 
 function WalrusFish:damage(attack)

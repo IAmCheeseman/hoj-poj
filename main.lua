@@ -24,7 +24,6 @@ loadDirectory("states")
 loadDirectory("rooms")
 
 require("translations")
-require("score")
 require("kill_timer")
 require("spawner")
 require("ammo")
@@ -50,7 +49,6 @@ function love.update(dt)
   world.update(dt)
 
   if not world.is_paused then
-    stepCombo(dt)
     stepSpawnTimer(dt)
     stepKillTimer(dt)
 

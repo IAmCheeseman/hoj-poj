@@ -47,8 +47,6 @@ function Hammerhead:dead(attack)
     attack.kbx * 100, attack.kby * 100)
   self.body.anchor = corpse
   world.add(corpse)
-
-  addScore(6, self.x, self.y - self.sprite.height)
 end
 
 function Hammerhead:damage(attack)

@@ -83,8 +83,6 @@ function Gunner:dead(attack)
     attack.kbx * 100, attack.kby * 100)
   self.body.anchor = corpse
   world.add(corpse)
-
-  addScore(5, self.x, self.y)
 end
 
 function Gunner:damage(attack)
