@@ -157,7 +157,7 @@ function WalrusFish:draw()
   end
 
   if self.health:iFramesActive() then
-    anim = "dhurt"--self.vy < 0 and "uhurt" or "dhurt"
+    anim = self.vy < 0 and "uhurt" or "dhurt"
   end
 
   self.sprite:setAnimation(anim)
