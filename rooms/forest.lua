@@ -59,4 +59,9 @@ function Forest:init(args)
 
   player.x = px * tilemap.tile_width
   player.y = py * tilemap.tile_height
+
+  world.flush()
+  world.flush() -- FIXME
+
+  spawnEnemies(1)
 end

@@ -32,7 +32,6 @@ local function generateRoom()
     walker[k] = v
   end
 
-  local first = true
   for p in walker:walkIter() do
     if p.x <= #data and p.y <= #data[1] then
       if sx == -1 then
@@ -46,11 +45,9 @@ local function generateRoom()
         ex = math.max(ex, p.x)
         ey = math.max(ey, p.y)
       end
-      if love.math.random() < 0.05 or first then
-        player_spawn_x = p.x
-        player_spawn_y = p.y
-        first = false
-      end
+
+      player_spawn_x = p.x
+      player_spawn_y = p.y
       data[p.x][p.y] = 0
     end
   end

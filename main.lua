@@ -50,7 +50,6 @@ function love.update(dt)
   world.update(dt)
 
   if not world.is_paused then
-    stepSpawnTimer(dt)
     stepKillTimer(dt)
 
     if action.isJustDown("reset") then
