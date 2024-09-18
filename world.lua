@@ -299,6 +299,14 @@ local function canStep(obj)
   return not world.is_paused or obj.step_while_paused
 end
 
+function world.clear()
+  for obj, _ in pairs(obj_meta) do
+    if not obj.persistent then
+      world.rem(obj)
+    end
+  end
+end
+
 function world.update(dt)
   for obj, _ in pairs(proc_set) do
     if is(obj.step, "function") then

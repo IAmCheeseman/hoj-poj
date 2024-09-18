@@ -8,6 +8,10 @@ local params = {}
 local data = {}
 
 local function initData()
+  data = {}
+  player_spawn_x = 0
+  player_spawn_y = 0
+
   for x=1, params.map_width do
     table.insert(data, {})
     for _=1, params.map_height do
@@ -87,7 +91,7 @@ function map.generate(parameters)
 
   initData()
   generateRoom()
-  -- removeSingles()
+  removeSingles()
   local img = renderToImage()
 
   return data, player_spawn_x, player_spawn_y, img

@@ -4,6 +4,7 @@ local cursor_sprite = Sprite.create("assets/cursor.png")
 cursor_sprite:offset("center", "center")
 
 function Cursor:new()
+  self.persistent = true
   self.z_index = math.huge
 
   love.mouse.setVisible(false)

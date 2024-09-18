@@ -4,6 +4,7 @@ action.define("pause", "key", "escape")
 action.define("exit", "key", "q")
 
 function PauseScreen:new()
+  self.persistent = true
   self.step_while_paused = true
 end
 
