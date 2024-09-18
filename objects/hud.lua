@@ -42,6 +42,17 @@ function Hud:gui()
       viewport.screenw, "center")
   end
 
+  do -- Level
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(
+      {
+        {0, 1, 0.5}, "Level #",
+        {0, 1, 0.5}, getDifficulty(),
+      },
+      0, 8,
+      viewport.screenw, "center")
+  end
+
   do -- Weapons
     local limit = 48 / 2
 

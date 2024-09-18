@@ -8,6 +8,10 @@ function nextDifficulty()
   difficulty = difficulty + 1
 end
 
+function getDifficulty()
+  return difficulty
+end
+
 function resetDifficulty()
   difficulty = 0
 end
