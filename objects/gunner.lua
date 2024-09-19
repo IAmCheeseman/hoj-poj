@@ -39,6 +39,8 @@ function Gunner:new()
   self.s_pursue.pursue_time_min = 1
   self.s_pursue.pursue_time_max = 1.5
   self.s_idle = IdleState:create(self, self.onIdle, self.onIdleTimerOver)
+  self.s_idle.idle_time_min = 1
+  self.s_idle.idle_time_max = 4
 
   self.sm = StateMachine.create(self, self.s_pursue)
   self.health = Health.create(self, 13, {
