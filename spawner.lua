@@ -55,17 +55,28 @@ function spawnEnemies()
     return
   end
 
-  local enemyc = 15 + (difficulty - 1) * 2
+  local spawn_positions = {}
+  for x=map.sx, map.ex, 1 do
+    for y=map.sy, map.ey, 1 do
+      local rx, ry = x * tilemap.tile_width, y * tilemap.tile_height
+      if spawnPointIsValid(rx, ry, tilemap)
+      and vec.distanceSq(rx, ry, px, py) > (16*4)^2 then
+        table.insert(spawn_positions, {rx, ry})
+      end
+    end
+  end
+
+  local enemyc = 5 + (difficulty - 1) * 2
   for _=1, enemyc do
-    local x, y
-    repeat
-      x = love.math.random(map.sx, map.ex) * tilemap.tile_width
-      y = love.math.random(map.sy, map.ey) * tilemap.tile_height
-    until spawnPointIsValid(x, y, tilemap) and vec.distanceSq(x, y, px, py) > (16 * 8)^2
+    local i = love.math.random(1, #spawn_positions)
+    print(spawn_positions[i], i, #spawn_positions)
+    local pos = spawn_positions[i]
+
+    tablex.swapRem(spawn_positions, i)
 
     local enemy = selectEnemy().obj:create()
-    enemy.x = x
-    enemy.y = y
+    enemy.x = pos[1]
+    enemy.y = pos[2]
     world.add(enemy)
   end
 end
