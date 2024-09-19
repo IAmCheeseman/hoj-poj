@@ -19,7 +19,7 @@ function Forest:init(args)
   world.add(Background:create("assets/grass.png"))
   world.add(DroppedWeapon:create("swiss_rifle", -50, 50))
 
-  local map_data, px, py, img = map.generate({
+  local map_data, px, py, _ = map.generate({
     map_width = 200,
     map_height = 200,
     walker = {
@@ -31,8 +31,6 @@ function Forest:init(args)
       max_steps_per_dir = 3,
     }
   })
-
-  map_img = img
 
   local tilemap = Tilemap:create(
     map_data, love.graphics.newImage("assets/dirt_tiles.png"), 16, 16, {

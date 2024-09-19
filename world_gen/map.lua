@@ -85,7 +85,7 @@ end
 local function renderToImage()
   local iw, ih = ex - sx, ey - sy
   local img_data = love.image.newImageData(iw, ih)
-  local filled = {0, 0, 0, 1}
+  local filled = {0, 0, 0, 0}
   local empty = {1, 1, 1, 1}
 
   for dx=sx, ex-1 do
@@ -109,6 +109,8 @@ function map.generate(parameters)
   generateRoom()
   removeSingles()
   local img = renderToImage()
+
+  map.img = img
 
   map.sx = sx
   map.sy = sy

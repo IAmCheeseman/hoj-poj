@@ -87,10 +87,6 @@ function love.draw()
 
   love.graphics.setColor(1, 1, 1)
   viewport.draw()
-
-  if map_img then
-    love.graphics.draw(map_img, 0, 0, 0, 4)
-  end
 end
 
 function love.quit()

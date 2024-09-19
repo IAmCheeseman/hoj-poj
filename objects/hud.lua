@@ -1,3 +1,4 @@
+local map = require("world_gen.map")
 local ui = require("ui")
 local weapons = require("weapons")
 
@@ -101,5 +102,26 @@ function Hud:gui()
         {1, 1, 1}, " :[",
       },
       0, centery, viewport.screenw, "center")
+  end
+
+  if map.img then
+    local dx = viewport.screenw - map.img:getWidth() - 2
+    local dy = viewport.screenh - map.img:getHeight() - 2
+    love.graphics.draw(map.img, dx, dy)
+
+    local player = world.getSingleton("player")
+    if player then
+      local mmx = player.x / 16 - map.sx
+      local mmy = player.y / 16 - map.sy
+      love.graphics.setColor(0.1, 1, 0.2)
+      love.graphics.points(mmx + dx, mmy + dy)
+    end
+
+    love.graphics.setColor(1, 0.1, 0.2)
+    for _, enemy in ipairs(world.getTagged("enemy")) do
+      local mmx = enemy.x / 16 - map.sx
+      local mmy = enemy.y / 16 - map.sy
+      love.graphics.points(mmx + dx, mmy + dy)
+    end
   end
 end
