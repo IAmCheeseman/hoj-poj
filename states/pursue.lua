@@ -22,10 +22,14 @@ function PursueState:step(dt)
   local obj = self.anchor
 
   if self.timer <= 0 then
-    local dirx, diry = vec.direction(
-      obj.x, obj.y, obj.target.x, obj.target.y)
+    local dirx, diry = vec.direction(obj.x, obj.y, obj.target.x, obj.target.y)
 
-    dirx, diry = vec.rotate(dirx, diry, mathx.frandom(-math.pi / 2, math.pi / 2))
+    local variance = math.pi
+    if viewport.isPointOnScreen(obj.x, obj.y) then
+      variance = math.pi / 4
+    end
+
+    dirx, diry = vec.rotate(dirx, diry, mathx.frandom(-variance, variance))
 
     if love.math.random() < 0.1 then
       dirx = -dirx
@@ -39,7 +43,7 @@ function PursueState:step(dt)
     try(self.on_direction_changed, self.anchor)
   end
 
-  self.timer = obj.s_pursue.timer - dt
+  self.timer = self.timer - dt
 
   obj.vx = mathx.dtLerp(obj.vx, self.dirx * obj.speed, obj.accel, dt)
   obj.vy = mathx.dtLerp(obj.vy, self.diry * obj.speed, obj.accel, dt)
