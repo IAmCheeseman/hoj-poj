@@ -54,6 +54,11 @@ function AmmoCrate:step(dt)
 
       sound.play("ammo_pickup")
     end
+
+    if vec.distanceSq(self.x, self.y, player.x, player.y) < 32^2 then
+      self.x = mathx.dtLerp(self.x, player.x, 10, dt)
+      self.y = mathx.dtLerp(self.y, player.y, 10, dt)
+    end
   end
 end
 
