@@ -54,16 +54,16 @@ function love.update(dt)
     if action.isJustDown("reset") then
       Forest:switch({new_run=true})
     end
-
-    if action.isJustDown("next") or #world.getTagged("enemy") == 0 then
-      Forest:switch({new_run=false})
-    end
   end
 
   modding.postStep()
   camera.step(dt)
 
   world.flush()
+
+  if action.isJustDown("next") or #world.getTagged("enemy") == 0 then
+    Forest:switch({new_run=false})
+  end
 
   update_graphics = true
 end

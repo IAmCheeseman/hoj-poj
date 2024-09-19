@@ -13,7 +13,7 @@ function getDifficulty()
 end
 
 function resetDifficulty()
-  difficulty = 0
+  difficulty = 1
 end
 
 function addEnemyToSpawner(obj, chance, level)
@@ -28,7 +28,7 @@ local function selectEnemy()
   local selection
   repeat
     selection = enemies[love.math.random(1, #enemies)]
-  until love.math.random() < selection.chance
+  until love.math.random() < selection.chance and difficulty >= selection.level
   return selection
 end
 
@@ -69,7 +69,6 @@ function spawnEnemies()
   local enemyc = 5 + (difficulty - 1) * 2
   for _=1, enemyc do
     local i = love.math.random(1, #spawn_positions)
-    print(spawn_positions[i], i, #spawn_positions)
     local pos = spawn_positions[i]
 
     if #spawn_positions > 1 then
