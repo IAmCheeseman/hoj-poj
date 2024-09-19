@@ -1,3 +1,4 @@
+local settings = require("settings")
 local camera = {}
 
 local x, y = 0, 0
@@ -67,6 +68,7 @@ function camera.step(dt)
       local p = jumps / max_jumps
       strength = strength * p
     end
+    strength = strength * settings.screenshake
     jump(math.cos(angle) * strength, math.sin(angle) * strength)
   end
 

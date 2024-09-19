@@ -1,3 +1,5 @@
+local settings = require("settings")
+
 BloodLayer = struct()
 
 local splat_count = 9
@@ -31,6 +33,10 @@ addBloodType("alien", 4, 6)
 addBloodType("demon", 7, 9)
 
 function addBloodSplat(blood_type, x, y, count, spread)
+  if settings.hemophobia then
+    return
+  end
+
   count = count or 1
   spread = spread or 16
 

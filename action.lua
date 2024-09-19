@@ -1,3 +1,4 @@
+local settings = require("settings")
 local action = {}
 
 local actions = {}
@@ -9,9 +10,14 @@ local function ensureActionExists(name)
 end
 
 function action.define(name, input_type, input)
-  actions[name] = {
+  local keybind = settings.keybinds[name] or {
     type = input_type,
-    input = input,
+    input = input
+  }
+
+  actions[name] = {
+    type = keybind.type,
+    input = keybind.input,
     just_pressed = false,
   }
 end
