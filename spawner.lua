@@ -72,7 +72,9 @@ function spawnEnemies()
     print(spawn_positions[i], i, #spawn_positions)
     local pos = spawn_positions[i]
 
-    tablex.swapRem(spawn_positions, i)
+    if #spawn_positions > 1 then
+      tablex.swapRem(spawn_positions, i)
+    end
 
     local enemy = selectEnemy().obj:create()
     enemy.x = pos[1]
