@@ -23,7 +23,7 @@ function Forest:init(args)
     map_width = 200,
     map_height = 200,
     walker = {
-      max_steps = 250,
+      max_steps = 100 + getDifficulty() * 5,
       turn_chance = 0.15,
       step_distance = 3,
       step_size_min = 1,

@@ -71,7 +71,7 @@ function spawnEnemies()
     local i = love.math.random(1, #spawn_positions)
     local pos = spawn_positions[i]
 
-    if #spawn_positions > 1 then
+    if #spawn_positions > 5 then
       tablex.swapRem(spawn_positions, i)
     end
 
