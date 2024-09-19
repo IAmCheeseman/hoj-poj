@@ -18,29 +18,38 @@ function PursueState:new(on_direction_changed)
   self.on_direction_changed = on_direction_changed
 end
 
+function PursueState:changeDir()
+  local obj = self.anchor
+  local dirx, diry = vec.direction(obj.x, obj.y, obj.target.x, obj.target.y)
+
+  local variance = math.pi
+  if viewport.isPointOnScreen(obj.x, obj.y) then
+    variance = math.pi / 4
+  end
+
+  dirx, diry = vec.rotate(dirx, diry, mathx.frandom(-variance, variance))
+
+  if love.math.random() < 0.1 then
+    dirx = -dirx
+    diry = -diry
+  end
+
+  self.dirx = dirx
+  self.diry = diry
+  self.timer = mathx.frandom(self.pursue_time_min, self.pursue_time_max)
+
+  try(self.on_direction_changed, self.anchor)
+end
+
+function PursueState:enter()
+  self:changeDir()
+end
+
 function PursueState:step(dt)
   local obj = self.anchor
 
   if self.timer <= 0 then
-    local dirx, diry = vec.direction(obj.x, obj.y, obj.target.x, obj.target.y)
-
-    local variance = math.pi
-    if viewport.isPointOnScreen(obj.x, obj.y) then
-      variance = math.pi / 4
-    end
-
-    dirx, diry = vec.rotate(dirx, diry, mathx.frandom(-variance, variance))
-
-    if love.math.random() < 0.1 then
-      dirx = -dirx
-      diry = -diry
-    end
-
-    self.dirx = dirx
-    self.diry = diry
-    self.timer = mathx.frandom(self.pursue_time_min, self.pursue_time_max)
-
-    try(self.on_direction_changed, self.anchor)
+    self:changeDir()
   end
 
   self.timer = self.timer - dt
