@@ -15,6 +15,10 @@ function MedKit:step(dt)
 
   self.lifetime = self.lifetime - dt
   if self.lifetime <= 0 then
+    local poof = Effect:create("assets/dust.ase", true)
+    poof.x = self.x
+    poof.y = self.y
+    world.add(poof)
     world.rem(self)
   end
 
