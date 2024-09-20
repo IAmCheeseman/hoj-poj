@@ -12,16 +12,37 @@ function AmmoCrate:new()
   self.lifetime = 6
 end
 
+local function getRandomAmmoType(exclude)
+  local types = getAmmoTypes()
+  local name
+  local bailout = 0
+  while bailout < 10 do
+    name = types[love.math.random(1, #types)]
+    local type = ammo[name]
+    if name ~= exclude and type.amount ~= type.max then
+      return name
+    end
+
+    bailout = bailout + 1
+  end
+  return name
+end
+
 local function selectAmmo()
   local opts = {player_data.hand, player_data.offhand}
-  local select = love.math.random() < 0.6 and 2 or 1
-  local weapon = weapons[opts[select]]
-  table.remove(opts, select)
+  local idx = love.math.random() < 0.5 and #opts or 1
+  local selection = opts[idx]
+  local weapon = weapons[selection]
+  table.remove(opts, idx)
   local ammo_type = weapon.ammo
 
   if ammo[ammo_type].amount == ammo[ammo_type].max then
     weapon = weapons[opts[1]]
-    ammo_type = weapon.ammo
+    if weapon then -- Try again for the other type
+      return selectAmmo()
+    else -- Select random type if there's no more options
+      ammo_type = getRandomAmmoType(ammo_type)
+    end
   end
 
   return ammo_type

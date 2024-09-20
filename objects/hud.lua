@@ -12,6 +12,37 @@ local function pad0(str, zeros)
   return str
 end
 
+local function drawWeaponHud(id, y, is_offhand)
+  if not weapons[id] then
+    return
+  end
+
+  local limit = 48 / 2
+
+  local first = weapons[id]
+
+  local first_name = tr(first.name)
+  local first_ammo = tostring(ammo[first.ammo].amount)
+
+  local first_text = first_name .. " " .. first_ammo
+
+  local first_width = math.max(ui.hud_font:getWidth(first_text) + 2, limit)
+
+  local ammo_col = {1, 1, 0}
+  local name_col = {1, 1, 1}
+  if is_offhand then
+    ammo_col = {0.5, 0.5, 0}
+    name_col = {0.5, 0.5, 0.5}
+  end
+
+  love.graphics.printf(
+    {
+      ammo_col, first_ammo .. " ",
+      name_col, first_name,
+    },
+    2, y, first_width, "center")
+end
+
 function Hud:gui()
   love.graphics.setFont(ui.hud_font)
   local texty = 0
@@ -55,38 +86,8 @@ function Hud:gui()
   end
 
   do -- Weapons
-    local limit = 48 / 2
-
-    local first = weapons[player_data.hand]
-    local other = weapons[player_data.offhand]
-
-    local first_name = tr(first.name)
-    local other_name = tr(other.name)
-    local first_ammo = tostring(ammo[first.ammo].amount)
-    local other_ammo = tostring(ammo[other.ammo].amount)
-
-    local first_text = first_name .. " " .. first_ammo
-    local other_text = other_name .. " " .. other_ammo
-
-    local first_width = math.max(ui.hud_font:getWidth(first_text) + 2, limit)
-    local other_width = math.max(ui.hud_font:getWidth(other_text) + 2, limit)
-
-    local firsty = texty
-    local othery = texty + 8
-
-    love.graphics.printf(
-      {
-        {1, 1, 0}, first_ammo .. " ",
-        {1, 1, 1}, first_name,
-      },
-      2, firsty, first_width, "center")
-
-    love.graphics.printf(
-      {
-        {0.6, 0.4, 0}, other_ammo .. " ",
-        {0.5, 0.5, 0.5}, other_name,
-      },
-      2, othery, other_width, "center")
+    drawWeaponHud(player_data.hand, texty, false)
+    drawWeaponHud(player_data.offhand, texty + 1, true)
   end
 
   if player_data.health.dead then

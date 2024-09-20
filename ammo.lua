@@ -1,4 +1,5 @@
 ammo = {}
+local ammo_types = {}
 
 function resetAmmo()
   for _, type in pairs(ammo) do
@@ -7,6 +8,7 @@ function resetAmmo()
 end
 
 function defineAmmoType(type, name, starting, max, crate)
+  table.insert(ammo_types, type)
   ammo[type] = {
     name = name,
     starting = starting,
@@ -16,5 +18,9 @@ function defineAmmoType(type, name, starting, max, crate)
   }
 end
 
-defineAmmoType("bullets", "ammo_bullets", 32, 256, 20)
+function getAmmoTypes()
+  return ammo_types
+end
+
+defineAmmoType("bullets", "ammo_bullets", 100, 256, 20)
 defineAmmoType("shells", "ammo_shells", 24, 64, 12)

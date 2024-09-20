@@ -36,6 +36,10 @@ function Weapon:step(dt)
 
   local weapon = weapons[self.type]
 
+  if not weapon then
+    return
+  end
+
   local automatic = weapon.automatic
   local can_refire = automatic
   if not can_refire then
@@ -117,5 +121,9 @@ end
 
 function Weapon:draw()
   local weapon = weapons[self.type]
+  if not weapon then
+    return
+  end
+
   weapon.draw(weapon.sprite, self)
 end

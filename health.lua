@@ -36,17 +36,22 @@ function Health:iFramesActive()
   return total_time - self.last_damage <= self.iframes
 end
 
+local function getAmmoPercentage(weapon_id)
+  if not weapons[weapon_id] then
+    return 1
+  end
+
+  local ammo_type = weapons[weapon_id].ammo
+  local ammo_dat = ammo[ammo_type]
+  return ammo_dat.amount / ammo_dat.max
+end
+
 function Health:dropCrate()
   local chance = 1/6
   local give_medkit = false
 
-  local hand_ammo_type = weapons[player_data.hand].ammo
-  local offhand_ammo_type = weapons[player_data.offhand].ammo
-  local hand_ammo = ammo[hand_ammo_type]
-  local offhand_ammo = ammo[offhand_ammo_type]
-
-  if hand_ammo.amount / hand_ammo.max < low_ammo_percentage
-    or offhand_ammo.amount / offhand_ammo.max < low_ammo_percentage then
+  if getAmmoPercentage(player_data.hand) < low_ammo_percentage
+    or getAmmoPercentage(player_data.offhand) < low_ammo_percentage then
     chance = 1/4
   end
 
@@ -56,7 +61,7 @@ function Health:dropCrate()
   end
 
   if love.math.random() > chance then
-    return
+    --return
   end
 
   if give_medkit then

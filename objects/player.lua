@@ -81,6 +81,8 @@ function Player:step(dt)
   if action.isDown("move_down")  then iy = iy + 1 end
   if action.isDown("move_right") then ix = ix + 1 end
 
+  self.sprite.layers["hands"].visible = not player_data.hand
+
   ix, iy = vec.normalized(ix, iy)
 
   self.vx = mathx.dtLerp(self.vx, ix * self.speed, self.frict, dt)
@@ -162,7 +164,7 @@ end
 
 function resetPlayerData()
   player_data.hand = "pistol"
-  player_data.offhand = "shotgun"
+  player_data.offhand = nil
 
   player_data.health = Health.create(nil, 5, {
     dead = Player.dead,
