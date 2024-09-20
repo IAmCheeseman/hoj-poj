@@ -30,7 +30,7 @@ function Hammerhead:new()
   self.s_pursue = PursueState:create(self)
 
   self.sm = StateMachine.create(self, self.s_pursue)
-  self.health = Health.create(self, 10, {
+  self.health = Health.create(self, 6, {
     dead = self.dead,
     damaged = self.damage
   })
