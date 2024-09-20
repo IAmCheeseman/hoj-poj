@@ -3,9 +3,6 @@ local translations = {
     weapon_pistol = "Pistol",
     weapon_shotgun = "Shotgun",
     weapon_swiss_rifle = "Swiss Rifle",
-    hud_score = "Score:",
-    hud_hp = "HP:",
-    hud_time = "Time:",
     ammo_bullets = "Bullets",
     ammo_shells = "Shells",
   }
