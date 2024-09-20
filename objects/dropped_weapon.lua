@@ -19,6 +19,11 @@ end
 
 function DroppedWeapon:draw()
   local weapon = weapons[self.type]
+  if not weapon then
+    world.rem(self)
+    return
+  end
+
   love.graphics.setColor(1, 1, 1)
   weapon.sprite:draw(self.x, self.y, self.rot)
 

@@ -1,7 +1,8 @@
 local weapons = require("weapons")
 local common = require("weapon_common")
 
-weapons.shotgun = {
+defineWeapon("shotgun", {
+  min_difficulty = 1,
   sprite = Sprite.create("assets/shotgun.png"):offset(3, "center"),
   name = "weapon_shotgun",
   ammo = "shells",
@@ -34,4 +35,4 @@ weapons.shotgun = {
     camera.shake(1, 0.05, 5, 8, 8, true)
   end,
   draw = common.drawGun,
-}
+})

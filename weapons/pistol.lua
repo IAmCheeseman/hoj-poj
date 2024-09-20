@@ -1,7 +1,8 @@
 local weapons = require("weapons")
 local common = require("weapon_common")
 
-weapons.pistol = {
+defineWeapon("pistol", {
+    min_difficulty = math.huge,
     sprite = Sprite.create("assets/pistol.png"):offset("left", "center"),
     name = "weapon_pistol",
     ammo = "bullets",
@@ -24,4 +25,4 @@ weapons.pistol = {
       camera.jump(1, t.angle + math.pi, 6)
     end,
     draw = common.drawGun,
-}
+})

@@ -17,6 +17,7 @@ function Health.create(anchor, max, vtable)
   h.iframes_prevent_damage = false
   h.vtable = vtable
   h.drop_crates = true
+  h.drop_weapons = true
 
   return h
 end
@@ -77,6 +78,16 @@ function Health:dropCrate()
   end
 end
 
+function Health:dropWeapon()
+  if love.math.random() > 1/6 then
+    return
+  end
+
+  local weapon = getRandomWeapon()
+  local drop = DroppedWeapon:create(weapon, self.anchor.x, self.anchor.y)
+  world.add(drop)
+end
+
 function Health:heal(amount)
   self.hp = math.min(self.hp + amount, self.max_hp)
 end
@@ -100,6 +111,10 @@ function Health:takeDamage(attack)
 
     if self.drop_crates then
       self:dropCrate()
+    end
+
+    if self.drop_weapons then
+      self:dropWeapon()
     end
   end
 

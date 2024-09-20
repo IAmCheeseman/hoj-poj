@@ -87,7 +87,7 @@ function Hud:gui()
 
   do -- Weapons
     drawWeaponHud(player_data.hand, texty, false)
-    drawWeaponHud(player_data.offhand, texty + 1, true)
+    drawWeaponHud(player_data.offhand, texty + 8, true)
   end
 
   if player_data.health.dead then
