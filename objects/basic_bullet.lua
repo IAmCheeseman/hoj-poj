@@ -19,6 +19,7 @@ function BasicBullet:new(opts)
   self.lifetime = self.max_lifetime
   self.damage = opts.damage or error("Expected damage property")
   self.bounce = opts.bounce or 0
+  self.pierce = opts.pierce
   self.bounce_damage_mod = opts.bounce_damage_mod or 1
   self.slow_down = opts.slow_down
   self.ignore_tags = opts.ignore_tags or {}
@@ -62,9 +63,12 @@ function BasicBullet:step(dt)
 
       if not should_ignore then
         local kbx, kby = vec.normalized(self.vx, self.vy)
-        local res = coll.obj.health:takeDamage({damage=self.damage, kbx=kbx, kby=kby})
+        local health = coll.obj.health
+        local res = health:takeDamage({damage=self.damage, kbx=kbx, kby=kby})
 
-        if res then
+        local can_pierce = health.dead and self.pierce
+
+        if res and not can_pierce then
           world.rem(self)
         end
       end

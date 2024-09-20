@@ -22,6 +22,7 @@ weapons.shotgun = {
       spread = 45,
       accuracy = 5,
       damage = 4.5,
+      pierce = true,
       bounce = 2,
       bounce_damage_mod = 1.2,
       lifetime = 0.5,
