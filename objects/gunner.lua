@@ -43,7 +43,7 @@ function Gunner:new()
   self.s_idle.idle_time_max = 4
 
   self.sm = StateMachine.create(self, self.s_pursue)
-  self.health = Health.create(self, 13, {
+  self.health = Health.create(self, 8, {
     dead = self.dead,
     damaged = self.damage
   })
