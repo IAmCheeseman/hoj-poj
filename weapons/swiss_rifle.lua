@@ -20,7 +20,7 @@ defineWeapon("swiss_rifle", {
         x = t.x,
         y = t.y,
         angle = t.angle + math.rad(mathx.frandom(-5, 5)),
-        damage = 11,
+        damage = 4,
         sprite = common.bullet_sprite,
       })
       world.add(MuzzleFlash:create(t.x, t.y, 2, common.muzzle_flash))
