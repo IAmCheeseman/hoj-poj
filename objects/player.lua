@@ -125,11 +125,18 @@ function Player:step(dt)
 
     if action.isJustDown("pickup") then
       local temp = closest.type
-      closest.type = player_data.hand
-      player_data.hand = temp
+      local hand = "offhand"
+      if player_data[hand] then
+        hand = "hand"
+      end
 
-      self.weapon.type = player_data.hand
-      self.weapon:reset()
+      closest.type = player_data[hand]
+      player_data[hand] = temp
+
+      if hand == "hand" then
+        self.weapon.type = player_data[hand]
+        self.weapon:reset()
+      end
     end
   end
 
