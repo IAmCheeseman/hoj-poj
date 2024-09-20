@@ -61,7 +61,7 @@ function Health:dropCrate()
   end
 
   if love.math.random() > chance then
-    --return
+    return
   end
 
   if give_medkit then
