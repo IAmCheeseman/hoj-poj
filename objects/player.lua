@@ -25,7 +25,7 @@ action.define("pickup", {
 })
 action.define("swap", {
   {method="key", input="space"},
-  {method="jsbtn", input="b"},
+  {method="jsbtn", input="leftshoulder"},
 })
 action.define("fire", {
   {method="mouse", input=1},
