@@ -70,13 +70,13 @@ function action.isDown(name)
         action.using_joystick = false
         return true
       end
-    elseif a.method == "jsbtn" then
+    elseif a.method == "jsbtn" and action.joystick then
       local down = action.joystick:isGamepadDown(a.input)
       if down then
         action.using_joystick = true
         return true
       end
-    elseif a.method == "jsaxis" then
+    elseif a.method == "jsaxis" and action.joystick then
       local axis = action.joystick:getGamepadAxis(a.input.axis)
       local down = false
       if math.abs(axis) > action.joystick_deadzone then
