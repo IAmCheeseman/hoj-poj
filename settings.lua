@@ -3,6 +3,7 @@ local settings_file = "settings.json"
 local default_settings = {
   screenshake = 1,
   hemophobia = false,
+  autoaim = 1,
   keybinds = {},
 }
 local settings = {}

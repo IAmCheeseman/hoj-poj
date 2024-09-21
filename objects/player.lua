@@ -1,4 +1,5 @@
 local Health = require("health")
+local settings = require("settings")
 
 Player = struct()
 
@@ -62,6 +63,8 @@ function Player:new()
 
   self.js_dirx = 0
   self.js_diry = 0
+  self.js_tdirx = 0
+  self.js_tdiry = 0
   self.cam_accel = 20
 end
 
@@ -98,6 +101,42 @@ function Player:swapWeapons()
   self.weapon:reset()
 end
 
+function Player:autoaim(dirx, diry)
+  local base = 0.97
+  local autoaim = base + (1 - settings.autoaim) * (1 - base)
+  local sel_obj
+  local sel_dist = math.huge
+  local sel_dot = 0
+  local sel_dirx = 0
+  local sel_diry = 0
+
+  for _, obj in ipairs(world.getTagged("autoaim_target")) do
+    local objx, objy = obj.body:getCenter()
+    local odx, ody = vec.direction(self.x, self.y, objx, objy)
+    local dist = vec.distance(self.x, self.y, objx, objy)
+    local dot = vec.dot(dirx, diry, odx, ody)
+
+    if dot > autoaim and dot > sel_dot and dist < sel_dist
+      and viewport.isPointOnScreen(objx, objy) then
+      sel_obj = obj
+      sel_dot = dot
+      sel_dist = dist
+      sel_dirx = odx
+      sel_diry = ody
+    end
+  end
+
+  local los = false
+  if sel_obj then
+    los = not raycast(self.x, self.y, sel_obj.x, sel_obj.y, {"env"}).colliding
+  end
+
+  if sel_dirx ~= 0 and sel_diry ~= 0 and los then
+    return true, sel_dirx, sel_diry
+  end
+  return false
+end
+
 function Player:step(dt)
   if action.using_joystick then
     local dirx = action.getGamepadAxis("rightx")
@@ -107,51 +146,31 @@ function Player:step(dt)
     self.lines = {}
 
     -- Autoaim
-    local autoaim = 0.95
-    local sel_obj
-    local sel_dist = math.huge
-    local sel_dot = 0
-    local sel_dirx = 0
-    local sel_diry = 0
+    local target, tdirx, tdiry = self:autoaim(dirx, diry)
 
-    for _, obj in ipairs(world.getTagged("autoaim_target")) do
-      local objx, objy = obj.body:getCenter()
-      local odx, ody = vec.direction(self.x, self.y, objx, objy)
-      local dist = vec.distance(self.x, self.y, objx, objy)
-      local dot = vec.dot(dirx, diry, odx, ody)
-
-      if dot > autoaim and dot > sel_dot and dist < sel_dist
-      and viewport.isPointOnScreen(objx, objy) then
-        sel_obj = obj
-        sel_dot = dot
-        sel_dist = dist
-        sel_dirx = odx
-        sel_diry = ody
+    if target then
+      if tdirx ~= 0 or tdiry ~= 0 then
+        self.js_tdirx = tdirx
+        self.js_tdiry = tdiry
+      end
+    else
+      if dirx ~= 0 or diry ~= 0 then
+        self.js_tdirx = dirx
+        self.js_tdiry = diry
       end
     end
 
-    local los = false
-    if sel_obj then
-      los = not raycast(self.x, self.y, sel_obj.x, sel_obj.y, {"env"}).colliding
-    end
-
-    setRealPointerPosition(
-      self.x + dirx * 64,
-      self.y + diry * 64)
-
-    if sel_dirx ~= 0 and sel_diry ~= 0 and los then
-      dirx = sel_dirx
-      diry = sel_diry
-    end
-
-    if dirx ~= 0 and diry ~= 0 then
+    if dirx ~= 0 or diry ~= 0 then
       self.js_dirx = dirx
       self.js_diry = diry
     end
 
-    setPointerPosition(
+    setRealPointerPosition(
       self.x + self.js_dirx * 64,
       self.y + self.js_diry * 64)
+    setPointerPosition(
+      self.x + self.js_tdirx * 64,
+      self.y + self.js_tdiry * 64)
   else
     setRealPointerPosition(getWorldMousePosition())
     setPointerPosition(getWorldMousePosition())
