@@ -52,6 +52,7 @@ function camera.jump(p, angle, strength)
     return
   end
 
+  strength = strength * settings.screenshake
   ssx = math.cos(angle) * strength
   ssy = math.sin(angle) * strength
 end
@@ -68,7 +69,6 @@ function camera.step(dt)
       local p = jumps / max_jumps
       strength = strength * p
     end
-    strength = strength * settings.screenshake
     jump(math.cos(angle) * strength, math.sin(angle) * strength)
   end
 
