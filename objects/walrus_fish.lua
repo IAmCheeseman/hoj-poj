@@ -10,7 +10,7 @@ local walrus_fish_shadow = Sprite.create("assets/walrus_fish_shadow.png")
 walrus_fish_shadow:offset("center", "center")
 
 function WalrusFish:new()
-  self.tags = {"enemy", "demon", "damagable", "soft_coll"}
+  self.tags = {"enemy", "demon", "damagable", "soft_coll", "autoaim_target"}
 
   self.sprite = Sprite.create("assets/walrus_fish.ase")
   self.sprite:offset("center", "bottom")

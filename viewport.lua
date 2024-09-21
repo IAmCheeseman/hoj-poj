@@ -3,6 +3,8 @@ local vp = {
   camy = 0,
   pointerx = 0,
   pointery = 0,
+  real_pointer_x = 0,
+  real_pointer_y = 0,
   screenw = 240,
   screenh = 180,
 }
@@ -42,6 +44,11 @@ function setPointerPosition(x, y)
   vp.pointery = y
 end
 
+function setRealPointerPosition(x, y)
+  vp.real_pointer_x = x
+  vp.real_pointer_y = y
+end
+
 function getPointerPosition()
   return vp.pointerx, vp.pointery
 end
@@ -49,6 +56,16 @@ end
 function getScreenPointerPosition()
   local sx = vp.pointerx - vp.camx
   local sy = vp.pointery - vp.camy
+  return sx, sy
+end
+
+function getRealPointerPosition()
+  return vp.real_pointer_x, vp.real_pointer_y
+end
+
+function getRealScreenPointerPosition()
+  local sx = vp.real_pointer_x - vp.camx
+  local sy = vp.real_pointer_y - vp.camy
   return sx, sy
 end
 

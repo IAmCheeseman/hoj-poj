@@ -9,7 +9,7 @@ Gunner = struct()
 addEnemyToSpawner(Gunner, 0.75, 1)
 
 function Gunner:new()
-  self.tags = {"enemy", "soft_coll", "damagable"}
+  self.tags = {"enemy", "soft_coll", "damagable", "autoaim_target"}
 
   self.sprite = Sprite.create("assets/gunner.ase")
   self.sprite:offset("center", "bottom")

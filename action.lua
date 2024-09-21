@@ -14,6 +14,14 @@ local function ensureActionExists(name)
   end
 end
 
+function action.getGamepadAxis(axis)
+  local input = action.joystick:getGamepadAxis(axis)
+  if math.abs(input) < action.joystick_deadzone then
+    return 0
+  end
+  return input
+end
+
 function action.define(name, inputs)
   local keybind = settings.keybinds[name] or inputs
 

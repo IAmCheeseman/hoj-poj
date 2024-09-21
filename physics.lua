@@ -144,6 +144,79 @@ local function sat(a, b, check, res)
   return res
 end
 
+local function rcTestAxis(axisx, axisy, sx, sy, ex, ey, body)
+  local rcProjMin = vec.dot(axisx, axisy, sx, sy)
+  local rcProjMax = vec.dot(axisx, axisy, ex, ey)
+  if rcProjMin > rcProjMax then
+    rcProjMin, rcProjMax = rcProjMax, rcProjMin
+  end
+
+  local proj = project(body, axisx, axisy)
+  if rcProjMax > proj.min and proj.max > rcProjMin then
+    return true
+  end
+  return false
+end
+
+function raycast(sx, sy, ex, ey, tags)
+  local coll = {
+    colliding = false,
+  }
+
+  local dirx, diry = ex - sx, ey - sy
+  local rc_perp_x = -diry
+  local rc_perp_y = dirx
+
+  local rc_par_x = dirx
+  local rc_par_y = diry
+
+  for _, tag in ipairs(tags) do
+    local tagged = world.getTagged(tag)
+    if #tagged == 0 then
+      return
+    end
+
+    for _, obj in ipairs(tagged) do
+      local body = obj.body
+      local body_checks_passed = true
+      for i=1, #body.shape, 2 do
+        local startx = body.shape[i] + body.anchor.x
+        local starty = body.shape[i+1] + body.anchor.y
+
+        local endx, endy
+
+        if i + 2 > #body.shape then
+          endx = body.shape[1] + body.anchor.x
+          endy = body.shape[2] + body.anchor.y
+        else
+          endx = body.shape[i+2] + body.anchor.x
+          endy = body.shape[i+3] + body.anchor.y
+        end
+
+
+        local axisx = -(starty - endy)
+        local axisy = startx - endx
+        axisx, axisy = vec.normalized(axisx, axisy)
+
+        if not rcTestAxis(axisx, axisy, sx, sy, ex, ey, body) then
+          body_checks_passed = false
+          break
+        end
+      end
+
+      if body_checks_passed
+      and rcTestAxis(rc_perp_x, rc_perp_y, sx, sy, ex, ey, body)
+      and rcTestAxis(rc_par_x, rc_par_y, sx, sy, ex, ey, body) then
+        coll.colliding = true
+        coll.obj = obj
+        return coll
+      end
+    end
+  end
+
+  return coll
+end
+
 function Body:collideWithBody(body)
   local res = {
     colliding = true,

@@ -6,7 +6,7 @@ Hammerhead = struct()
 addEnemyToSpawner(Hammerhead, 1, 1)
 
 function Hammerhead:new()
-  self.tags = {"enemy", "alien", "damagable", "soft_coll"}
+  self.tags = {"enemy", "alien", "damagable", "soft_coll", "autoaim_target"}
 
   self.sprite = Sprite.create("assets/hammerhead.ase")
   self.sprite:offset("center", "bottom")

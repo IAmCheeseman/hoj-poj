@@ -60,6 +60,8 @@ function Player:new()
   self.speed = 16 * 6
   self.frict = 12
 
+  self.js_dirx = 0
+  self.js_diry = 0
   self.cam_accel = 20
 end
 
@@ -98,13 +100,60 @@ end
 
 function Player:step(dt)
   if action.using_joystick then
-    local dirx = action.joystick:getGamepadAxis("rightx")
-    local diry = action.joystick:getGamepadAxis("righty")
+    local dirx = action.getGamepadAxis("rightx")
+    local diry = action.getGamepadAxis("righty")
     dirx, diry = vec.normalized(dirx, diry)
-    setPointerPosition(
+
+    self.lines = {}
+
+    -- Autoaim
+    local autoaim = 0.95
+    local sel_obj
+    local sel_dist = math.huge
+    local sel_dot = 0
+    local sel_dirx = 0
+    local sel_diry = 0
+
+    for _, obj in ipairs(world.getTagged("autoaim_target")) do
+      local objx, objy = obj.body:getCenter()
+      local odx, ody = vec.direction(self.x, self.y, objx, objy)
+      local dist = vec.distance(self.x, self.y, objx, objy)
+      local dot = vec.dot(dirx, diry, odx, ody)
+
+      if dot > autoaim and dot > sel_dot and dist < sel_dist
+      and viewport.isPointOnScreen(objx, objy) then
+        sel_obj = obj
+        sel_dot = dot
+        sel_dist = dist
+        sel_dirx = odx
+        sel_diry = ody
+      end
+    end
+
+    local los = false
+    if sel_obj then
+      los = not raycast(self.x, self.y, sel_obj.x, sel_obj.y, {"env"}).colliding
+    end
+
+    setRealPointerPosition(
       self.x + dirx * 64,
       self.y + diry * 64)
+
+    if sel_dirx ~= 0 and sel_diry ~= 0 and los then
+      dirx = sel_dirx
+      diry = sel_diry
+    end
+
+    if dirx ~= 0 and diry ~= 0 then
+      self.js_dirx = dirx
+      self.js_diry = diry
+    end
+
+    setPointerPosition(
+      self.x + self.js_dirx * 64,
+      self.y + self.js_diry * 64)
   else
+    setRealPointerPosition(getWorldMousePosition())
     setPointerPosition(getWorldMousePosition())
   end
 
@@ -130,7 +179,7 @@ function Player:step(dt)
 
   -- Update camera
   do
-    local mx, my = getPointerPosition()
+    local mx, my = getRealPointerPosition()
     mx = mx - self.x
     my = my - self.y
     local camx = self.x - viewport.screenw / 2 + mx * 0.15
