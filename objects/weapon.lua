@@ -28,7 +28,7 @@ function Weapon:step(dt)
   self.x = self.anchor.x + self.target_offset_x
   self.y = self.anchor.y + self.target_offset_y
 
-  local mx, my = getWorldMousePosition()
+  local mx, my = getPointerPosition()
   local dirx, diry = vec.direction(self.x, self.y, mx, my)
   self.rot = vec.angle(dirx, diry)
 

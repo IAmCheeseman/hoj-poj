@@ -31,8 +31,8 @@ loadDirectory("rooms")
 local modding = require("modding")
 modding.loadMods()
 
-action.define("reset", "key", "r")
-action.define("next", "key", "n")
+action.define("reset", {{method="key", input="r"}})
+action.define("next", {{method="key", input="n"}})
 
 world.add(Cursor:create())
 world.add(PauseScreen:create())

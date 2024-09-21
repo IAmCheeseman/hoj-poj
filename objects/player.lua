@@ -2,13 +2,35 @@ local Health = require("health")
 
 Player = struct()
 
-action.define("move_up", "key", "w")
-action.define("move_left", "key", "a")
-action.define("move_down", "key", "s")
-action.define("move_right", "key", "d")
-action.define("pickup", "key", "e")
-action.define("swap", "key", "space")
-action.define("fire", "mouse", 1)
+action.define("move_up", {
+  {method="key", input="w"},
+  {method="jsaxis", input={axis="lefty", dir=-1}},
+})
+action.define("move_left", {
+  {method="key", input="a"},
+  {method="jsaxis", input={axis="leftx", dir=-1}},
+})
+action.define("move_right", {
+  {method="key", input="d"},
+  {method="jsaxis", input={axis="leftx", dir=1}},
+})
+action.define("move_down", {
+  {method="key", input="s"},
+  {method="jsaxis", input={axis="lefty", dir=1}},
+})
+
+action.define("pickup", {
+  {method="key", input="e"},
+  {method="jsbtn", input="a"},
+})
+action.define("swap", {
+  {method="key", input="space"},
+  {method="jsbtn", input="b"},
+})
+action.define("fire", {
+  {method="mouse", input=1},
+  {method="jsaxis", input={axis="triggerright", dir=1}},
+})
 
 sound.load("player_hit", "assets/hit.wav", 1)
 
@@ -75,6 +97,17 @@ function Player:swapWeapons()
 end
 
 function Player:step(dt)
+  if action.using_joystick then
+    local dirx = action.joystick:getGamepadAxis("rightx")
+    local diry = action.joystick:getGamepadAxis("righty")
+    dirx, diry = vec.normalized(dirx, diry)
+    setPointerPosition(
+      self.x + dirx * 64,
+      self.y + diry * 64)
+  else
+    setPointerPosition(getWorldMousePosition())
+  end
+
   local ix, iy = 0, 0
   if action.isDown("move_up")    then iy = iy - 1 end
   if action.isDown("move_left")  then ix = ix - 1 end
@@ -97,7 +130,7 @@ function Player:step(dt)
 
   -- Update camera
   do
-    local mx, my = getWorldMousePosition()
+    local mx, my = getPointerPosition()
     mx = mx - self.x
     my = my - self.y
     local camx = self.x - viewport.screenw / 2 + mx * 0.15
@@ -146,7 +179,7 @@ function Player:step(dt)
 
   -- Update graphics
   do
-    local mx, my = getWorldMousePosition()
+    local mx, my = getPointerPosition()
     self.scalex = mx < self.x and -1 or 1
 
     local anim = my < self.y and "uwalk" or "dwalk"

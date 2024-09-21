@@ -1,7 +1,14 @@
 PauseScreen = struct()
 
-action.define("pause", "key", "escape")
-action.define("exit", "key", "q")
+action.define("pause", {
+  {method="key", input="escape"},
+  {method="jsbtn", input="start"},
+})
+
+action.define("exit", {
+  {method="key", input="q"},
+  {method="jsbtn", input="back"},
+})
 
 function PauseScreen:new()
   self.persistent = true

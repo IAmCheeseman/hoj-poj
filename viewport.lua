@@ -1,6 +1,8 @@
 local vp = {
   camx = 0,
   camy = 0,
+  pointerx = 0,
+  pointery = 0,
   screenw = 240,
   screenh = 180,
 }
@@ -33,6 +35,21 @@ function getMousePosition()
   my = math.floor(my / scale)
 
   return mx, my
+end
+
+function setPointerPosition(x, y)
+  vp.pointerx = x
+  vp.pointery = y
+end
+
+function getPointerPosition()
+  return vp.pointerx, vp.pointery
+end
+
+function getScreenPointerPosition()
+  local sx = vp.pointerx - vp.camx
+  local sy = vp.pointery - vp.camy
+  return sx, sy
 end
 
 function vp.getDrawTranslation()

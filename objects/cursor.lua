@@ -11,7 +11,7 @@ function Cursor:new()
 end
 
 function Cursor:gui()
-  local mx, my = getMousePosition()
+  local mx, my = getScreenPointerPosition()
 
   love.graphics.setColor(1, 1, 1)
   cursor_sprite:draw(mx, my)
