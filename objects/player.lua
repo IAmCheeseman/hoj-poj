@@ -75,6 +75,8 @@ function Player:added()
 
   local hud = Hud:create(self.health)
   world.add(hud)
+
+  self:updateCamera(false)
 end
 
 function Player:dead()
@@ -137,6 +139,23 @@ function Player:autoaim(dirx, diry)
   return false
 end
 
+function Player:updateCamera(lerp, dt)
+  local mx, my = getRealPointerPosition()
+  mx = mx - self.x
+  my = my - self.y
+  local camx = self.x - viewport.screenw / 2 + mx * 0.15
+  local camy = self.y - viewport.screenh / 2 + my * 0.15
+
+  if lerp then
+    local ccamx, ccamy = camera.getPos()
+    camera.setPos(
+      mathx.dtLerp(ccamx, camx, 15, dt),
+      mathx.dtLerp(ccamy, camy, 15, dt))
+  else
+    camera.setPos(camx, camy)
+  end
+end
+
 function Player:step(dt)
   if action.using_joystick then
     local dirx = action.getGamepadAxis("rightx")
@@ -196,16 +215,6 @@ function Player:step(dt)
 
   self.z_index = self.y
 
-  -- Update camera
-  do
-    local mx, my = getRealPointerPosition()
-    mx = mx - self.x
-    my = my - self.y
-    local camx = self.x - viewport.screenw / 2 + mx * 0.15
-    local camy = self.y - viewport.screenh / 2 + my * 0.15
-    camera.setPos(camx, camy, dt)
-  end
-
   if action.isJustDown("swap") then
     self:swapWeapons()
   end
@@ -262,6 +271,8 @@ function Player:step(dt)
     self.sprite:setAnimation(anim)
     self.sprite:update(dt)
   end
+
+  self:updateCamera(true, dt)
 end
 
 function Player:draw()
