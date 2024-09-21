@@ -203,7 +203,7 @@ function Player:step(dt)
     my = my - self.y
     local camx = self.x - viewport.screenw / 2 + mx * 0.15
     local camy = self.y - viewport.screenh / 2 + my * 0.15
-    camera.setPos(camx, camy)
+    camera.setPos(camx, camy, dt)
   end
 
   if action.isJustDown("swap") then

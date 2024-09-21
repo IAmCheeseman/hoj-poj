@@ -14,9 +14,9 @@ local deteriorate = false
 
 local timer = 0
 
-function camera.setPos(cx, cy)
-  x = cx
-  y = cy
+function camera.setPos(cx, cy, dt)
+  x = mathx.dtLerp(x, cx, 20, dt)
+  y = mathx.dtLerp(y, cy, 20, dt)
 end
 
 function camera.shake(p, f, j, sma, smi, d)
