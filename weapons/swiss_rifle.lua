@@ -2,7 +2,7 @@ local weapons = require("weapons")
 local common = require("weapon_common")
 
 defineWeapon("swiss_rifle", {
-    min_difficulty = 1,
+    min_difficulty = 2,
     sprite = Sprite.create("assets/swiss_rifle.png"):offset(4, "center"),
     name = "weapon_swiss_rifle",
     ammo = "bullets",
