@@ -34,7 +34,13 @@ local gui_list = {}
 local gui_list_addq = {}
 local gui_list_remq = {}
 
+local deferred_draw = {}
+
 world.is_paused = false
+
+function world.deferDraw(fn)
+  table.insert(deferred_draw, fn)
+end
 
 function world.add(obj)
   if add_set[obj] then
@@ -331,6 +337,12 @@ function world.draw()
     obj_meta[obj].draw_list_index = i
     obj:draw()
   end
+
+  for _, fn in ipairs(deferred_draw) do
+    fn()
+  end
+  deferred_draw = {}
+
   viewport.stop()
 
   viewport.applyGui()

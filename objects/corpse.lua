@@ -52,11 +52,9 @@ function Corpse:step(dt)
     self.vy = mathx.dtLerp(self.vy, 0, 10, dt)
   end
 
-  self.x = self.x + self.vx * dt
-  self.y = self.y + self.vy * dt
   self.height = math.min(self.height + self.vz * dt, 0)
 
-  local coll = self.body:moveAndCollideWithTags({"env"})
+  local coll = self.body:moveAndCollideWithTags(self.vx, self.vy, dt, {"env"})
 
   if coll then
     self.vx, self.vy = vec.reflect(self.vx, self.vy, coll.axisx, coll.axisy)

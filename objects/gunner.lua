@@ -111,10 +111,7 @@ function Gunner:step(dt)
   self.vx = self.vx + pushx * 0.3
   self.vy = self.vy + pushy * 0.3
 
-  self.x = self.x + self.vx * dt
-  self.y = self.y + self.vy * dt
-
-  self.body:moveAndCollideWithTags({"env"})
+  self.body:moveAndCollideWithTags(self.vx, self.vy, dt, {"env"})
 
   self.z_index = self.y
 

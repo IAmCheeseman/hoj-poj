@@ -43,12 +43,11 @@ function BasicBullet:step(dt)
     self.vy = math.sin(self.rot) * self.speed * p
   end
 
-  self.x = self.x + self.vx * dt
-  self.y = self.y + self.vy * dt
-
   self.z_index = self.y - 8
 
-  local colls = self.body:getAllCollisions({"env", "damagable"})
+  local colls = self.body:getAllCollisions(self.vx, self.vy, dt, {"env", "damagable"})
+  self.x = self.x + self.vx * dt
+  self.y = self.y + self.vy * dt
 
   for _, coll in ipairs(colls) do
     if coll.tag == "damagable" then

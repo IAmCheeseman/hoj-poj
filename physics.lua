@@ -63,6 +63,11 @@ function Body:getAabb()
     self.aabbw, self.aabbh
 end
 
+function Body:getSmallestSide()
+  local _, _, w, h = self:getAabb()
+  return math.min(w, h)
+end
+
 function Body:getCenter()
   if self.centerx and self.centery then
     return self.centerx + self.anchor.x, self.centery + self.anchor.y
@@ -246,7 +251,7 @@ function Body:collideWithBody(body)
   return res
 end
 
-function Body:moveAndCollideWithTag(tag)
+function Body:_moveAndCollideWithTag(tag)
   local tagged = world.getTagged(tag)
   if #tagged == 0 then
     return
@@ -267,31 +272,68 @@ function Body:moveAndCollideWithTag(tag)
   return coll
 end
 
-function Body:moveAndCollideWithTags(tags)
+function Body:moveAndCollideWithTags(vx, vy, dt, tags)
   local coll
-  for _, tag in ipairs(tags) do
-    coll = self:moveAndCollideWithTag(tag) or coll
+
+  local ax, ay = self.anchor.x, self.anchor.y
+  local movex = vx * dt
+  local movey = vy * dt
+  local resx = ax + movex
+  local resy = ay + movey
+
+  local dist = vec.distance(self.anchor.x, self.anchor.y, resx, resy)
+  local checks = math.ceil(dist / self:getSmallestSide())
+
+  for i=1, checks do
+    local p = i/checks
+    self.anchor.x = ax + movex * p
+    self.anchor.y = ay + movey * p
+
+    for _, tag in ipairs(tags) do
+      coll = self:_moveAndCollideWithTag(tag)
+      if coll and coll.colliding then
+        return coll
+      end
+    end
   end
 
   return coll
 end
 
-function Body:getAllCollisions(tags)
+function Body:getAllCollisions(vx, vy, dt, tags)
   local collisions = {}
   local added_set = {}
 
-  for _, tag in ipairs(tags) do
-    for _, obj in ipairs(world.getTagged(tag)) do
-      local res = self:collideWithBody(obj.body)
-      if res.colliding and not added_set[obj] then
-        added_set[obj] = true
+  local ax, ay = self.anchor.x, self.anchor.y
+  local movex = vx * dt
+  local movey = vy * dt
+  local resx = ax + movex
+  local resy = ay + movey
 
-        res.tag = tag
-        res.obj = obj
-        table.insert(collisions, res)
+  local dist = vec.distance(self.anchor.x, self.anchor.y, resx, resy)
+  local checks = math.ceil(dist / self:getSmallestSide())
+
+  for i=1, checks do
+    local p = i/checks
+    self.anchor.x = ax + movex * p
+    self.anchor.y = ay + movey * p
+
+    for _, tag in ipairs(tags) do
+      for _, obj in ipairs(world.getTagged(tag)) do
+        local res = self:collideWithBody(obj.body)
+        if res.colliding and not added_set[obj] then
+          added_set[obj] = true
+
+          res.tag = tag
+          res.obj = obj
+          table.insert(collisions, res)
+        end
       end
     end
   end
+
+  self.anchor.x = ax
+  self.anchor.y = ay
 
   return collisions
 end
