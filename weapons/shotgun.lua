@@ -14,13 +14,13 @@ defineWeapon("shotgun", {
   spawnBullets = function(t)
     common.shotgunFire({
       ignore_tags = {"player"},
-      count = 7,
-      speed_min = 350,
+      count = 8,
+      speed_min = 200,
       speed_max = 450,
       x = t.x,
       y = t.y,
       angle = t.angle,
-      spread = 45,
+      spread = 35,
       accuracy = 5,
       damage = 4.5,
       pierce = true,

@@ -11,9 +11,10 @@ function weapon_util.singleFire(opts)
 end
 
 function weapon_util.shotgunFire(opts)
-  for i=1, opts.count do
-    local spread = math.rad(opts.spread * (i/opts.count) - opts.spread * 0.5)
-    local angle = opts.angle + spread
+  local base = opts.angle
+  for i=0, opts.count-1 do
+    local spread = math.rad((i / (opts.count-1) - 0.5) * opts.spread)
+    local angle = base + spread
     angle = angle + math.rad(mathx.frandom(-opts.accuracy, opts.accuracy))
 
     local speed = mathx.frandom(opts.speed_min, opts.speed_max)
