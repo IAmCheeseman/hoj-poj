@@ -3,6 +3,8 @@ local translations = {
     weapon_pistol = "Pistol",
     weapon_shotgun = "Shotgun",
     weapon_swiss_rifle = "Swiss Rifle",
+    weapon_machinegun = "Machinegun",
+    weapon_triple_machinegun = "Triple Machinegun",
     ammo_bullets = "Bullets",
     ammo_shells = "Shells",
   }
