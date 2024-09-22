@@ -279,7 +279,7 @@ function Player:draw()
 end
 
 function resetPlayerData()
-  player_data.hand = "pistol"
+  player_data.hand = "triple_machinegun"
   player_data.offhand = nil
 
   player_data.health = Health.create(nil, 5, {
