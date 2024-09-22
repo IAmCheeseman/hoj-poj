@@ -22,7 +22,7 @@ defineWeapon("triple_machinegun", {
         damage = 6,
         sprite = common.bullet_sprite,
         parallel_count = 3,
-        parallel_sep = 4,
+        parallel_sep = 5,
       })
       world.add(MuzzleFlash:create(t.x, t.y, 2, common.muzzle_flash))
       camera.jump(1, t.angle + math.pi, 6)
