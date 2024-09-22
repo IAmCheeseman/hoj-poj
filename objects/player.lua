@@ -30,7 +30,7 @@ action.define("swap", {
 })
 action.define("fire", {
   {method="mouse", input=1},
-  {method="jsaxis", input={axis="triggerright", dir=1}},
+  {method="jsbtn", input="rightshoulder"},
 })
 
 sound.load("player_hit", "assets/hit.wav", 1)
