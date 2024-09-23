@@ -25,10 +25,11 @@ function Forest:init(args)
     walker = {
       max_steps = 200, --100 + getDifficulty() * 5,
       turn_chance = 0.15,
-      step_distance = 3,
+      step_distance = 1,
       step_size_min = 1,
       step_size_max = 1,
       max_steps_per_dir = 3,
+      falloff = 40 + getDifficulty() * 2,
     }
   })
 

@@ -17,6 +17,7 @@ function Walker.create(aabbx, aabby, aabbw, aabbh)
   w.step_size_min = 1
   w.step_size_max = 1
   w.max_steps_per_dir = 5
+  w.falloff = 1000
   w.aabbx = aabbx
   w.aabby = aabby
   w.aabbw = aabbw
@@ -36,11 +37,18 @@ function Walker:changeDirection()
   end
 
   if newx == self.dirx and newy == self.diry then
-    return Walker:changeDirection()
+    return self:changeDirection()
   end
 
   self.dirx = newx
   self.diry = newy
+
+  local cur_dist = vec.distanceSq(self.startx, self.starty, self.x, self.y)
+  local next_dist = vec.distanceSq(
+    self.startx, self.starty, self.x + self.dirx, self.y + self.diry)
+  if cur_dist > self.falloff and next_dist > cur_dist then
+    return self:changeDirection()
+  end
 
   self.steps_in_dir = 0
 end
@@ -66,6 +74,11 @@ function Walker:step()
       table.insert(self.path, {x=self.x+x, y=self.y+y})
       table.insert(points, {x=self.x+x, y=self.y+y})
     end
+  end
+
+  if self.steps == 0 then
+    self.startx = self.x
+    self.starty = self.y
   end
 
   self.steps = self.steps + 1

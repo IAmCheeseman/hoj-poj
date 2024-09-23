@@ -15,15 +15,12 @@ end
 local function getRandomAmmoType(exclude)
   local types = getAmmoTypes()
   local name
-  local bailout = 0
-  while bailout < 10 do
+  for _=1, 10 do
     name = types[love.math.random(1, #types)]
     local type = ammo[name]
     if name ~= exclude and type.amount ~= type.max then
       return name
     end
-
-    bailout = bailout + 1
   end
   return name
 end
