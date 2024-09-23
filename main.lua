@@ -1,3 +1,5 @@
+jit.off()
+
 total_time = 0
 
 love.graphics.setDefaultFilter("nearest", "nearest")
