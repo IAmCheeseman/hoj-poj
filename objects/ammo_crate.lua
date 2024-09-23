@@ -12,13 +12,13 @@ function AmmoCrate:new()
   self.lifetime = 6
 end
 
-local function getRandomAmmoType(exclude)
+local function getRandomAmmoType()
   local types = getAmmoTypes()
   local name
   for _=1, 10 do
     name = types[love.math.random(1, #types)]
     local type = ammo[name]
-    if name ~= exclude and type.amount ~= type.max then
+    if type.amount ~= type.max then
       return name
     end
   end
@@ -27,27 +27,30 @@ end
 
 local function selectAmmo()
   local opts = {player_data.hand, player_data.offhand}
-  local idx = love.math.random() < 0.5 and #opts or 1
-  local selection = opts[idx]
-  table.remove(opts, idx)
-
-  if not selection.weapon then
-    selection = opts[1]
-  end
-
-  local weapon = selection:getWeapon()
-  local ammo_type = weapon.ammo
-
-  if ammo[ammo_type].amount == ammo[ammo_type].max then
-    weapon = opts[1]:getWeapon()
-    if weapon then -- Try again for the other type
-      return selectAmmo()
-    else -- Select random type if there's no more options
-      ammo_type = getRandomAmmoType(ammo_type)
+  local remove = {}
+  for i, v in ipairs(opts) do
+    local weapon = v:getWeapon()
+    if not weapon then
+      table.insert(remove, i)
+    else
+      local ammo_type = weapon.ammo
+      if ammo[ammo_type].count == ammo[ammo_type].max then
+        table.insert(remove, i)
+      end
     end
   end
 
-  return ammo_type
+  for _, v in ipairs(remove) do
+    table.remove(opts, v)
+  end
+
+  if #opts == 0 then
+    return getRandomAmmoType()
+  else
+    local idx = love.math.random() < 0.5 and #opts or 1
+    local weapon = opts[idx]:getWeapon() or {ammo="bullet"}
+    return weapon.ammo
+  end
 end
 
 function AmmoCrate:step(dt)
