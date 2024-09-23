@@ -18,13 +18,10 @@ local add_set = {}
 local remq = {}
 local rem_set = {}
 
--- Processing is not done in any particular order; it can be a set for 
--- performance.
-local proc_set = {}
--- You need to sometimes manually add/remove items to the proc set, but that can't be
--- done while processing.
-local proc_set_addq = {}
-local proc_set_remq = {}
+local proc_list = {}
+local proc_list_addq = {}
+local proc_list_remq = {}
+
 -- Drawing has a specific order it must be done in; it has to be a list.
 local draw_list = {}
 local draw_list_addq = {}
@@ -162,7 +159,8 @@ local function flushAdd()
     next_id = next_id + 1
 
     if obj.step then
-      proc_set[obj] = true
+      table.insert(proc_list, obj)
+      meta.proc_list_index = #proc_list
     end
 
     if obj.draw then
@@ -190,7 +188,7 @@ local function flushAdd()
   add_set = {}
 end
 
-local function removeFromDrawList(dl, m, idx_k)
+local function removeFromList(dl, m, idx_k)
   local _, new = tablex.swapRem(dl, m[idx_k])
 
   -- Keep indices correct
@@ -205,14 +203,16 @@ local function flushRem()
 
     local meta = obj_meta[obj]
 
-    proc_set[obj] = nil
+    if meta.proc_list_index then
+      removeFromList(proc_list, meta, "proc_list_index")
+    end
 
     if meta.draw_list_index then
-      removeFromDrawList(draw_list, meta, "draw_list_index")
+      removeFromList(draw_list, meta, "draw_list_index")
     end
 
     if meta.gui_list_index then
-      removeFromDrawList(gui_list, meta, "gui_list_index")
+      removeFromList(gui_list, meta, "gui_list_index")
     end
 
     obj_meta[obj] = nil
@@ -222,21 +222,7 @@ local function flushRem()
   rem_set = {}
 end
 
-local function flushProcSetAdd()
-  for _, obj in ipairs(proc_set_addq) do
-    proc_set[obj] = true
-  end
-  proc_set_addq = {}
-end
-
-local function flushProcSetRem()
-  for _, obj in ipairs(proc_set_remq) do
-    proc_set[obj] = nil
-  end
-  proc_set_remq = {}
-end
-
-local function flushDrawListAdd(q, dl, idx_k)
+local function flushListAdd(q, dl, idx_k)
   for _, obj in ipairs(q) do
     local meta = obj_meta[obj]
     table.insert(dl, obj)
@@ -244,11 +230,11 @@ local function flushDrawListAdd(q, dl, idx_k)
   end
 end
 
-local function flushDrawListRem(q, dl)
+local function flushListRem(q, dl, idx_k)
   for _, obj in ipairs(q) do
     local meta = obj_meta[obj]
-    if meta.draw_list_index then
-      removeFromDrawList(dl, meta, "draw_list_index")
+    if meta[idx_k] then
+      removeFromList(dl, meta, idx_k)
     end
   end
 end
@@ -260,17 +246,17 @@ function world.flush()
   flushRem()
   flushTagAdd()
 
-  flushProcSetAdd()
-  flushProcSetRem()
+  flushListAdd(proc_list_addq, proc_list, "proc_list_index")
+  flushListRem(proc_list_addq, proc_list, "proc_list_index")
 
-  flushDrawListAdd(draw_list_addq, draw_list, "draw_list_index")
+  flushListAdd(draw_list_addq, draw_list, "draw_list_index")
   draw_list_addq = {}
-  flushDrawListRem(draw_list_remq, draw_list)
+  flushListRem(draw_list_remq, draw_list, "draw_list_index")
   draw_list_remq = {}
 
-  flushDrawListAdd(gui_list_addq, gui_list, "draw_list_index")
+  flushListAdd(gui_list_addq, gui_list, "gui_list_index")
   gui_list_addq = {}
-  flushDrawListRem(gui_list_remq, gui_list)
+  flushListRem(gui_list_remq, gui_list, "gui_list_index")
   gui_list_remq = {}
 end
 
@@ -282,8 +268,8 @@ function world.clear(t)
   addq = {}
   remq = {}
   rem_set = {}
-  proc_set_addq = {}
-  proc_set_remq = {}
+  proc_list_addq = {}
+  proc_list_remq = {}
   draw_list_addq = {}
   draw_list_remq = {}
   gui_list_addq = {}
@@ -300,7 +286,7 @@ function world.clear(t)
 end
 
 function world.update(dt)
-  for obj, _ in pairs(proc_set) do
+  for _, obj in ipairs(proc_list) do
     if is(obj.step, "function") then
       if canStep(obj) then
         obj:step(dt)
@@ -358,11 +344,11 @@ function world.addProc(obj)
     error("Object must have a step function to be processed.")
   end
 
-  table.insert(proc_set_addq, obj)
+  table.insert(proc_list_addq, obj)
 end
 
 function world.remProc(obj)
-  table.insert(proc_set_remq, obj)
+  table.insert(proc_list_remq, obj)
 end
 
 function world.addDrawProc(obj)

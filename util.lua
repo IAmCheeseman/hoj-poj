@@ -22,6 +22,10 @@ function tablex.swapRem(t, i)
 end
 
 function tablex.print(t, i, ts)
+  if type(t) ~= "table" then
+    return
+  end
+
   i = i or 0
   ts = ts or {}
   if ts[t] then
