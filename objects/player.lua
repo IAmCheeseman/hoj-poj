@@ -1,5 +1,6 @@
 local Health = require("health")
 local settings = require("settings")
+local Slot = require("slot")
 
 Player = struct()
 
@@ -70,7 +71,7 @@ end
 
 function Player:added()
   self.weapon = Weapon:create(self, player_data.hand)
-
+  self:updateWeapon()
   world.add(self.weapon)
 
   local hud = Hud:create(self.health)
@@ -94,13 +95,14 @@ function Player:damage()
   sound.play("player_hit")
 end
 
-function Player:swapWeapons()
-  local temp = player_data.hand
-  player_data.hand = player_data.offhand
-  player_data.offhand = temp
-
-  self.weapon.type = player_data.hand
+function Player:updateWeapon()
+  self.weapon.slot = player_data.hand
   self.weapon:reset()
+end
+
+function Player:swapWeapons()
+  player_data.hand, player_data.offhand = player_data.offhand, player_data.hand
+  self:updateWeapon()
 end
 
 function Player:autoaim(dirx, diry)
@@ -231,16 +233,31 @@ function Player:step(dt)
     closest.can_pickup = true
 
     if action.isJustDown("pickup") then
-      local temp = closest.type
-      if not player_data.offhand then
-        self:swapWeapons()
+      local cslot = closest.slot
+
+      local handled = false
+
+      for _, slot in ipairs({player_data.hand, player_data.offhand}) do
+        if cslot.weapon == slot.weapon then
+          if slot.dual_wielding then
+            cslot.dual_wielding = false
+          elseif not slot.dual then
+            cslot.weapon = nil
+          end
+          slot.dual_wielding = true
+          handled = true
+        end
       end
 
-      closest.type = player_data.hand
-      player_data.hand = temp
+      if not handled then
+        if player_data.offhand:isEmpty() then
+          self:swapWeapons()
+        end
 
-      self.weapon.type = player_data.hand
-      self.weapon:reset()
+        player_data.hand, closest.slot = cslot, player_data.hand
+
+        self:updateWeapon()
+      end
     end
   end
 
@@ -276,8 +293,8 @@ function Player:draw()
 end
 
 function resetPlayerData()
-  player_data.hand = "pistol"
-  player_data.offhand = nil
+  player_data.hand = Slot.create("pistol")
+  player_data.offhand = Slot.create(nil)
 
   player_data.health = Health.create(nil, 5, {
     dead = Player.dead,

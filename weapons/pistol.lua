@@ -2,13 +2,14 @@ local weapons = require("weapons")
 local common = require("weapon_common")
 
 defineWeapon("pistol", {
-    min_difficulty = math.huge,
+    min_difficulty = 2,
     sprite = Sprite.create("assets/pistol.png"):offset("left", "center"),
     name = "weapon_pistol",
     ammo = "bullets",
     shoot_sfx = "pistol",
     reload = 0.2,
     recoil = 0,
+    dual_wield = true,
     barrel_length = 10,
     automatic = false,
     spawnBullets = function(t)

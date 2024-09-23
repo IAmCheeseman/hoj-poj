@@ -2,7 +2,14 @@ local weapon_util = {}
 
 function weapon_util.drawGun(sprite, gun)
   love.graphics.setColor(1, 1, 1)
-  sprite:draw(gun.x, gun.y, gun.rot, 1, gun.scaley)
+
+  if gun.slot.dual_wielding then
+    local movex, movey = vec.rotate(1, 0, gun.rot + math.pi / 2)
+    sprite:draw(gun.x - movex * 4, gun.y - movey * 4, gun.rot, 1, -1)
+    sprite:draw(gun.x + movex * 4, gun.y + movey * 4, gun.rot, 1, 1)
+  else
+    sprite:draw(gun.x, gun.y, gun.rot, 1, gun.scaley)
+  end
 end
 
 function weapon_util.singleFire(opts)

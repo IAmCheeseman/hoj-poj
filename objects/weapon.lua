@@ -2,7 +2,7 @@ local weapons = require("weapons")
 
 Weapon = struct()
 
-function Weapon:new(anchor, type)
+function Weapon:new(anchor, data)
   self.tags = {"weapon"}
 
   self.anchor = anchor
@@ -10,7 +10,10 @@ function Weapon:new(anchor, type)
   self.target_offset_x = 0
   self.target_offset_y = -4
 
-  self.type = type
+  self.slot = data
+
+  self.rot = 0
+  self.scaley = 1
 
   self.reload = 0
   self.released_fire = true
@@ -34,8 +37,7 @@ function Weapon:step(dt)
 
   self.reload = self.reload - dt
 
-  local weapon = weapons[self.type]
-
+  local weapon = self.slot:getWeapon()
   if not weapon then
     return
   end
@@ -82,7 +84,7 @@ function Weapon:step(dt)
 end
 
 function Weapon:fire()
-  local weapon = weapons[self.type]
+  local weapon = self.slot:getWeapon()
   local consumption = weapon.consumption or 1
 
   local ammo_type = ammo[weapon.ammo]
@@ -103,13 +105,23 @@ function Weapon:fire()
 
   sound.play(weapon.shoot_sfx, true)
 
+  local angle = self.rot
+  if self.slot.dual_wielding then
+    angle = angle + math.rad(mathx.frandom(-20, 20))
+  end
+
   weapon.spawnBullets({
     x = x,
     y = y,
-    angle = self.rot,
+    angle = angle,
     burst = self.burst,
   })
-  self.reload = weapon.reload
+
+  local reload = weapon.reload
+  if self.slot.dual_wielding then
+    reload = reload / 2
+  end
+  self.reload = reload
 
   if self.anchor.vx and self.anchor.vy then
     local recoilx = math.cos(self.rot) * weapon.recoil
@@ -120,7 +132,7 @@ function Weapon:fire()
 end
 
 function Weapon:draw()
-  local weapon = weapons[self.type]
+  local weapon = self.slot:getWeapon()
   if not weapon then
     return
   end

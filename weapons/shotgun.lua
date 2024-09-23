@@ -9,6 +9,7 @@ defineWeapon("shotgun", {
   shoot_sfx = "shotgun",
   reload = 0.5,
   recoil = 0,
+  dual_wield = true,
   barrel_length = 11,
   automatic = false,
   spawnBullets = function(t)

@@ -37,12 +37,12 @@ function Health:iFramesActive()
   return total_time - self.last_damage <= self.iframes
 end
 
-local function getAmmoPercentage(weapon_id)
-  if not weapons[weapon_id] then
+local function getAmmoPercentage(slot)
+  if not slot:getWeapon() then
     return 1
   end
 
-  local ammo_type = weapons[weapon_id].ammo
+  local ammo_type = slot:getWeapon().ammo
   local ammo_dat = ammo[ammo_type]
   return ammo_dat.amount / ammo_dat.max
 end
@@ -84,7 +84,8 @@ function Health:dropWeapon()
   end
 
   local weapon = getRandomWeapon()
-  local drop = DroppedWeapon:create(weapon, self.anchor.x, self.anchor.y)
+  local dual = love.math.random() < 1/100
+  local drop = DroppedWeapon:create(weapon, dual, self.anchor.x, self.anchor.y)
   world.add(drop)
 end
 

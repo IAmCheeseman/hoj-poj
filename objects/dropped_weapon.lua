@@ -1,12 +1,13 @@
 local weapons = require("weapons")
 local ui = require("ui")
+local Slot = require("slot")
 
 DroppedWeapon = struct()
 
-function DroppedWeapon:new(type, x, y)
+function DroppedWeapon:new(type, dual, x, y)
   self.tags = {"dropped_weapon"}
 
-  self.type = type
+  self.slot = Slot.create(type, dual)
 
   self.x = x
   self.y = y
@@ -18,7 +19,7 @@ function DroppedWeapon:new(type, x, y)
 end
 
 function DroppedWeapon:draw()
-  local weapon = weapons[self.type]
+  local weapon = self.slot:getWeapon()
   if not weapon then
     world.rem(self)
     return
@@ -31,6 +32,9 @@ function DroppedWeapon:draw()
     love.graphics.setFont(ui.hud_font)
 
     local text = ("[e] %s"):format(tr(weapon.name))
+    if self.slot.dual_wielding then
+      text = text .. " x2"
+    end
     local w = ui.hud_font:getWidth(text)
     local y = math.max(weapon.sprite.width, weapon.sprite.height)
     love.graphics.print(text, self.x - w / 2, self.y - y)

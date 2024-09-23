@@ -12,21 +12,15 @@ local function pad0(str, zeros)
   return str
 end
 
-local function drawWeaponHud(id, y, is_offhand)
-  if not weapons[id] then
+local function drawWeaponHud(slot, y, is_offhand)
+  if not slot:getWeapon() then
     return
   end
 
-  local limit = 48 / 2
-
-  local first = weapons[id]
+  local first = slot:getWeapon()
 
   local first_name = tr(first.name)
   local first_ammo = tostring(ammo[first.ammo].amount)
-
-  local first_text = first_name .. " " .. first_ammo
-
-  local first_width = math.max(ui.hud_font:getWidth(first_text) + 2, limit)
 
   local ammo_col = {1, 1, 0}
   local name_col = {1, 1, 1}
@@ -35,12 +29,16 @@ local function drawWeaponHud(id, y, is_offhand)
     name_col = {0.5, 0.5, 0.5}
   end
 
-  love.graphics.printf(
-    {
-      ammo_col, first_ammo .. " ",
-      name_col, first_name,
-    },
-    2, y, first_width, "center")
+  local text = {
+    ammo_col, first_ammo .. " ",
+    name_col, first_name,
+  }
+
+  if slot.dual_wielding then
+    table.insert(text, " x2")
+  end
+
+  love.graphics.printf(text, 2, y, viewport.screenw, "left")
 end
 
 function Hud:gui()

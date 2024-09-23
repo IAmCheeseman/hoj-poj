@@ -32,12 +32,17 @@ local function selectAmmo()
   local opts = {player_data.hand, player_data.offhand}
   local idx = love.math.random() < 0.5 and #opts or 1
   local selection = opts[idx]
-  local weapon = weapons[selection]
   table.remove(opts, idx)
+
+  if not selection.weapon then
+    selection = opts[1]
+  end
+
+  local weapon = selection:getWeapon()
   local ammo_type = weapon.ammo
 
   if ammo[ammo_type].amount == ammo[ammo_type].max then
-    weapon = weapons[opts[1]]
+    weapon = opts[1]:getWeapon()
     if weapon then -- Try again for the other type
       return selectAmmo()
     else -- Select random type if there's no more options
