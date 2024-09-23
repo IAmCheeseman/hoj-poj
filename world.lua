@@ -195,6 +195,8 @@ local function removeFromList(dl, m, idx_k)
   if new then
     obj_meta[new][idx_k] = m[idx_k]
   end
+
+  m[idx_k] = nil
 end
 
 local function flushRem()
@@ -247,7 +249,9 @@ function world.flush()
   flushTagAdd()
 
   flushListAdd(proc_list_addq, proc_list, "proc_list_index")
-  flushListRem(proc_list_addq, proc_list, "proc_list_index")
+  proc_list_addq = {}
+  flushListRem(proc_list_remq, proc_list, "proc_list_index")
+  proc_list_remq = {}
 
   flushListAdd(draw_list_addq, draw_list, "draw_list_index")
   draw_list_addq = {}
