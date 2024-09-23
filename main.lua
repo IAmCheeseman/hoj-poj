@@ -61,7 +61,7 @@ function love.update(dt)
 
   world.flush()
 
-  if action.isJustDown("next") or #world.getTagged("enemy") == 0 then
+  if action.isJustDown("next") then
     Forest:switch({new_run=false})
   end
 

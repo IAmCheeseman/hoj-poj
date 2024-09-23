@@ -7,6 +7,10 @@ function resetKillTimer()
 end
 
 function stepKillTimer(dt)
+  if #world.getTagged("enemy") == 0 then
+    return
+  end
+
   timer = timer - dt
 end
 

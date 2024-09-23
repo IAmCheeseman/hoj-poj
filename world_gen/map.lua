@@ -51,6 +51,10 @@ local function generateRoom()
       data[p.x][p.y] = 0
     end
   end
+
+  data[player_spawn_x - 1][player_spawn_y] = 0
+  data[player_spawn_x][player_spawn_y - 1] = 0
+  data[player_spawn_x - 1][player_spawn_y - 1] = 0
 end
 
 local function isSingle(x, y)

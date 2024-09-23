@@ -62,6 +62,11 @@ function Forest:init(args)
   player.x = px * tilemap.tile_width
   player.y = py * tilemap.tile_height
 
+  local teleporter = Teleporter:create()
+  teleporter.x = player.x
+  teleporter.y = player.y
+  world.add(teleporter)
+
   world.flush()
 
   spawnEnemies()
