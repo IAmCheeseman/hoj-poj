@@ -1,3 +1,4 @@
+local start = os.clock()
 jit.off()
 
 total_time = 0
@@ -41,6 +42,12 @@ world.add(PauseScreen:create())
 world.flush()
 
 Forest:switch({new_run=true})
+
+function love.load()
+  local init_time_ms = math.floor((os.clock() - start) * 1000)
+  log.info("Initialized. Took " .. init_time_ms .. "ms")
+  log.info("Operating system: " .. love.system.getOS())
+end
 
 function love.update(dt)
   total_time = total_time + dt
