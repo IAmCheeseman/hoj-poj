@@ -92,6 +92,6 @@ function love.draw()
 end
 
 function love.quit()
-  local data = Sprite.atlas.canvas:newImageData()
+  local data = love.graphics.readbackTexture(Sprite.atlas.canvas)
   data:encode("png", "atlas.png")
 end

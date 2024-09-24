@@ -12,6 +12,15 @@ local translations = {
 
 local locale = "en"
 
+for _, pref in ipairs(love.system.getPreferredLocales()) do
+  local l = pref:sub(1, 2)
+  if translations[l] then
+    locale = l
+    log.info("Set locale to " .. l)
+    break
+  end
+end
+
 function setLocale(new_locale)
   locale = new_locale
 end
