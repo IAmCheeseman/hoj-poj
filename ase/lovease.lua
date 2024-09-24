@@ -389,9 +389,9 @@ local function grab_chunk(file)
 end
 
 local function ase_loader(src)
-    local file = love.filesystem.newFile(src)
+    local file = love.filesystem.openFile(src, "r")
     -- error if file is not found
-    if not file:open("r") then
+    if not file then
         error("File not found: " .. src)
     end
     file:open("r")
