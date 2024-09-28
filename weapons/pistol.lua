@@ -13,12 +13,13 @@ defineWeapon("pistol", {
     barrel_length = 10,
     automatic = false,
     spawnBullets = function(t)
-      common.singleFire({
+      common.singleFire(t, {
         ignore_tags = {"player"},
         speed = 400,
         x = t.x,
         y = t.y,
-        angle = t.angle + math.rad(mathx.frandom(-5, 5)),
+        angle = t.angle,
+        accuracy = 5,
         damage = 6,
         sprite = common.bullet_sprite,
       })

@@ -14,12 +14,13 @@ defineWeapon("swiss_rifle", {
     barrel_length = 10,
     automatic = true,
     spawnBullets = function(t)
-      common.singleFire({
+      common.singleFire(t, {
         ignore_tags = {"player"},
         speed = 400,
         x = t.x,
         y = t.y,
-        angle = t.angle + math.rad(mathx.frandom(-5, 5)),
+        angle = t.angle,
+        accuracy = 5,
         damage = 4,
         sprite = common.bullet_sprite,
       })

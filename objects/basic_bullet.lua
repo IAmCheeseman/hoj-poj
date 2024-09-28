@@ -1,6 +1,7 @@
+local weapon_common = require("weapon_common")
 BasicBullet = struct()
 
-function BasicBullet:new(opts)
+function BasicBullet:new(t, opts)
   self.x = opts.x or error("Expected x property")
   self.y = opts.y or error("Expected y proeprty")
   if opts.dirx and opts.diry then
@@ -9,10 +10,16 @@ function BasicBullet:new(opts)
     self.speed = vec.len(opts.dirx, opts.diry)
     self.rot = vec.angle(opts.dirx, opts.diry)
   else
-    self.vx = math.cos(opts.angle) * opts.speed
-    self.vy = math.sin(opts.angle) * opts.speed
+    local angle = opts.angle
+    local accuracy = opts.accuracy or 0
+    if t.dual_wielding then
+      accuracy = accuracy * weapon_common.dual_accuracy_mod
+    end
+    angle = angle + math.rad(mathx.frandom(-accuracy, accuracy))
+    self.vx = math.cos(angle) * opts.speed
+    self.vy = math.sin(angle) * opts.speed
     self.speed = opts.speed or error("Expected speed property")
-    self.rot = opts.angle or error("Expected angle property")
+    self.rot = angle or error("Expected angle property")
   end
   self.sprite = opts.sprite or error("Expected sprite property")
   self.max_lifetime = opts.lifetime or 999

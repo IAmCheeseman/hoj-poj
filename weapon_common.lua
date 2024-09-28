@@ -1,5 +1,7 @@
 local weapon_util = {}
 
+weapon_util.dual_accuracy_mod = 2
+
 function weapon_util.drawGun(sprite, gun)
   love.graphics.setColor(1, 1, 1)
 
@@ -12,28 +14,29 @@ function weapon_util.drawGun(sprite, gun)
   end
 end
 
-function weapon_util.singleFire(opts)
-  local b = BasicBullet:create(opts)
+function weapon_util.singleFire(t, opts)
+  local b = BasicBullet:create(t, opts)
   world.add(b)
 end
 
-function weapon_util.shotgunFire(opts)
+function weapon_util.shotgunFire(t, opts)
   local base = opts.angle
   for i=0, opts.count-1 do
     local spread = math.rad((i / (opts.count-1) - 0.5) * opts.spread)
+    if t.dual_wielding then
+      spread = spread * weapon_util.dual_accuracy_mod
+    end
     local angle = base + spread
-    angle = angle + math.rad(mathx.frandom(-opts.accuracy, opts.accuracy))
-
     local speed = mathx.frandom(opts.speed_min, opts.speed_max)
 
     opts.speed = speed
     opts.angle = angle
 
-    weapon_util.singleFire(opts)
+    weapon_util.singleFire(t, opts)
   end
 end
 
-function weapon_util.parallelFire(fn, opts)
+function weapon_util.parallelFire(t, fn, opts)
   local x = opts.x
   local y = opts.y
   local angle = opts.angle
@@ -44,7 +47,7 @@ function weapon_util.parallelFire(fn, opts)
     local sep = opts.parallel_sep * p
     opts.x = x + movex * sep
     opts.y = y + movey * sep
-    fn(opts)
+    fn(t, opts)
   end
 end
 

@@ -62,7 +62,7 @@ function Gunner:onIdleTimerOver()
     self.x, self.y - self.pistol_height,
     self.target.x, self.target.y)
   self.pistol_rot = angle
-  weapon_common.singleFire({
+  weapon_common.singleFire({}, {
     ignore_tags = {"enemy"},
     speed = 100,
     x = self.x + math.cos(angle) * 8,

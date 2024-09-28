@@ -13,7 +13,7 @@ defineWeapon("shotgun", {
   barrel_length = 11,
   automatic = false,
   spawnBullets = function(t)
-    common.shotgunFire({
+    common.shotgunFire(t, {
       ignore_tags = {"player"},
       count = 8,
       speed_min = 200,

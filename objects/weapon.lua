@@ -106,15 +106,13 @@ function Weapon:fire()
   sound.play(weapon.shoot_sfx, true)
 
   local angle = self.rot
-  if self.slot.dual_wielding then
-    angle = angle + math.rad(mathx.frandom(-20, 20))
-  end
 
   weapon.spawnBullets({
     x = x,
     y = y,
     angle = angle,
     burst = self.burst,
+    dual_wielding = self.slot.dual_wielding,
   })
 
   local reload = weapon.reload

@@ -82,7 +82,7 @@ function WalrusFish:onJumpEnd()
     local angle = base_angle + p * (math.pi / 8)
     local dirx = math.cos(angle)
     local diry = math.sin(angle)
-    world.add(BasicBullet:create({
+    world.add(BasicBullet:create({}, {
       x = self.x + dirx * 24,
       y = self.y + diry * 24,
       dirx = dirx * 100,
