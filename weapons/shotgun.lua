@@ -7,7 +7,7 @@ defineWeapon("shotgun", {
   name = "weapon_shotgun",
   ammo = "shells",
   shoot_sfx = "shotgun",
-  reload = 0.5,
+  reload = 0.65,
   recoil = 0,
   dual_wield = true,
   barrel_length = 11,
