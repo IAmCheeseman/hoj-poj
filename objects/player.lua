@@ -1,3 +1,4 @@
+local StateMachine = require("state_machine")
 local Health = require("health")
 local settings = require("settings")
 local Slot = require("slot")
@@ -67,6 +68,9 @@ function Player:new()
   self.js_tdirx = 0
   self.js_tdiry = 0
   self.cam_accel = 20
+
+  self.s_move = PlayerMove:create(self)
+  self.sm = StateMachine.create(self, self.s_move)
 end
 
 function Player:added()
@@ -164,8 +168,6 @@ function Player:step(dt)
     local diry = action.getGamepadAxis("righty")
     dirx, diry = vec.normalized(dirx, diry)
 
-    self.lines = {}
-
     -- Autoaim
     local target, tdirx, tdiry = self:autoaim(dirx, diry)
 
@@ -197,18 +199,7 @@ function Player:step(dt)
     setPointerPosition(getWorldMousePosition())
   end
 
-  local ix, iy = 0, 0
-  if action.isDown("move_up")    then iy = iy - 1 end
-  if action.isDown("move_left")  then ix = ix - 1 end
-  if action.isDown("move_down")  then iy = iy + 1 end
-  if action.isDown("move_right") then ix = ix + 1 end
-
-  self.sprite.layers["hands"].visible = not player_data.hand
-
-  ix, iy = vec.normalized(ix, iy)
-
-  self.vx = mathx.dtLerp(self.vx, ix * self.speed, self.frict, dt)
-  self.vy = mathx.dtLerp(self.vy, iy * self.speed, self.frict, dt)
+  self.sm:call("step", dt)
 
   self.body:moveAndCollideWithTags(self.vx, self.vy, dt, {"env"})
 
