@@ -65,15 +65,18 @@ function Shotgunner:onIdleTimerOver()
   weapon_common.shotgunFire({}, {
     ignore_tags = {"enemy"},
     count = 6,
-    speed_min = 100,
-    speed_max = 160,
+    speed_min = 200,
+    speed_max = 450,
     x = self.x + math.cos(angle) * 8,
     y = self.y + math.sin(angle) * 8 - self.pistol_height,
     angle = angle,
     spread = 25,
     accuracy = 2,
     damage = 1,
-    sprite = weapon_common.enemy_bullet_sprite,
+    lifetime = 0.75,
+    slow_down = true,
+    animate_with_lifetime = true,
+    sprite = weapon_common.enemy_pellet_sprite,
   })
   sound.play("gunner_shoot", true)
 end

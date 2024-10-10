@@ -57,6 +57,8 @@ weapon_util.pellet_sprite = Sprite.create("assets/pellet.ase")
   :offset("center", "center")
 weapon_util.enemy_bullet_sprite = Sprite.create("assets/enemy_bullet.png")
   :offset("center", "center")
+weapon_util.enemy_pellet_sprite = Sprite.create("assets/enemy_pellet.ase")
+  :offset("center", "center")
 
 weapon_util.muzzle_flash = Sprite.create("assets/muzzle_flash.png")
   :offset("center", "center")
