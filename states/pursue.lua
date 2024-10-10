@@ -18,7 +18,7 @@ function PursueState:new(on_direction_changed)
   self.on_direction_changed = on_direction_changed
 end
 
-function PursueState:changeDir()
+function PursueState:changeDir(trigger_callback)
   local obj = self.anchor
   local dirx, diry = vec.direction(obj.x, obj.y, obj.target.x, obj.target.y)
 
@@ -38,18 +38,20 @@ function PursueState:changeDir()
   self.diry = diry
   self.timer = mathx.frandom(self.pursue_time_min, self.pursue_time_max)
 
-  try(self.on_direction_changed, self.anchor)
+  if trigger_callback then
+    try(self.on_direction_changed, self.anchor)
+  end
 end
 
 function PursueState:enter()
-  self:changeDir()
+  self:changeDir(false)
 end
 
 function PursueState:step(dt)
   local obj = self.anchor
 
   if self.timer <= 0 then
-    self:changeDir()
+    self:changeDir(true)
   end
 
   self.timer = self.timer - dt
