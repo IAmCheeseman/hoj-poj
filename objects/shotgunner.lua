@@ -14,10 +14,10 @@ function Shotgunner:new()
   self.sprite = Sprite.create("assets/shotgunner.ase")
   self.sprite:offset("center", "bottom")
 
-  self.pistol = Sprite.create("assets/shotgun.png")
-  self.pistol:offset(3, "center")
-  self.pistol_height = 4
-  self.pistol_rot = 0
+  self.shotgun = Sprite.create("assets/shotgun.png")
+  self.shotgun:offset(3, "center")
+  self.shotgun_height = 4
+  self.shotgun_rot = 0
 
   self.shadow = Sprite.create("assets/player_shadow.png")
   self.shadow:offset("center", "center")
@@ -59,16 +59,16 @@ function Shotgunner:onIdleTimerOver()
   self.sm:setState(self.s_pursue)
 
   local angle = vec.angleBetween(
-    self.x, self.y - self.pistol_height,
+    self.x, self.y - self.shotgun_height,
     self.target.x, self.target.y)
-  self.pistol_rot = angle
+  self.shotgun_rot = angle
   weapon_common.shotgunFire({}, {
     ignore_tags = {"enemy"},
     count = 6,
     speed_min = 200,
     speed_max = 350,
     x = self.x + math.cos(angle) * 8,
-    y = self.y + math.sin(angle) * 8 - self.pistol_height,
+    y = self.y + math.sin(angle) * 8 - self.shotgun_height,
     angle = angle,
     spread = 45,
     accuracy = 2,
@@ -106,12 +106,12 @@ function Shotgunner:step(dt)
 
   if self.sm.current_state == self.s_idle then
     local angle = vec.angleBetween(
-      self.x, self.y - self.pistol_height,
+      self.x, self.y - self.shotgun_height,
       self.target.x, self.target.y)
-    self.pistol_rot = angle
+    self.shotgun_rot = angle
     self.sprite_scale = self.target.x < self.x and -1 or 1
   elseif self.sm.current_state == self.s_pursue then
-    self.pistol_rot = vec.angle(self.vx, self.vy)
+    self.shotgun_rot = vec.angle(self.vx, self.vy)
     self.sprite_scale = self.vx < 0 and -1 or 1
   end
 
@@ -144,5 +144,5 @@ function Shotgunner:draw()
   self.sprite:setAnimation(anim)
   self.shadow:draw(self.x, self.y)
   self.sprite:draw(self.x, self.y, 0, self.sprite_scale, 1)
-  self.pistol:draw(self.x, self.y - self.pistol_height, self.pistol_rot)
+  self.shotgun:draw(self.x, self.y - self.shotgun_height, self.shotgun_rot)
 end
